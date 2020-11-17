@@ -6,7 +6,17 @@ const {
 
 async function buildTables() {
   try {
-    client.connect();
+    console.log("starting to build tables...");
+    await client.query(`
+    CREATE TABLE products 
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    price INTEGER NOT NULL,
+    imageURL VARCHAR(255) NOT NULL,
+    inStock BOOLEAN DEFAULT false,
+    category VARCHAR(255) NOT NULL 
+    `)
 
     // drop tables in correct order
 
