@@ -1,6 +1,6 @@
 // code to build and initialize DB goes here
 const {
-  client
+  client, createProduct
   // other db methods 
 } = require('./index');
 
@@ -35,33 +35,35 @@ async function createTables() {
     );
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
-      firstName VARCHAR(255) NOT NULL,
-      lastName VARCHAR(255) NOT NULL,
-      email citext NOT NULL UNIQUE,
+      "firstName" VARCHAR(255) NOT NULL,
+      "lastName" VARCHAR(255) NOT NULL,
+      email TEXT UNIQUE NOT NULL,
       imageURL VARCHAR(255),
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) UNIQUE NOT NULL,
-      "isAdmin" NOT NULL BOOLEAN DEFAULT false
-    )
+      "isAdmin" BOOLEAN DEFAULT false NOT NULL
+    );
     CREATE TABLE orders (
       id SERIAL PRIMARY KEY,
-      status text DEFAULT "created",
-      "userId" INTEGER REFERENCES users(id)
+      status VARCHAR(255) DEFAULT 'created',
+      "userId" INTEGER REFERENCES users(id),
       "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP + interval '1 day'
-    )
+    );
     CREATE TABLE order_products (
       id SERIAL PRIMARY KEY,
       "productId" INTEGER REFERENCES products(id),
       "orderId" INTEGER REFERENCES orders(id),
       price INTEGER NOT NULL,
       quantity INTEGER NOT NULL DEFAULT 0
-    )
+    );
+
     `);
 
   } catch (error) {
     throw error;
   }
 }
+
 
 async function buildTables() {
   try {
@@ -76,8 +78,20 @@ async function buildTables() {
 
 async function populateInitialData() {
   try {
+    console.log('Starting to create products...')
+    const productsToCreate = [
+      { name: 'camo masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
+      { name: 'Golden Gopher masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'}
+      ]
     // create useful starting data
+    console.log('products created')
+    const products = await Promise.all(productsToCreate.map(createProduct))
+    
+    console.log("The Products", products)
+    console.log('Finished creating products!');
+
   } catch (error) {
+    console.error('Error creating products!');
     throw error;
   }
 }
