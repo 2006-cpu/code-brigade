@@ -29,7 +29,7 @@ async function createTables() {
       name VARCHAR(255) NOT NULL,
       description VARCHAR(255) NOT NULL,
       price INTEGER NOT NULL,
-      imageURL VARCHAR(255) NOT NULL,
+      imageURL VARCHAR(255),
       "inStock" BOOLEAN DEFAULT false,
       category VARCHAR(255) NOT NULL 
     );
@@ -38,7 +38,7 @@ async function createTables() {
       firstName VARCHAR(255) NOT NULL,
       lastName VARCHAR(255) NOT NULL,
       email citext NOT NULL UNIQUE,
-      imageURL VARCHAR(255) NOT NULL,
+      imageURL VARCHAR(255),
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) UNIQUE NOT NULL,
       "isAdmin" NOT NULL BOOLEAN DEFAULT false
