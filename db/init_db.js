@@ -29,7 +29,7 @@ async function createTables() {
       name VARCHAR(255) NOT NULL,
       description VARCHAR(255) NOT NULL,
       price INTEGER NOT NULL,
-      imageURL VARCHAR(255),
+      imageURL VARCHAR(255) DEFAULT 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg',
       "inStock" BOOLEAN DEFAULT false,
       category VARCHAR(255) NOT NULL 
     );
@@ -38,7 +38,7 @@ async function createTables() {
       "firstName" VARCHAR(255) NOT NULL,
       "lastName" VARCHAR(255) NOT NULL,
       email TEXT UNIQUE NOT NULL,
-      imageURL VARCHAR(255),
+      imageURL VARCHAR(255) DEFAULT 'http://www.freeimageslive.com/galleries/sports/moods_emotions/preview/happy_face.jpg',
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) UNIQUE NOT NULL,
       "isAdmin" BOOLEAN DEFAULT false NOT NULL
