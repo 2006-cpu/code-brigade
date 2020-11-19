@@ -29,8 +29,6 @@ const App = () => {
 
   return (
     <Router>
-      <h1>Hello, World!</h1>
-      <h2>{ message }</h2>
       <div className="App">
         <Switch>
           <Route path="/product/:productId">
