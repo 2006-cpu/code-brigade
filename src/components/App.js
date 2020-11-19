@@ -17,18 +17,18 @@ import {
 } from '../api';
 
 const App = () => {
-  // const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('');
   const [productList, setProductList] = useState([]);
 
-  // useEffect(() => {
-  //   getSomething()
-  //     .then(response => {
-  //       setMessage(response.message);
-  //     })
-  //     .catch(error => {
-  //       setMessage(error.message);
-  //     });
-  // });
+  useEffect(() => {
+    getSomething()
+      .then(response => {
+        setMessage(response.message);
+      })
+      .catch(error => {
+        setMessage(error.message);
+      });
+  });
 
   const fetchProducts = () => {
     getAllProducts()
@@ -48,6 +48,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
+      <h1>Hello</h1>
         <Switch>
           <Route path="/product/:productId">
               <Product productList={productList}/>
