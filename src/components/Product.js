@@ -1,25 +1,18 @@
-import {React, useState, useEffect} from 'react';
-import {getProduct} from '../api'
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
-const Product = (id) => {
-    const [product, setProduct] = useState({});
+const Product = (props) => {
+    const {productList} = props
+    console.log('zzzz', productList)
+    const {productId} = useParams();
+    const product = productList.find(singleProduct => productId == singleProduct.id);
+    console.log('the product', product)
 
-    const fetchProduct = () => {
-        getProduct(id)
-        .then(product => {
-            setProduct(product);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-      }
-    
-      useEffect(() => {
-        fetchProduct();
-    }, [product]);
 
     return (
         <div>
+            <h1>Product</h1>
+            {product && <>
             <h2>{product.name}</h2>
             <p>{product.description}</p>
             <p>{product.price}</p>
@@ -28,7 +21,8 @@ const Product = (id) => {
                 ? <p>Yes</p> 
                 : <p>No</p> 
             }</div>
-            <p>{product.category}</p>
+            <p>{product.category}</p></>}
+            
         </div>
     );
 }

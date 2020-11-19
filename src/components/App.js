@@ -7,32 +7,53 @@ import {
 } from 'react-router-dom';
 
 import {
-  Product
+  Product,
+  Products
 } from './index';
 
 import {
-  getSomething
+  getSomething,
+  getAllProducts
 } from '../api';
 
 const App = () => {
-  const [message, setMessage] = useState('');
+  // const [message, setMessage] = useState('');
+  const [productList, setProductList] = useState([]);
+
+  // useEffect(() => {
+  //   getSomething()
+  //     .then(response => {
+  //       setMessage(response.message);
+  //     })
+  //     .catch(error => {
+  //       setMessage(error.message);
+  //     });
+  // });
+
+  const fetchProducts = () => {
+    getAllProducts()
+    .then(products => {
+        setProductList(products);
+        console.log('product:', products)
+    })
+    .catch(error => {
+        console.error(error);
+    });
+  }
 
   useEffect(() => {
-    getSomething()
-      .then(response => {
-        setMessage(response.message);
-      })
-      .catch(error => {
-        setMessage(error.message);
-      });
-  });
+    fetchProducts();
+}, []);
 
   return (
     <Router>
       <div className="App">
         <Switch>
           <Route path="/product/:productId">
-              <Product />
+              <Product productList={productList}/>
+          </Route>
+          <Route path="/products">
+              <Products productList={productList}/>
           </Route>
         </Switch>
       </div>
