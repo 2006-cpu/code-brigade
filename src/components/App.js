@@ -14,17 +14,6 @@ import {
 } from './index';
 
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from 'react-router-dom';
-
-import {
-  Product,
-  Products
-} from './index';
-
-import {
   getSomething,
   getAllProducts
 } from '../api';
@@ -62,6 +51,7 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Hello</h1>
+      <NavBar />
         <Switch>
           <Route path="/product/:productId">
               <Product productList={productList}/>
