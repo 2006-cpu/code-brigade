@@ -1,9 +1,9 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:5000'
+const BASE_URL = '/'
 
 export async function getSomething() {
   try {
-    const { data } = await axios.get('/api');
+    const { data } = await axios.get('api');
     return data;
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ export async function getSomething() {
 
 export const getAllProducts = async () => {
   try {
-    const { data } = await axios.get(`${BASE_URL}/api/products`);
+    const { data } = await axios.get(`${BASE_URL}api/products`);
     console.log('data:', data)
     return data;
   } catch (error) {
@@ -22,7 +22,7 @@ export const getAllProducts = async () => {
 
 export const getProduct = async (id) => {
   try {
-    const { data } = await axios.get(`${BASE_URL}/api/product/${id}`);
+    const { data } = await axios.get(`${BASE_URL}api/product/${id}`);
     console.log('data:', data)
     return data;
   } catch (error) {
