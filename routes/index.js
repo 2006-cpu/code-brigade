@@ -9,6 +9,7 @@ apiRouter.get("/", (req, res, next) => {
 
 apiRouter.get('/products', async (req, res, next) => {
   try {
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
       const products = await getAllProducts();
       res.send(products);
   } catch (error) {
@@ -19,6 +20,7 @@ apiRouter.get('/products', async (req, res, next) => {
 apiRouter.get('/product/:productId', async (req, res, next) => {
   const id = req.params.productId;
   try {
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
       const productById = await getProductById(id);
       res.send(productById);
   } catch (error) {
