@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  getSomething
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from 'react-router-dom';
+
+import {
+  Product,
+  Products
+} from './index';
+
+import {
+  getSomething,
+  getAllProducts
 } from '../api';
 
 const App = () => {
   const [message, setMessage] = useState('');
+  const [productList, setProductList] = useState([]);
 
   useEffect(() => {
     getSomething()
@@ -17,11 +30,35 @@ const App = () => {
       });
   });
 
+  const fetchProducts = () => {
+    getAllProducts()
+    .then(products => {
+        setProductList(products);
+        console.log('product:', products)
+    })
+    .catch(error => {
+        console.error(error);
+    });
+  }
+
+  useEffect(() => {
+    fetchProducts();
+}, []);
+
   return (
-    <div className="App">
-      <h1>Hello, World!</h1>
-      <h2>{ message }</h2>
-    </div>
+    <Router>
+      <div className="App">
+      <h1>Hello</h1>
+        <Switch>
+          <Route path="/product/:productId">
+              <Product productList={productList}/>
+          </Route>
+          <Route path="/products">
+              <Products productList={productList}/>
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
