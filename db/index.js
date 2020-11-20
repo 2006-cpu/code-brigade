@@ -3,6 +3,8 @@ const { Client } = require('pg');
 const DB_NAME = 'localhost:5432/graceshopper-dev'
 const DB_URL = process.env.DATABASE_URL || `postgres://${ DB_NAME }`;
 const client = new Client(DB_URL);
+const bcrypt = require('bcrypt')
+const SALT_COUNT = 10;
 
 // database methods
 async function getProductById(id) {
@@ -54,11 +56,31 @@ async function createProduct(product) {
   }
 };
 
+// users adapters
+
+async function createUser({firstName, lastName, email, imageurl, username, password, isAdmin}) {
+  const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+  try {
+      const { rows: [user] } = await client.query(`
+      INSERT INTO users("firstName", "lastName", email, imageurl, username, password, "isAdmin")
+      VALUES($1, $2, $3, $4, $5, $6, $7)
+      ON CONFLICT (username) DO NOTHING
+      RETURNING *;
+  `, [firstName, lastName, email, imageurl, username, hashedPassword, isAdmin]);
+  console.log('createdUser:', user)
+  delete user.password
+  return user;
+  } catch (error) {
+      throw error;
+  }    
+}
+
 // export
 module.exports = {
   client,
   getProductById,
   getAllProducts,
-  createProduct
+  createProduct,
+  createUser
   // db methods
 }
