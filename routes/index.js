@@ -28,4 +28,6 @@ apiRouter.get('/product/:productId', async (req, res, next) => {
   }
 })
 
+apiRouter.get('/')
+
 module.exports = apiRouter;
