@@ -14,23 +14,11 @@ import {
 } from './index';
 
 import {
-  getSomething,
   getAllProducts
 } from '../api';
 
 const App = () => {
-  const [message, setMessage] = useState('');
   const [productList, setProductList] = useState([]);
-
-  useEffect(() => {
-    getSomething()
-      .then(response => {
-        setMessage(response.message);
-      })
-      .catch(error => {
-        setMessage(error.message);
-      });
-  });
 
   const fetchProducts = () => {
     getAllProducts()

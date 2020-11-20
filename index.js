@@ -26,6 +26,12 @@ server.use((req, res, next) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 });
 
+//ERROR HANDLING ***
+server.use((error, req, res, next) => {
+  console.error(error)
+  res.send({error: 'This is an error', ...error});
+}); 
+
 // bring in the DB connection
 const { client } = require('./db');
 
