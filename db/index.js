@@ -65,7 +65,7 @@ async function createUser({firstName, lastName, email, imageurl, username, passw
       RETURNING id, username;
   `, [firstName, lastName, email, imageurl, username, hashedPassword, isAdmin]);
   console.log('createdUser:', user)
-  // delete user.password
+  delete user.password
   return user;
   } catch (error) {
       throw error;

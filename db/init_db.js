@@ -92,22 +92,11 @@ async function createInitialProducts() {
       { name: 'Golden Gopher masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'}
       ]
 
-      // const usersToCreate = [
-      //   {firstName: 'Berto', lastName: 'One', email: 'albert@gmail.com', imageurl: 'https://picsum.photos/200', username: 'albert', password: 'berto99', isAdmin: false},
-      //   {firstName: 'Sandy', lastName: 'Two', email: 'sandra@gmail.com', imageurl: 'https://picsum.photos/200', username: 'sandy', password: 'glamgal', isAdmin: false}
-      // ]
-    // create useful starting data
     console.log('products created')
     const products = await Promise.all(productsToCreate.map(createProduct))
-
-    // console.log('users created')
-    // const users = await Promise.all(usersToCreate.map(createUser))
     
     console.log("The Products", products)
     console.log('Finished creating products!');
-
-    // console.log("The Users", users)
-    // console.log('Finished creating users!');
 
   } catch (error) {
     console.error('Error creating products!');
@@ -123,10 +112,7 @@ async function createInitialUsers() {
       {firstName: 'Berto', lastName: 'One', email: 'albert@gmail.com', imageurl: 'https://picsum.photos/200', username: 'albert', password: 'berto99', isAdmin: false},
       {firstName: 'Sandy', lastName: 'Two', email: 'sandra@gmail.com', imageurl: 'https://picsum.photos/200', username: 'sandy', password: 'glamgal', isAdmin: false}
     ]
-    // const usersToCreate = [
-    //   {username: 'albert', password: 'berto99'},
-    //   {username: 'sandy', password: 'glamgal'}
-    // ]
+
     const users = await Promise.all(usersToCreate.map(createUser));
 
     console.log('Users created:');
