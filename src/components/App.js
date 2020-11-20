@@ -36,7 +36,6 @@ const App = () => {
     getAllProducts()
     .then(products => {
         setProductList(products);
-        console.log('product:', products)
     })
     .catch(error => {
         console.error(error);
