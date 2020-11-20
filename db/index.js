@@ -75,12 +75,34 @@ async function createUser({firstName, lastName, email, imageurl, username, passw
   }    
 }
 
+async function getUser({username, password}) {
+  try {
+      const {rows: [user] } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE username = $1;
+      `, [username]);
+      console.log('theUser:', user)
+      const isMatch = bcrypt.compareSync(password, user.password);
+      if(isMatch) {
+          delete user.password;
+          return user;
+          
+      } else if (!isMatch){
+        return;
+      }    
+  } catch (error) {
+      throw error;
+  }
+}
+
 // export
 module.exports = {
   client,
   getProductById,
   getAllProducts,
   createProduct,
-  createUser
+  createUser,
+  getUser
   // db methods
 }
