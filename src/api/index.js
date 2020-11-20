@@ -13,7 +13,6 @@ export async function getSomething() {
 export const getAllProducts = async () => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/products`);
-    console.log('data:', data)
     return data;
   } catch (error) {
     throw error;
@@ -23,7 +22,6 @@ export const getAllProducts = async () => {
 export const getProduct = async (id) => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/product/${id}`);
-    console.log('data:', data)
     return data;
   } catch (error) {
     throw error;
