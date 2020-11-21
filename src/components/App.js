@@ -12,7 +12,7 @@ import {
   Product,
   Products,
   Login,
-  Register
+  Register,
 } from './index';
 
 import {
@@ -41,13 +41,13 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Hello</h1>
-      <NavBar />
+      <NavBar setToken={setToken} token={token} />
         <Switch>
-          <Route path="/Login">
-            <Login />
+          <Route path="/login">
+            <Login setToken={setToken} token={token}/>
           </Route>
           <Route path="/register">
-              <Register setToken={setToken}/>
+              <Register setToken={setToken} token={token}/>
           </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>

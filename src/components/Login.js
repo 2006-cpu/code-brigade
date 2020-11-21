@@ -5,6 +5,7 @@ import {loginUser} from '../api/index.js'
 
 
 const Login = (props) => {
+  const { token, setToken} = props;
   const [login, setLogin] = useState({
     username: '',
     password: ''
@@ -12,7 +13,10 @@ const Login = (props) => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    loginUser(login.username, login.password)
+    // loginUser(login.username, login.password)
+    const result = await loginUser(login.username, login.password);
+    console.log('result', result)
+    setToken(result.token)
   }
 
   return (

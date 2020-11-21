@@ -5,13 +5,14 @@ const BASE_URL = '/'
 
 
 const Register = (props) => {
-    const { setToken } = props;
+    const {token, setToken } = props;
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [imageURL, setImageURL] = useState('');
+
     
     const signUp = async ({firstName, lastName, email, username, password, imageURL, isAdmin}) => {
         try {
@@ -24,6 +25,7 @@ const Register = (props) => {
                 setEmail('');
                 setImageURL('');
                 setToken(response.data.token);
+                console.log('token', token);
                 return response;
             }
         } catch (error) {
@@ -36,7 +38,8 @@ const Register = (props) => {
         signUp({firstName, lastName, email, username, password, imageURL, isAdmin: false})
     }
     
-    
+    console.log('token', token);
+
     return (<>   
         <form onSubmit={handleSubmit}>
         <h3>Register Here</h3>
