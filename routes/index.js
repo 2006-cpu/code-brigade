@@ -2,114 +2,60 @@ const apiRouter = require('express').Router();
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'codebrigaderules'
 
-const { getAllProducts,
-        getProductById,
-        createUser,
-        getUser,
-        getUserByUsername } = require('../db');
+const { getUserById } = require('../db');
 
-apiRouter.get("/", (req, res, next) => {
+apiRouter.get("/", (req, res) => {
   res.send({
     message: "API is under construction!"
   });
 });
 
-apiRouter.get('/products', async (req, res, next) => {
-  try {
-      const products = await getAllProducts();
-      res.send(products);
-  } catch (error) {
-      next(error);
-  }
-})
+apiRouter.get('/masks', (req, res, next) => {
+  res.send({message: 'All is safe'});
+});
 
-apiRouter.get('/product/:productId', async (req, res, next) => {
-  const id = req.params.productId;
-  try {
-      const productById = await getProductById(id);
-      res.send(productById);
-  } catch (error) {
-     next(error);
-  }
-})
+apiRouter.use(async (req, res, next) => {
+  const prefix = 'Bearer ';
+  const auth = req.header('Authorization');
 
-apiRouter.post('/login', async (req, res, next) => {
-  const { username, password } = req.body;
-    if (!username || !password) {
-      next({
-        name: "MissingCredentialsError",
-        message: "Please supply both a username and password"
+  if (!auth) { 
+  next();
+  } else if (auth.startsWith(prefix)) {
+    const token = auth.slice(prefix.length);
+    try {
+    const { id } = jwt.verify(token, JWT_SECRET);
+
+    if (id) {
+      req.user = await getUserById(id);
+      console.log("Do we see anything")
+      next();
+    }
+    } catch ({ name, message }) {
+    next({ name, message });
+    }
+  } else {
+    next({
+      name: 'AuthorizationHeaderError',
+      message: `Authorization token must start with ${ prefix }`
     });
   }
-  try {
-    const user = await getUser({username, password})
+});
 
-    if (!user) {
-      next({
-      name: 'Invalid',
-      message: 'No match'
-      });
-    }
 
-    if (user) {
-      const token = jwt.sign({ 
-        id: user.id, 
-        username: user.username
-        }, JWT_SECRET, {
-        expiresIn: '1w'
-        });
-   
-      res.send({ 
-        user,
-        message: "you're logged in!",
-        token  
-      });
-    } else {
-      next({ 
-        name: 'IncorrectCredentialsError', 
-        message: 'Username or password is incorrect'
-      });
-    }
-  } catch(error) {
-    console.log(error);
-    next(error);
+apiRouter.use((req, res, next) => {
+  if (req.user) {
+    console.log("User is set:", req.user);
   }
+  next();
 });
 
-apiRouter.post('/register', async (req, res, next) => {
-  const { firstName, lastName, email, imageurl, username, password, isAdmin } = req.body;
+const usersRouter = require('./users');
+apiRouter.use('/users', usersRouter);
 
-    if (password.length < 8) {
-      return next({
-        name: 'PasswordError',
-        message: "Password Too Short!"
-      });
-    }   
-  
-    const _user  = await getUserByUsername(username)
-    if (_user) {
-      return next({
-        name: 'UserExistsError',
-        message: 'A user by that username already exists'
-        });
-    }
-  try {
-    const user = await createUser({firstName, lastName, email, imageurl, username, password, isAdmin})
-    const token = jwt.sign({  
-      id: user.id,
-      username: user.username
-      }, JWT_SECRET, {
-      expiresIn: '1w'
-      });
+const productsRouter = require('./products');
+apiRouter.use('/products', productsRouter);
 
-    if (token) { 
-      res.send({user
-      ,token})
-    }          
-  } catch ({ name, message }) {
-    next({ name, message })
-  }  
-});
-
+const productRouter = require('./product');
+apiRouter.use('/product', productRouter);
 
 module.exports = apiRouter;
