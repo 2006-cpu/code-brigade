@@ -11,6 +11,7 @@ import {
 import {
   Product,
   Products,
+  Login,
   Register
 } from './index';
 
@@ -42,6 +43,9 @@ const App = () => {
       <h1>Hello</h1>
       <NavBar />
         <Switch>
+          <Route path="/Login">
+            <Login />
+          </Route>
           <Route path="/register">
               <Register setToken={setToken}/>
           </Route>
