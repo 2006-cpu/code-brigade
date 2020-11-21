@@ -6,7 +6,9 @@ const {
   getAllProducts,
   createUser,
   getUser,
-  getUserByUsername
+  getUserByUsername,
+  getAllUsers,
+  getUserById
   // other db methods 
 } = require('./index');
 
@@ -151,6 +153,14 @@ async function testDB() {
     console.log("Calling getUserByUsername with albert");
     const albert = await getUserByUsername("albert");
     console.log("Result:", albert);
+
+    console.log("Calling getAllUsers");
+    const allUsers = await getAllUsers();
+    console.log("All Users List Result:", allUsers)
+
+    console.log("Calling getUserById with Sandy 1");
+    const sandy = await getUserById(1);
+    console.log("getUserById Result:", sandy)
 
     console.log("Finished database tests!");
   } catch (error) {
