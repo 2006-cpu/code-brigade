@@ -47,7 +47,7 @@ async function createTables() {
       imageURL VARCHAR(255) DEFAULT 'http://www.freeimageslive.com/galleries/sports/moods_emotions/preview/happy_face.jpg',
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) UNIQUE NOT NULL,
-      "isAdmin" BOOLEAN DEFAULT false NOT NULL
+      "isAdmin" BOOLEAN DEFAULT false
     );
     CREATE TABLE orders (
       id SERIAL PRIMARY KEY,

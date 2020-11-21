@@ -10,7 +10,8 @@ import {
 
 import {
   Product,
-  Products
+  Products,
+  Register
 } from './index';
 
 import {
@@ -19,6 +20,7 @@ import {
 
 const App = () => {
   const [productList, setProductList] = useState([]);
+  const [token, setToken] = useState('')
 
   const fetchProducts = () => {
     getAllProducts()
@@ -40,6 +42,9 @@ const App = () => {
       <h1>Hello</h1>
       <NavBar />
         <Switch>
+          <Route path="/register">
+              <Register setToken={setToken}/>
+          </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>
           </Route>
