@@ -94,6 +94,32 @@ async function getUser({username, password}) {
   }
 }
 
+async function getAllUsers() {
+  try {
+      const { rows } = await client.query(`
+      SELECT *
+      FROM users;
+      `);
+      return rows;
+  } catch (error) {
+      throw error;
+  }
+}
+
+async function getUserById(id) {
+  try {
+      const { rows: [user] } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE "id" = ${id};
+      `, [id])
+      delete user.password;
+      return user;
+  } catch (error) {
+      throw error;
+  }
+}
+
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
@@ -121,6 +147,8 @@ module.exports = {
   createProduct,
   createUser,
   getUser,
+  getAllUsers,
+  getUserById,
   getUserByUsername
   // db methods
 }
