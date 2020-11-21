@@ -137,6 +137,75 @@ async function getUserByUsername(username) {
   }
 }
 
+//order by id
+async function getOrderById(id) {
+  try {
+      const {rows: orderItems} = await client.query(`
+        SELECT products.*, order_products.id, order_products.price, order_products.quantity
+        FROM products
+        JOIN order_products ON order_products."productId"=products.id
+        WHERE order_products."orderId"=${id}
+        `);
+         
+        return orderItems;
+  } catch(error) {
+    throw error;
+  }
+};
+
+//all Orders
+async function getAllOrders() {
+  try {
+    const { rows: allOrders } = await client.query(`
+      SELECT orders.*, users.username as "person"
+      FROM orders
+      JOIN users on users.id=orders."userId"
+      `)
+
+    for (let order of orders) {
+      const {rows: productList } = await client.query(`
+      SELECT products.*, order_products.price, order_products.quantity, order_products.id as "productCartItemId"
+      FROM products
+      JOIN order_products ON order_products."productId"=products.id
+      WHERE "orderId" IN ($1)
+      `, [orders.id]);
+      order.productList = productList
+    }
+
+    return allOrders
+
+  } catch (error) {
+  throw error;
+  }
+};
+
+//get Orders by Username
+  async function getOrdersByUser({username}) {
+  try {
+      const { rows: ordersList } = await client.query(`
+      SELECT orders.*, users.username as "person"
+      FROM orders
+      JOIN users on users.id=orders."userId"
+      WHERE username='${username}'
+      `)
+
+      for (let order of orders) {
+        const { rows: productList} = await client.query(`
+        SELECT products.*, order_products.price, order_products.quantity, order_products.id as "productCartItemId"
+        FROM products
+        JOIN order_products ON order_products."productId"=products.id
+        WHERE "orderId" IN ($1)
+        `, [orders.id]);
+        order.productList = productList
+      }
+
+      return ordersList
+
+  } catch(error) {
+    throw error;
+  }
+};
+
 
 
 // export
@@ -149,6 +218,9 @@ module.exports = {
   getUser,
   getAllUsers,
   getUserById,
-  getUserByUsername
+  getUserByUsername,
+  getOrderById,
+  getAllOrders,
+  getOrdersByUser
   // db methods
 }
