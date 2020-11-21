@@ -10,7 +10,8 @@ import {
 
 import {
   Product,
-  Products
+  Products,
+  Login
 } from './index';
 
 import {
@@ -40,6 +41,9 @@ const App = () => {
       <h1>Hello</h1>
       <NavBar />
         <Switch>
+          <Route path="/Login">
+            <Login />
+          </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>
           </Route>
