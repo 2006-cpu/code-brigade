@@ -11,7 +11,8 @@ import {
 import {
   Product,
   Products,
-  Login
+  Login,
+  Register
 } from './index';
 
 import {
@@ -20,6 +21,7 @@ import {
 
 const App = () => {
   const [productList, setProductList] = useState([]);
+  const [token, setToken] = useState('')
 
   const fetchProducts = () => {
     getAllProducts()
@@ -43,6 +45,9 @@ const App = () => {
         <Switch>
           <Route path="/Login">
             <Login />
+          </Route>
+          <Route path="/register">
+              <Register setToken={setToken}/>
           </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>

@@ -6,7 +6,9 @@ const {
   getAllProducts,
   createUser,
   getUser,
-  getUserByUsername
+  getUserByUsername,
+  getAllUsers,
+  getUserById
   // other db methods 
 } = require('./index');
 
@@ -47,7 +49,7 @@ async function createTables() {
       imageURL VARCHAR(255) DEFAULT 'http://www.freeimageslive.com/galleries/sports/moods_emotions/preview/happy_face.jpg',
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) UNIQUE NOT NULL,
-      "isAdmin" BOOLEAN DEFAULT false NOT NULL
+      "isAdmin" BOOLEAN DEFAULT false
     );
     CREATE TABLE orders (
       id SERIAL PRIMARY KEY,
@@ -151,6 +153,14 @@ async function testDB() {
     console.log("Calling getUserByUsername with albert");
     const albert = await getUserByUsername("albert");
     console.log("Result:", albert);
+
+    console.log("Calling getAllUsers");
+    const allUsers = await getAllUsers();
+    console.log("All Users List Result:", allUsers)
+
+    console.log("Calling getUserById with Sandy 1");
+    const sandy = await getUserById(1);
+    console.log("getUserById Result:", sandy)
 
     console.log("Finished database tests!");
   } catch (error) {
