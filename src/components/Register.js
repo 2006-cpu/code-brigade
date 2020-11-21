@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 const BASE_URL = '/'
-// import signUp from '../api'
 
 
 
@@ -47,7 +46,6 @@ const Register = (props) => {
         <input type="text" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
         <input type="password" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
         <input type="text" placeholder={'Image URL'} value={imageURL} onChange={(event) => setImageURL(event.target.value)} />
-        {/* <input type="text" placeholder={'Image URL'} value={imageURL} onChange={(event) => setImageURL(event.target.value)} /> */}
         <button type="submit" >Sign Up</button>
       </form>        
     </>)
