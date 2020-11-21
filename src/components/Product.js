@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 const Product = (props) => {
     const {productList} = props
     const {productId} = useParams();
-    const product = productList.find(singleProduct => productId == singleProduct.id);
+    const product = productList.find(singleProduct => Number(productId) === singleProduct.id);
 
 
     return (

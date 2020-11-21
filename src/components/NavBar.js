@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const NavBar = (props) => { 
-    const { token, setToken } = props;
+    const {token, setToken} = props;
 
     const logout = () => {    
         if (token) {

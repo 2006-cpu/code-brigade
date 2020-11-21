@@ -21,7 +21,8 @@ import {
 
 const App = () => {
   const [productList, setProductList] = useState([]);
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState('');
+  const [user, setUser] = useState({});
 
   const fetchProducts = () => {
     getAllProducts()
@@ -41,13 +42,13 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Hello</h1>
-      <NavBar setToken={setToken} token={token} />
+      <NavBar token={token} setToken={setToken}/>
         <Switch>
-          <Route path="/login">
-            <Login setToken={setToken} token={token}/>
+          <Route path="/Login">
+            <Login setUser={setUser} token={token} setToken={setToken} />
           </Route>
           <Route path="/register">
-              <Register setToken={setToken} token={token}/>
+              <Register user={user} setUser={setUser} setToken={setToken}/>
           </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>
