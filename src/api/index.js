@@ -41,15 +41,19 @@ export async function loginUser(username, password) {
     username: username,
     password: password
   })
-}).then(response => response.json())
-  .then(result => {
-    localStorage.setItem('token', result.token);
-    localStorage.setItem('username', username)
-    console.log(result);
-  })
-  .catch(console.error);
-    return existingUser;
-  } catch (error) {
-    throw error;
+})
+  const responseObj = await existingUser.json();
+  console.log('responseObj', responseObj);
+// }).then(response => response.json())
+//   .then(result => {
+//     localStorage.setItem('token', result.token);
+//     localStorage.setItem('username', username)
+//     console.log(result);
+//   })
+// //   .catch(console.error);
+//     return existingUser;
+return responseObj;
+  } catch(error) {
+    console.error(error);
   }
 }

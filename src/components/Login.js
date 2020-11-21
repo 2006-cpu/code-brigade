@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 // import NavBar from './NavBar'
 import axios from 'axios';
 import {loginUser} from '../api/index.js'
+const BASE_URL = '/'
 
 
 const Login = (props) => {
+  const {setUser, setToken} = props
   const [login, setLogin] = useState({
     username: '',
     password: ''
@@ -12,7 +14,19 @@ const Login = (props) => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    loginUser(login.username, login.password)
+    
+    const data = await loginUser(login.username, login.password);
+    console.log('data:', data);
+    setToken(data.token);
+    const auth = {
+        headers: {'Authorization': `Bearer ${data.token}`
+    }
+      }
+    const user = await axios.get(`${BASE_URL}api/users/me`, auth);
+    console.log("THE USER:", user)
+    if(user && user.username) {
+        setUser(user);
+    }
   }
 
   return (

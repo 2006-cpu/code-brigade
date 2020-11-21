@@ -5,7 +5,7 @@ const BASE_URL = '/'
 
 
 const Register = (props) => {
-    const { setToken } = props;
+    const { setUser, setToken } = props;
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -16,6 +16,7 @@ const Register = (props) => {
     const signUp = async ({firstName, lastName, email, username, password, imageURL, isAdmin}) => {
         try {
             const response = await axios.post(`${ BASE_URL }api/users/register`, {firstName, lastName, email, username, password, imageURL, isAdmin})
+            const responseToken = response.data.token;
             if(response){
                 setUsername('');
                 setPassword('');
@@ -23,7 +24,16 @@ const Register = (props) => {
                 setLastName('');
                 setEmail('');
                 setImageURL('');
-                setToken(response.data.token);
+                setToken(responseToken);
+                const auth = {
+                    headers: {'Authorization': `Bearer ${responseToken}`
+                }
+                  }
+                const user = await axios.get(`${BASE_URL}api/users/me`, auth);
+                console.log("THE USER:", user)
+                if(user && user.username) {
+                    setUser(user);
+                }
                 return response;
             }
         } catch (error) {
