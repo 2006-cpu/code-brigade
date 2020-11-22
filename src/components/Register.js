@@ -31,10 +31,8 @@ const Register = (props) => {
                 }
                   }
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
-                console.log("THE USER:", user)
-                if(user && user.username) {
-                    setUser(user);
-                }
+                console.log("THE USER:", user.data)
+                setUser(user.data);
                 return response;
             }
         } catch (error) {

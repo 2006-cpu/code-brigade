@@ -13,6 +13,7 @@ import {
   Products,
   Login,
   Register,
+  Account
 } from './index';
 
 import {
@@ -49,6 +50,9 @@ const App = () => {
           </Route>
           <Route path="/register">
               <Register user={user} setUser={setUser} setToken={setToken}/>
+          </Route>
+          <Route path="/account">
+              <Account user={user} />
           </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>
