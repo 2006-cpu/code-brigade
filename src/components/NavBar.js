@@ -21,6 +21,7 @@ const NavBar = (props) => {
     return (
         <div>
             {token ? <>
+                <NavLink to={"/account"} activeClassName="current">My Account</NavLink>
                 <NavLink to={"/products"} activeClassName="current">Products</NavLink>
                 <button onClick={logout}>Logout</button> 
                 </>
