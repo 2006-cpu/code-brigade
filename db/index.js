@@ -206,6 +206,21 @@ async function getAllOrders() {
   }
 };
 
+async function getOrdersByProduct({id}) {
+  try {
+    const { rows: orders } = await client.query(`
+      SELECT orders.*
+      FROM order_products 
+      INNER JOIN orders ON "orderId"=orders.id
+      WHERE "productId"=${id} 
+    `);
+
+    return orders;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 
 // export
