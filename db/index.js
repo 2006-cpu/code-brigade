@@ -214,7 +214,7 @@ async function getCartByUser(userId) {
     const { rows: [cart] } = await client.query(`
       SELECT *
       FROM orders
-      WHERE id=$1 AND status='created'
+      WHERE "userId"=$1 AND status='created'
       `, [userId])
 
     const { rows: productList }  = await client.query(`

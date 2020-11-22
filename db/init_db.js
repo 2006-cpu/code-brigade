@@ -98,7 +98,7 @@ async function createInitialProducts() {
     const productsToCreate = [
       { name: 'Sports Team masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
       { name: 'Marvel masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'},
-      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'adults'}
+      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/61M4QKuk0-L._AC_SL1024_.jpg', inStock: true, category: 'adults'}
       ]
 
     console.log('products created')
@@ -119,7 +119,8 @@ async function createInitialUsers() {
 
     const usersToCreate = [
       {firstName: 'Berto', lastName: 'One', email: 'albert@gmail.com', imageurl: 'https://picsum.photos/200', username: 'albert', password: 'berto99', isAdmin: false},
-      {firstName: 'Sandy', lastName: 'Two', email: 'sandra@gmail.com', imageurl: 'https://picsum.photos/200', username: 'sandy', password: 'glamgal', isAdmin: false}
+      {firstName: 'Sandy', lastName: 'Two', email: 'sandra@gmail.com', imageurl: 'https://picsum.photos/200', username: 'sandy', password: 'glamgal', isAdmin: false},
+      {firstName: 'Code', lastName: 'Brigade', email: 'codebrigade@gmail.com', imageurl: 'https://picsum.photos/200', username: 'codebrigade', password: 'codebrigade', isAdmin: true}
     ]
 
     const users = await Promise.all(usersToCreate.map(createUser));
@@ -139,9 +140,13 @@ async function createInitialOrders() {
 
     const ordersToCreate = [
       {status: 'created', userId: 1},
-      {status: 'created', userId: 1},
+      {status: 'completed', userId: 1},
+      {status: 'cancelled', userId: 1},
       {status: 'completed', userId: 2},
-      {status: 'created', userId: 2}
+      {status: 'created', userId: 2},
+      {status: 'created', userId: 3},
+      {status: 'cancelled', userId: 3},
+      {status: 'completed', userId: 3}
     ]
     const orders = await Promise.all(ordersToCreate.map(order => createOrder(order)));
     console.log('Orders Created: ', orders)
