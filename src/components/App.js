@@ -16,6 +16,8 @@ import {
   Account
 } from './index';
 
+import Cart from './Cart'
+
 import {
   getAllProducts
 } from '../api';
@@ -42,7 +44,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-      <h1>Hello</h1>
+      <h1>Masks Co.</h1>
       <NavBar token={token} setToken={setToken}/>
         <Switch>
           <Route path="/Login">
@@ -60,6 +62,11 @@ const App = () => {
           <Route path="/products">
               <Products productList={productList}/>
           </Route>
+
+          <Route path="/cart">
+              <Cart user={user} token={token}/>
+          </Route>
+
         </Switch>
       </div>
     </Router>
