@@ -6,7 +6,8 @@ const JWT_SECRET = 'codebrigaderules';
 const { createUser,
         getUser,
         getUserByUsername,
-        getUserById
+        getUserById,
+        getOrdersByUser
         } = require('../db/')
 
         
@@ -79,7 +80,7 @@ usersRouter.post('/register', async (req, res, next) => {
           });
       }
     try {
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+      // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
       const user = await createUser({firstName, lastName, email, imageurl, username, password, isAdmin})
       const token = jwt.sign({  
         id: user.id,
@@ -109,6 +110,17 @@ usersRouter.get('/me', async (req, res, next) => {
     } catch ({ name, message }) {
       next({ name, message })
     }
+});
+
+
+usersRouter.get('/:userId/orders', async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const ordersOfUser = await getOrdersByUser(userId)
+    res.send(ordersOfUser);
+  } catch ({ name, message }) {
+    next({ name, message })
+  }
 });
   
 

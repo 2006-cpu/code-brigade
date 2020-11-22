@@ -26,6 +26,7 @@ server.use((req, res, next) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 });
 
+
 //ERROR HANDLING ***
 server.use((error, req, res, next) => {
   console.error(error)
