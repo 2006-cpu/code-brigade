@@ -8,7 +8,12 @@ const {
   getUser,
   getUserByUsername,
   getAllUsers,
-  getUserById
+  getUserById,
+  createOrder,
+  getOrderById,
+  getAllOrders,
+  getOrdersByUser,
+  getCartByUser
   // other db methods 
 } = require('./index');
 
@@ -81,6 +86,7 @@ async function buildTables() {
     await createTables();
     await createInitialProducts();
     await createInitialUsers();
+    await createInitialOrders();
   } catch (error) {
     throw error;
   }
@@ -90,8 +96,9 @@ async function createInitialProducts() {
   try {
     console.log('Starting to create products...')
     const productsToCreate = [
-      { name: 'camo masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
-      { name: 'Golden Gopher masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'}
+      { name: 'Sports Team masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
+      { name: 'Marvel masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'},
+      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'adults'}
       ]
 
     console.log('products created')
@@ -126,6 +133,25 @@ async function createInitialUsers() {
   }
 }
 
+async function createInitialOrders() {
+  try {
+    console.log('starting to create orders...');
+
+    const ordersToCreate = [
+      {status: 'created', userId: 1},
+      {status: 'created', userId: 1},
+      {status: 'completed', userId: 2},
+      {status: 'created', userId: 2}
+    ]
+    const orders = await Promise.all(ordersToCreate.map(order => createOrder(order)));
+    console.log('Orders Created: ', orders)
+    console.log('Finished creating orders.')
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 async function testDB() {
   try {
     console.log("Starting to test database...");
@@ -151,8 +177,8 @@ async function testDB() {
     console.log("Result:", user);
     
     console.log("Calling getUserByUsername with albert");
-    const albert = await getUserByUsername("albert");
-    console.log("Result:", albert);
+    const albert1 = await getUserByUsername("albert");
+    console.log("Result:", albert1);
 
     console.log("Calling getAllUsers");
     const allUsers = await getAllUsers();
@@ -161,6 +187,22 @@ async function testDB() {
     console.log("Calling getUserById with Sandy 1");
     const sandy = await getUserById(1);
     console.log("getUserById Result:", sandy)
+
+    console.log("Calling getOrderById with Order id 1");
+    const firstOrder = await getOrderById(1)
+    console.log("Find order by ID:", firstOrder)
+
+    console.log("Calling getAllOrders");
+    const allOrders = await getAllOrders()
+    console.log("See all orders", allOrders)
+
+    console.log("Calling getOrdersByUser");
+    const ordersOfUser = await getOrdersByUser(sandy)
+    console.log("See Orders by Username:", ordersOfUser)
+
+    console.log("Get Open Cart by User Id");
+    const cartByUserId = await getCartByUser(1)
+    console.log("Cart by User id", cartByUserId) 
 
     console.log("Finished database tests!");
   } catch (error) {

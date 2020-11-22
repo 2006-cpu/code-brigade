@@ -23,7 +23,6 @@ async function getProductById(id) {
 
 
 async function getAllProducts() {
-
   try {
     const {rows: products} = await client.query(`
       SELECT * 
@@ -38,23 +37,20 @@ async function getAllProducts() {
 
 
 async function createProduct(product) {
-
   const { name, description, price, imageURL, inStock, category } = product
-  
   try {
-   
     const { rows: [ newProduct ] } = await client.query(`
       INSERT INTO products(name, description, price, imageURL, "inStock", category) 
       VALUES($1, $2, $3, $4, $5, $6) 
       RETURNING *;
     `, [name, description, price, imageURL, inStock, category]);
 
-       return newProduct;
-
+    return newProduct;
   } catch (error) {
     throw error;
   }
 };
+
 
 async function createUser({firstName, lastName, email, imageurl, username, password, isAdmin}) {
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
@@ -63,14 +59,15 @@ async function createUser({firstName, lastName, email, imageurl, username, passw
       INSERT INTO users("firstName", "lastName", email, imageurl, username, password, "isAdmin")
       VALUES($1, $2, $3, $4, $5, $6, $7)
       RETURNING id, username;
-  `, [firstName, lastName, email, imageurl, username, hashedPassword, isAdmin]);
-  console.log('createdUser:', user)
-  delete user.password
-  return user;
+      `, [firstName, lastName, email, imageurl, username, hashedPassword, isAdmin]);
+
+      delete user.password
+      return user;
   } catch (error) {
-      throw error;
+    throw error;
   }    
-}
+};
+
 
 async function getUser({username, password}) {
   try {
@@ -86,13 +83,12 @@ async function getUser({username, password}) {
 
       } else {
         delete user.password;
-
         return user;
       }    
   } catch (error) {
       throw error;
   }
-}
+};
 
 async function getAllUsers() {
   try {
@@ -100,11 +96,13 @@ async function getAllUsers() {
       SELECT *
       FROM users;
       `);
+
       return rows;
   } catch (error) {
       throw error;
   }
-}
+};
+
 
 async function getUserById(id) {
   try {
@@ -114,11 +112,13 @@ async function getUserById(id) {
       WHERE id = $1;
       `, [id])
       delete user.password;
+
       return user;
   } catch (error) {
-      throw error;
+    throw error;
   }
-}
+};
+
 
 async function getUserByUsername(username) {
   try {
@@ -128,84 +128,123 @@ async function getUserByUsername(username) {
       WHERE username=$1
     `, [username]);
 
-    console.log('user', user)
-
-    return user;
-
+      return user;
   } catch (error) {
     throw error;
   }
-}
+};
 
-//order by id
+
 async function getOrderById(id) {
   try {
-      const {rows: orderItems} = await client.query(`
-        SELECT products.*, order_products.id, order_products.price, order_products.quantity
-        FROM products
-        JOIN order_products ON order_products."productId"=products.id
-        WHERE order_products."orderId"=${id}
-        `);
+    const {rows: [order]} = await client.query(`
+      SELECT *
+      FROM orders
+      WHERE id=$1
+      `, [id]);
+
+      const { rows: productList }  = await client.query(`
+      SELECT products.*
+      FROM products
+      JOIN order_products ON products.id=order_products."orderId"
+      WHERE order_products."orderId"=$1;
+      `, [order.id])  
+
+      order.productList = productList
          
-        return orderItems;
+      return order;
   } catch(error) {
     throw error;
   }
 };
 
-//all Orders
+
 async function getAllOrders() {
   try {
     const { rows: allOrders } = await client.query(`
-      SELECT orders.*, users.username as "person"
+      SELECT orders.*, users.username
       FROM orders
       JOIN users on users.id=orders."userId"
       `)
 
-    for (let order of orders) {
+    for (let order of allOrders) {
       const {rows: productList } = await client.query(`
       SELECT products.*, order_products.price, order_products.quantity, order_products.id as "productCartItemId"
       FROM products
       JOIN order_products ON order_products."productId"=products.id
       WHERE "orderId" IN ($1)
-      `, [orders.id]);
+      `, [order.id]);
       order.productList = productList
     }
 
     return allOrders
-
   } catch (error) {
   throw error;
   }
 };
 
-//get Orders by Username
-  async function getOrdersByUser({username}) {
+
+async function getOrdersByUser({username}) {
   try {
       const { rows: ordersList } = await client.query(`
-      SELECT orders.*, users.username as "person"
+      SELECT orders.*, users.username
       FROM orders
       JOIN users on users.id=orders."userId"
       WHERE username='${username}'
       `)
 
-      for (let order of orders) {
+      for (let order of ordersList) {
         const { rows: productList} = await client.query(`
         SELECT products.*, order_products.price, order_products.quantity, order_products.id as "productCartItemId"
         FROM products
         JOIN order_products ON order_products."productId"=products.id
         WHERE "orderId" IN ($1)
-        `, [orders.id]);
+        `, [order.id]);
         order.productList = productList
       }
-
       return ordersList
-
   } catch(error) {
     throw error;
   }
 };
 
+
+async function getCartByUser(userId) {
+  try {
+    const { rows: [cart] } = await client.query(`
+      SELECT *
+      FROM orders
+      WHERE id=$1 AND status='created'
+      `, [userId])
+
+    const { rows: productList }  = await client.query(`
+      SELECT products.*
+      FROM products
+      JOIN order_products ON products.id=order_products."orderId"
+      WHERE order_products."orderId"=$1;
+      `, [cart.id])  
+
+      cart.productList = productList
+      return cart;
+  } catch(error) {
+    throw error;
+  }
+};
+
+
+async function createOrder({ status, userId }) {
+  try {
+    const { rows: [ order ] } = await client.query(`
+      INSERT INTO orders(status, "userId") 
+      VALUES($1, $2)
+      RETURNING *;
+      `, [status, userId]);
+
+      return order;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 // export
@@ -221,6 +260,8 @@ module.exports = {
   getUserByUsername,
   getOrderById,
   getAllOrders,
-  getOrdersByUser
+  getOrdersByUser,
+  getCartByUser,
+  createOrder
   // db methods
 }
