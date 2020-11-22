@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
-const NavBar = () => {
+const NavBar = (props) => { 
+    const {token, setToken} = props;
+
+    const logout = () => {    
+        if (token) {
+            setToken('');
+        } else {
+           return 
+        }
+    }
+
+    useEffect(() => {
+        if(token){
+            setToken(token) ;
+        } 
+    }, []);
 
     return (
         <div>
-            <ul id="nav">
-                <li><a href="/register">Register</a></li>
-                <li><a href="/product/:productId">Product</a></li>
-                <li><a href="/products">Products</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
+            {token ? <>
+                <NavLink to={"/products"} activeClassName="current">Products</NavLink>
+                <button onClick={logout}>Logout</button> 
+                </>
+            : 
+            <>
+                <NavLink to={"/products"} activeClassName="current">Products</NavLink>
+                <NavLink to={"/register"} activeClassName="current">Register</NavLink>
+                <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
+            </>
+            }
         </div>
     )
 };

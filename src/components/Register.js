@@ -12,6 +12,7 @@ const Register = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [imageURL, setImageURL] = useState('');
+
     
     const signUp = async ({firstName, lastName, email, username, password, imageURL, isAdmin}) => {
         try {
@@ -45,7 +46,6 @@ const Register = (props) => {
         e.preventDefault();
         signUp({firstName, lastName, email, username, password, imageURL, isAdmin: false})
     }
-    
     
     return (<>   
         <form onSubmit={handleSubmit}>
