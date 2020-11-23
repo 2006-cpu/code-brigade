@@ -11,8 +11,11 @@ ordersRouter.use((req, res, next) => {
 
 ordersRouter.get('/', async (req, res, next) => {
     try {
-            const orders = await getAllOrders();
-            res.send(orders);    
+            if(req.user.isAdmin){
+                const orders = await getAllOrders();
+            res.send(orders); 
+
+            }   
     } catch (error) {
         next(error);
     }
