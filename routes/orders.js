@@ -13,7 +13,7 @@ ordersRouter.get('/', async (req, res, next) => {
     try {
             if(req.user.isAdmin){
                 const orders = await getAllOrders();
-            res.send(orders); 
+                res.send(orders); 
 
             }   
     } catch (error) {
