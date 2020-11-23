@@ -184,14 +184,14 @@ async function getAllOrders() {
 };
 
 
-async function getOrdersByUser({username}) {
+async function getOrdersByUser(userId) {
   try {
       const { rows: ordersList } = await client.query(`
       SELECT orders.*, users.username
       FROM orders
       JOIN users on users.id=orders."userId"
-      WHERE username='${username}'
-      `)
+      WHERE users.id=$1
+      `, [userId])
 
       for (let order of ordersList) {
         const { rows: productList} = await client.query(`

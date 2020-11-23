@@ -201,9 +201,9 @@ async function testDB() {
     const allOrders = await getAllOrders()
     console.log("See all orders", allOrders)
 
-    console.log("Calling getOrdersByUser");
-    const ordersOfUser = await getOrdersByUser(sandy)
-    console.log("See Orders by Username:", ordersOfUser)
+    console.log("Calling getOrdersByUser ID 3");
+    const ordersOfUser = await getOrdersByUser(3)
+    console.log("See Orders by User ID:", ordersOfUser)
 
     console.log("Get Open Cart by User Id");
     const cartByUserId = await getCartByUser(1)

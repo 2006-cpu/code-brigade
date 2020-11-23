@@ -40,3 +40,18 @@ return responseObj;
     console.error(error);
   }
 }
+
+
+export const getCartByUser = async (token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`} }
+  try {
+    const  data  = await axios.get(`${BASE_URL}api/orders/cart`, auth);
+    if (data.error) {
+      return
+    } else {
+      return data
+    }
+  } catch (error) {
+    throw error;
+  }
+};

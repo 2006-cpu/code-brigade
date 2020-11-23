@@ -18,18 +18,17 @@ ordersRouter.get('/', async (req, res, next) => {
     }
 })
 
-ordersRouter.get('/cart', async (req, res, next) => {
+
+ordersRouter.get('/cart', requireUser, async (req, res, next) => {
     try {
         const cartByUserId = await getCartByUser(req.user.id);
-        console.log('cartByUser', cartByUserId);
-        res.send(cartByUserId);
+        if (cartByUserId) {
+        res.send(cartByUserId)
+        }
     } catch (error) {
-        next (error)
+      next (error)
     }
 })
-
-
-
 
 
 module.exports = ordersRouter;
