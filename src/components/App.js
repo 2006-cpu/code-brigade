@@ -13,7 +13,8 @@ import {
   Products,
   Login,
   Register,
-  Account
+  Account,
+  SingleOrder
 } from './index';
 
 import Cart from './Cart'
@@ -65,6 +66,9 @@ const App = () => {
 
           <Route path="/cart">
               <Cart user={user} token={token}/>
+          </Route>
+          <Route path="/orders/:orderId">
+            <SingleOrder />
           </Route>
 
         </Switch>

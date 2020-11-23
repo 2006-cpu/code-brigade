@@ -55,3 +55,12 @@ export const getCartByUser = async (token) => {
     throw error;
   }
 };
+
+export const getAllOrders = async () => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/orders`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
