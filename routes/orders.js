@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser } = require('../db');
+const { getAllOrders, getCartByUser, createOrder } = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
@@ -29,6 +29,16 @@ ordersRouter.get('/cart', requireUser, async (req, res, next) => {
       next (error)
     }
 })
+
+ordersRouter.post('/', async (req, res, next) => {
+    try {
+        const {status, userId} = req.body
+        const newOrder = await createOrder({status, userId});
+          res.send(newOrder);
+    } catch (error) {
+    next(error);
+    }
+});
 
 
 module.exports = ordersRouter;

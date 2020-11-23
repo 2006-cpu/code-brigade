@@ -55,3 +55,25 @@ export const getCartByUser = async (token) => {
     throw error;
   }
 };
+
+export const getOrder = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}api/orders`);
+    // now we're going to filter based on orderId
+    const order = response.data.filter(item => item.id === id)
+    console.log('response:', response)
+    return order;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getAllOrders = async () => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/orders`);
+    console.log('data:', data)
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
