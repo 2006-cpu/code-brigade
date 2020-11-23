@@ -59,7 +59,6 @@ export const getCartByUser = async (token) => {
 export const getAllOrders = async () => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/orders`);
-    console.log('data:', data)
     return data;
   } catch (error) {
     throw error;
