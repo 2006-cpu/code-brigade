@@ -8,6 +8,7 @@ const NavBar = (props) => {
     const logout = () => {    
         if (token) {
             setToken('');
+            setUser('');
         } else {
            return 
         }

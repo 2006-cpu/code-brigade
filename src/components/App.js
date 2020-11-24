@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getAllOrders } from '../api/index.js';
 
 import NavBar from './NavBar';
 
@@ -28,6 +29,7 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
+  const [orders, setOrders] = useState([]);
 
   const fetchProducts = () => {
     getAllProducts()
@@ -43,6 +45,20 @@ const App = () => {
     fetchProducts();
 }, []);
 
+const fetchAllOrders = () => {
+  getAllOrders()
+  .then(orders => {
+      setOrders(orders);
+  })
+  .catch(error => {
+      console.error(error);
+  });
+}
+
+useEffect(() => {
+  fetchAllOrders()
+}, [])
+
   return (
     <Router>
       <div className="App">
@@ -55,9 +71,11 @@ const App = () => {
           <Route path="/register">
               <Register user={user} setUser={setUser} setToken={setToken}/>
           </Route>
-          <Route path="/account">
+          {user && token && 
+            <Route path="/account">
               <Account user={user} />
-          </Route>
+            </Route>
+          }
           <Route path="/product/:productId">
               <Product productList={productList}/>
           </Route>
@@ -68,12 +86,16 @@ const App = () => {
           <Route path="/cart">
               <Cart user={user} token={token}/>
           </Route>
-          <Route path="/orders/:orderId">
-            <SingleOrder />
-          </Route>
-          <Route path="/orders">
-            <Orders />
-          </Route>
+          
+          {user && user.isAdmin && <>
+            <Route path="/orders">
+              <Orders orders={orders} />
+            </Route>
+            <Route path="/orders/:orderId">
+              <SingleOrder orders={orders} />
+            </Route>
+          </>}
+          
 
         </Switch>
       </div>

@@ -1,24 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { getAllOrders } from '../api/index.js';
 
 
-const SingleOrder = () => {
+const SingleOrder = (props) => {
     const {orderId} = useParams();
-    const [orders, setOrders] = useState([])
-    const fetchAllOrders = () => {
-      getAllOrders()
-      .then(orders => {
-          setOrders(orders);
-      })
-      .catch(error => {
-          console.error(error);
-      });
-    }
-    
-    useEffect(() => {
-      fetchAllOrders()
-    }, [])
+    const {orders} = props;
+
 
     const singleOrder = orders.find(singleElm => Number(orderId) === singleElm.id);
 
