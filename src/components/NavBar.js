@@ -42,7 +42,7 @@ const NavBar = (props) => {
             </>
             }
             <>
-            {user && user.isAdmin && <NavLink to="/orders">View Oders</NavLink>}
+            {user && user.isAdmin && <NavLink to="/orders">View Orders</NavLink>}
             </>
         </div>
     )
