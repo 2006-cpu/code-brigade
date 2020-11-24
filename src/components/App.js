@@ -14,7 +14,8 @@ import {
   Login,
   Register,
   Account,
-  SingleOrder
+  SingleOrder,
+  Orders
 } from './index';
 
 import Cart from './Cart'
@@ -46,7 +47,7 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Masks Co.</h1>
-      <NavBar token={token} setToken={setToken}/>
+      <NavBar user={user} setUser={setUser} token={token} setToken={setToken}/>
         <Switch>
           <Route path="/Login">
             <Login setUser={setUser} token={token} setToken={setToken} />
@@ -69,6 +70,9 @@ const App = () => {
           </Route>
           <Route path="/orders/:orderId">
             <SingleOrder />
+          </Route>
+          <Route path="/orders">
+            <Orders />
           </Route>
 
         </Switch>

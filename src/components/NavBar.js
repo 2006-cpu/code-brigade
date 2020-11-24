@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './index.css'
 
 const NavBar = (props) => { 
-    const {token, setToken} = props;
+    const {user, setUser, token, setToken} = props;
 
     const logout = () => {    
         if (token) {
@@ -16,6 +16,12 @@ const NavBar = (props) => {
     useEffect(() => {
         if(token){
             setToken(token) ;
+        } 
+    }, []);
+
+    useEffect(() => {
+        if(user){
+            setUser(user) ;
         } 
     }, []);
 
@@ -35,6 +41,9 @@ const NavBar = (props) => {
                 <NavLink to="/cart">View Cart</NavLink>
             </>
             }
+            <>
+            {user && user.isAdmin && <NavLink to="/orders">View Oders</NavLink>}
+            </>
         </div>
     )
 };
