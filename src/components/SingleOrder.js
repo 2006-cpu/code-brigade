@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 const SingleOrder = (props) => {
     const {orderId} = useParams();
-    const {orders} = props;
+    const {user, orders} = props;
 
 
     const singleOrder = orders.find(singleElm => Number(orderId) === singleElm.id);
@@ -13,7 +13,7 @@ const SingleOrder = (props) => {
       <div>
       <h1>Orders</h1>
       {
-      singleOrder && 
+      singleOrder && user.isAdmin &&
       <>
           <p>{singleOrder.id}</p>
           <p>{singleOrder.status}</p>

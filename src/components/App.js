@@ -87,16 +87,13 @@ useEffect(() => {
               <Cart user={user} token={token}/>
           </Route>
           
-          {user && user.isAdmin && <>
-            <Route path="/orders">
-              <Orders orders={orders} />
+            <Route exact path="/orders">
+              <Orders user={user} orders={orders} />
             </Route>
-            <Route path="/orders/:orderId">
-              <SingleOrder orders={orders} />
-            </Route>
-          </>}
-          
 
+            <Route exact path="/orders/:orderId">
+              <SingleOrder user={user} orders={orders} />
+            </Route>
         </Switch>
       </div>
     </Router>
