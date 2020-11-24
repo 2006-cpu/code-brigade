@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import NavBar from './NavBar';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -8,33 +10,28 @@ import {
 
 import {
   Product,
-  Products
+  Products,
+  Login,
+  Register,
+  Account,
+  SingleOrder
 } from './index';
 
+import Cart from './Cart'
+
 import {
-  getSomething,
   getAllProducts
 } from '../api';
 
 const App = () => {
-  const [message, setMessage] = useState('');
   const [productList, setProductList] = useState([]);
-
-  useEffect(() => {
-    getSomething()
-      .then(response => {
-        setMessage(response.message);
-      })
-      .catch(error => {
-        setMessage(error.message);
-      });
-  });
+  const [token, setToken] = useState('');
+  const [user, setUser] = useState({});
 
   const fetchProducts = () => {
     getAllProducts()
     .then(products => {
         setProductList(products);
-        console.log('product:', products)
     })
     .catch(error => {
         console.error(error);
@@ -48,14 +45,32 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-      <h1>Hello</h1>
+      <h1>Masks Co.</h1>
+      <NavBar token={token} setToken={setToken}/>
         <Switch>
+          <Route path="/Login">
+            <Login setUser={setUser} token={token} setToken={setToken} />
+          </Route>
+          <Route path="/register">
+              <Register user={user} setUser={setUser} setToken={setToken}/>
+          </Route>
+          <Route path="/account">
+              <Account user={user} />
+          </Route>
           <Route path="/product/:productId">
               <Product productList={productList}/>
           </Route>
           <Route path="/products">
               <Products productList={productList}/>
           </Route>
+
+          <Route path="/cart">
+              <Cart user={user} token={token}/>
+          </Route>
+          <Route path="/orders/:orderId">
+            <SingleOrder />
+          </Route>
+
         </Switch>
       </div>
     </Router>

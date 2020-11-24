@@ -1,6 +1,19 @@
 // code to build and initialize DB goes here
 const {
-  client, createProduct
+  client, 
+  createProduct,
+  getProductById,
+  getAllProducts,
+  createUser,
+  getUser,
+  getUserByUsername,
+  getAllUsers,
+  getUserById,
+  createOrder,
+  getOrderById,
+  getAllOrders,
+  getOrdersByUser,
+  getCartByUser
   // other db methods 
 } = require('./index');
 
@@ -29,7 +42,7 @@ async function createTables() {
       name VARCHAR(255) NOT NULL,
       description VARCHAR(255) NOT NULL,
       price INTEGER NOT NULL,
-      imageURL VARCHAR(255),
+      imageURL VARCHAR(255) DEFAULT 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg',
       "inStock" BOOLEAN DEFAULT false,
       category VARCHAR(255) NOT NULL 
     );
@@ -38,10 +51,10 @@ async function createTables() {
       "firstName" VARCHAR(255) NOT NULL,
       "lastName" VARCHAR(255) NOT NULL,
       email TEXT UNIQUE NOT NULL,
-      imageURL VARCHAR(255),
+      imageURL VARCHAR(255) DEFAULT 'http://www.freeimageslive.com/galleries/sports/moods_emotions/preview/happy_face.jpg',
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) UNIQUE NOT NULL,
-      "isAdmin" BOOLEAN DEFAULT false NOT NULL
+      "isAdmin" BOOLEAN DEFAULT false
     );
     CREATE TABLE orders (
       id SERIAL PRIMARY KEY,
@@ -71,19 +84,23 @@ async function buildTables() {
 
     await dropTables();
     await createTables();
+    await createInitialProducts();
+    await createInitialUsers();
+    await createInitialOrders();
   } catch (error) {
     throw error;
   }
 }
 
-async function populateInitialData() {
+async function createInitialProducts() {
   try {
     console.log('Starting to create products...')
     const productsToCreate = [
-      { name: 'camo masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
-      { name: 'Golden Gopher masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'}
+      { name: 'Sports Team masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
+      { name: 'Marvel masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'},
+      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/61M4QKuk0-L._AC_SL1024_.jpg', inStock: true, category: 'adults'}
       ]
-    // create useful starting data
+
     console.log('products created')
     const products = await Promise.all(productsToCreate.map(createProduct))
     
@@ -96,7 +113,111 @@ async function populateInitialData() {
   }
 }
 
+async function createInitialUsers() {
+  console.log('Starting to create users...');
+  try {
+
+    const usersToCreate = [
+      {firstName: 'Berto', lastName: 'One', email: 'albert@gmail.com', imageurl: 'https://picsum.photos/200', username: 'albert', password: 'berto99', isAdmin: false},
+      {firstName: 'Sandy', lastName: 'Two', email: 'sandra@gmail.com', imageurl: 'https://picsum.photos/200', username: 'sandy', password: 'glamgal', isAdmin: false},
+      {firstName: 'Code', lastName: 'Brigade', email: 'codebrigade@gmail.com', imageurl: 'https://picsum.photos/200', username: 'codebrigade', password: 'codebrigade', isAdmin: true}
+    ]
+
+    const users = await Promise.all(usersToCreate.map(createUser));
+
+    console.log('Users created:');
+    console.log(users);
+    console.log('Finished creating users!');
+  } catch (error) {
+    console.error('Error creating users!');
+    throw error;
+  }
+}
+
+async function createInitialOrders() {
+  try {
+    console.log('starting to create orders...');
+
+    const ordersToCreate = [
+      {status: 'created', userId: 1},
+      {status: 'completed', userId: 1},
+      {status: 'cancelled', userId: 1},
+      {status: 'completed', userId: 2},
+      {status: 'created', userId: 2},
+      {status: 'created', userId: 3},
+      {status: 'cancelled', userId: 3},
+      {status: 'completed', userId: 3}
+    ]
+    const orders = await Promise.all(ordersToCreate.map(order => createOrder(order)));
+    console.log('Orders Created: ', orders)
+    console.log('Finished creating orders.')
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function testDB() {
+  try {
+    console.log("Starting to test database...");
+
+    console.log("Calling createProduct");
+    const newProduct = await createProduct({name: 'french mask', description:'keeps you warm at night', price: '10', imageURL:'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'})
+    console.log("Result:", newProduct);
+
+    console.log("Calling getAllProducts");
+    const products = await getAllProducts();
+    console.log("Result:", products);
+
+    console.log("Calling getProductById with 1");
+    const item1 = await getProductById(1);
+    console.log("Result:", item1);
+
+    console.log("Calling createUser");
+    const newUser = await createUser({firstName:'Jeanne', lastName:'Dupont', email:'JeanneDupont@gmail.com', imageurl:'https://picsum.photos/200', username:'petitefleur', password:'messagesecret', isAdmin: false});
+    console.log("Result:", newUser);
+
+    console.log("Calling getUser");
+    const user = await getUser({username:'albert', password:'berto99'});
+    console.log("Result:", user);
+    
+    console.log("Calling getUserByUsername with albert");
+    const albert1 = await getUserByUsername("albert");
+    console.log("Result:", albert1);
+
+    console.log("Calling getAllUsers");
+    const allUsers = await getAllUsers();
+    console.log("All Users List Result:", allUsers)
+
+    console.log("Calling getUserById with Sandy 1");
+    const sandy = await getUserById(1);
+    console.log("getUserById Result:", sandy)
+
+    console.log("Calling getOrderById with Order id 1");
+    const firstOrder = await getOrderById(1)
+    console.log("Find order by ID:", firstOrder)
+
+    console.log("Calling getAllOrders");
+    const allOrders = await getAllOrders()
+    console.log("See all orders", allOrders)
+
+    console.log("Calling getOrdersByUser ID 3");
+    const ordersOfUser = await getOrdersByUser(3)
+    console.log("See Orders by User ID:", ordersOfUser)
+
+    console.log("Get Open Cart by User Id");
+    const cartByUserId = await getCartByUser(1)
+    console.log("Cart by User id", cartByUserId) 
+
+    console.log("Finished database tests!");
+  } catch (error) {
+    console.log("Error during testDB");
+    throw error;
+  }
+}
+
+
 buildTables()
-  .then(populateInitialData)
+  .then(testDB)
   .catch(console.error)
   .finally(() => client.end());
