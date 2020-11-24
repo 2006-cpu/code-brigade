@@ -25,6 +25,10 @@ const Login = (props) => {
     const user = await axios.get(`${BASE_URL}api/users/me`, auth);
     setUser(user.data);
     console.log("THE USER:", user.data)
+    setLogin({
+      username: '',
+      password: ''
+    })
     
   }
 
