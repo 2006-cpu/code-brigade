@@ -11,12 +11,12 @@ const Register = (props) => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [imageURL, setImageURL] = useState('');
+    const [imageurl, setImageURL] = useState('');
 
     
-    const signUp = async ({firstName, lastName, email, username, password, imageURL, isAdmin}) => {
+    const signUp = async ({firstName, lastName, email, username, password, imageurl, isAdmin}) => {
         try {
-            const response = await axios.post(`${ BASE_URL }api/users/register`, {firstName, lastName, email, username, password, imageURL, isAdmin})
+            const response = await axios.post(`${ BASE_URL }api/users/register`, {firstName, lastName, email, username, password, imageurl, isAdmin})
             const responseToken = response.data.token;
             if(response){
                 setUsername('');
@@ -42,7 +42,7 @@ const Register = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        signUp({firstName, lastName, email, username, password, imageURL, isAdmin: false})
+        signUp({firstName, lastName, email, username, password, imageurl, isAdmin: false})
     }
     
     return (<>   
@@ -53,7 +53,7 @@ const Register = (props) => {
         <input type="text" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
         <input type="text" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
         <input type="password" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
-        <input type="text" placeholder={'Image URL'} value={imageURL} onChange={(event) => setImageURL(event.target.value)} />
+        <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
         <button type="submit" >Sign Up</button>
       </form>        
     </>)
