@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getAllOrders } from '../api/index.js';
 
 import NavBar from './NavBar';
 
@@ -29,7 +28,6 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
-  const [orders, setOrders] = useState([]);
 
   const fetchProducts = () => {
     getAllProducts()
@@ -44,20 +42,6 @@ const App = () => {
   useEffect(() => {
     fetchProducts();
 }, []);
-
-const fetchAllOrders = () => {
-  getAllOrders()
-  .then(orders => {
-      setOrders(orders);
-  })
-  .catch(error => {
-      console.error(error);
-  });
-}
-
-useEffect(() => {
-  fetchAllOrders()
-}, [])
 
   return (
     <Router>
@@ -82,18 +66,15 @@ useEffect(() => {
           <Route path="/products">
               <Products productList={productList}/>
           </Route>
-
           <Route path="/cart">
               <Cart user={user} token={token}/>
+          </Route>          
+          <Route exact path="/orders">
+            <Orders user={user} />
           </Route>
-          
-            <Route exact path="/orders">
-              <Orders user={user} orders={orders} />
-            </Route>
-
-            <Route exact path="/orders/:orderId">
-              <SingleOrder user={user} orders={orders} />
-            </Route>
+          <Route exact path="/orders/:orderId">
+            <SingleOrder user={user} />
+          </Route>
         </Switch>
       </div>
     </Router>

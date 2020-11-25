@@ -1,8 +1,24 @@
-import React from 'react';
+import React, {useState, useEffect }from 'react';
 import { NavLink } from 'react-router-dom';
+import {getAllOrders} from '../api'
 
 const Orders = (props) => {
-    const {user, orders} = props;
+    const {user} = props;
+    const [orders, setOrders] = useState([]);
+
+    const fetchAllOrders = () => {
+        getAllOrders()
+        .then(orders => {
+            setOrders(orders);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+      }
+      
+      useEffect(() => {
+        fetchAllOrders()
+      }, [])
     
     console.log(orders)
     return (<>
