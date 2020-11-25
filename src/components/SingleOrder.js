@@ -1,23 +1,38 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
+import {getOrderById} from '../api'
+
 
 
 const SingleOrder = (props) => {
+    const [order, setOrder] = useState({});
     const {orderId} = useParams();
-    const {orders} = props;
+    const {user} = props;
 
+    const fetchOrder = () => {
+      getOrderById(orderId)
+      .then(order => {
+          setOrder(order);
+      })
+      .catch(error => {
+          console.error(error);
+      });
+    }
+    
+    useEffect(() => {
+      fetchOrder()
+    }, [])
 
-    const singleOrder = orders.find(singleElm => Number(orderId) === singleElm.id);
-
+    
     return (
       <div>
       <h1>Orders</h1>
       {
-      singleOrder && 
+      order && user.isAdmin &&
       <>
-          <p>{singleOrder.id}</p>
-          <p>{singleOrder.status}</p>
-          <p>{singleOrder.datePlaced}</p>
+          <p>{order.id}</p>
+          <p>{order.status}</p>
+          <p>{order.datePlaced}</p>
       </>
       }   
   </div>
