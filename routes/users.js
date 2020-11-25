@@ -1,7 +1,7 @@
 const express = require('express');
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'codebrigaderules';
+const JWT_SECRET =  process.env.JWT_SECRET || 'codebrigaderules';
 
 const { createUser,
         getUser,
@@ -32,7 +32,7 @@ usersRouter.post('/login', async (req, res, next) => {
       if (!user) {
         next({
         name: 'Invalid',
-        message: 'No match'
+        message: 'No match with that username and password combination'
         });
       }
   
