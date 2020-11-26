@@ -13,7 +13,8 @@ const {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
-  getCartByUser
+  getCartByUser,
+  createOrderProductsList,
   // other db methods 
 } = require('./index');
 
@@ -87,6 +88,7 @@ async function buildTables() {
     await createInitialProducts();
     await createInitialUsers();
     await createInitialOrders();
+    await createInitialOrderProductList();
   } catch (error) {
     throw error;
   }
@@ -156,6 +158,26 @@ async function createInitialOrders() {
   }
 }
 
+// createOrderProductsList({ productId, orderId, price, quantity })
+async function createInitialOrderProductList() {
+  try {
+    console.log('Starting to create Order Products...');
+
+    const orderProductsToCreate = [
+      {productId: 1, orderId: 1, price: 5, quantity: 1},
+      {productId: 3, orderId: 3, price: 3, quantity: 1},
+      {productId: 2, orderId: 5, price: 2, quantity: 1},
+      {productId: 3, orderId: 6, price: 3, quantity: 1},
+      {productId: 1, orderId: 8, price: 5, quantity: 1}
+    ]
+    const orderProductList = await Promise.all(orderProductsToCreate.map(orderProduct => createOrderProductsList(orderProduct)));
+    console.log('Order Products Created: ', orderProductList)
+    console.log('Finished creating Order Products.')
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 async function testDB() {
   try {
@@ -208,6 +230,10 @@ async function testDB() {
     console.log("Get Open Cart by User Id");
     const cartByUserId = await getCartByUser(1)
     console.log("Cart by User id", cartByUserId) 
+
+    console.log("Get Order Product: Christmas Mask for Order #1 ");
+    const orderProduct = await createOrderProductsList({ productId: 3, orderId: 2, price: 3, quantity: 1 })
+    console.log("Create Order Product", orderProduct) 
 
     console.log("Finished database tests!");
   } catch (error) {
