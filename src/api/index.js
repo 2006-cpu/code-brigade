@@ -21,7 +21,7 @@ export const getProduct = async (id) => {
   }
 }
 
-export async function loginUser(username, password) {
+export const loginUser = async (username, password) => {
   try {
     const existingUser = await fetch(`${BASE_URL}api/users/login`, {
   method: "POST",

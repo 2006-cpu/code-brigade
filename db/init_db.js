@@ -15,6 +15,7 @@ const {
   getOrdersByUser,
   getCartByUser,
   createOrderProductsList,
+  getOrderProductById
   // other db methods 
 } = require('./index');
 
@@ -234,6 +235,10 @@ async function testDB() {
     console.log("Get Order Product: Christmas Mask for Order #1 ");
     const orderProduct = await createOrderProductsList({ productId: 3, orderId: 2, price: 3, quantity: 1 })
     console.log("Create Order Product", orderProduct) 
+
+    console.log("Get order product by Id");
+    const orderProductById = await getOrderProductById(1)
+    console.log("Get Order Product", orderProductById)
 
     console.log("Finished database tests!");
   } catch (error) {

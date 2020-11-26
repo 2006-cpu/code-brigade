@@ -261,6 +261,19 @@ async function createOrder({ status, userId }) {
   }
 };
 
+async function getOrderProductById(id) {
+  try  {
+    const { rows: [ order_product ] } = await client.query(`
+    SELECT *
+    FROM order_products
+    WHERE id=$1
+    `, [ id ])
+
+      return order_product;
+  } catch (error) {
+    throw error;
+  }
+}
 //seed Data for order_products
 async function createOrderProductsList({ productId, orderId, price, quantity }) {
   try {
@@ -293,6 +306,7 @@ module.exports = {
   getOrdersByUser,
   getCartByUser,
   createOrder,
-  createOrderProductsList
+  createOrderProductsList,
+  getOrderProductById
   // db methods
 }
