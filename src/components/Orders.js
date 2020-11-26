@@ -1,11 +1,28 @@
-import React from 'react';
+import React, {useState, useEffect }from 'react';
 import { NavLink } from 'react-router-dom';
+import {getAllOrders} from '../api'
 
 const Orders = (props) => {
-    const {orders} = props;
-    
+    const {user} = props;
+    const [orders, setOrders] = useState([]);
 
-    return (
+    const fetchAllOrders = () => {
+        getAllOrders()
+        .then(orders => {
+            setOrders(orders);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+      }
+      
+      useEffect(() => {
+        fetchAllOrders()
+      }, [])
+    
+    console.log(orders)
+    return (<>
+        {user && user.isAdmin &&
         <div className="orders-div">
             <h1>All Orders</h1>
             {orders.map(({id, status, userId, datePlaced}) => {
@@ -17,8 +34,10 @@ const Orders = (props) => {
                 </div>
             </>})}
         </div>
+    }
+        
 
-    )
+    </>)
 }
 
 export default Orders;

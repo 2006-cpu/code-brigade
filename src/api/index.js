@@ -90,3 +90,12 @@ export const getAllOrders = async () => {
     throw error;
   }
 }
+
+export const getOrderById = async (id) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/orders/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
