@@ -289,6 +289,16 @@ async function createOrderProductsList({ productId, orderId, price, quantity }) 
   }
 };
 
+async function destroyOrderProduct(id){
+  const { rows: [order_product] } = await client.query(`
+      DELETE FROM order_products
+      WHERE id = $1
+      RETURNING *;
+  `, [id])
+  return order_product;
+}
+
+
 
 // export
 module.exports = {
@@ -307,6 +317,7 @@ module.exports = {
   getCartByUser,
   createOrder,
   createOrderProductsList,
-  getOrderProductById
+  getOrderProductById,
+  destroyOrderProduct
   // db methods
 }

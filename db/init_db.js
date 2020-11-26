@@ -15,7 +15,8 @@ const {
   getOrdersByUser,
   getCartByUser,
   createOrderProductsList,
-  getOrderProductById
+  getOrderProductById,
+  destroyOrderProduct
   // other db methods 
 } = require('./index');
 
