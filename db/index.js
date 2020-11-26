@@ -290,6 +290,7 @@ module.exports = {
   getAllOrders,
   getOrdersByUser,
   getCartByUser,
-  createOrder
+  createOrder,
+  updateOrderProduct
   // db methods
 }
