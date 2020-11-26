@@ -15,7 +15,9 @@ const {
   getOrdersByUser,
   getCartByUser,
   createOrderProductsList,
-  getOrderProductById
+  getOrderProductById,
+  getOrdersByProduct,
+  addProductToOrder
   // other db methods 
 } = require('./index');
 
@@ -239,6 +241,34 @@ async function testDB() {
     console.log("Get order product by Id");
     const orderProductById = await getOrderProductById(1)
     console.log("Get Order Product", orderProductById)
+
+    console.log("Testing Functions for addProductToOrder")
+    const orderList = await getOrdersByProduct({id:3})
+    const index = orderList.findIndex(order => order.id === 3)
+    console.log("What are the results:", orderList)
+    console.log("What is the index", index)
+    
+    console.log("Testing a non-existing product in order")
+    const nonExist = await getOrdersByProduct({id:4})
+    console.log("Testing a non-existing product ID in an order returns an empty array:", nonExist)
+
+    //TEST 1 WORKS EXISTING
+    const addingProductOrder = await addProductToOrder({ orderId: 3, productId: 3, price: 8, quantity: 2})
+    console.log("What is addingProductOrder", addingProductOrder)
+  
+    //TEST 2 WORKS NEW
+    const addingProductOrderTestTwo = await addProductToOrder({ orderId: 3, productId: 4, price: 10, quantity: 4})
+    console.log("What is addingProductOrder TEST TWO", addingProductOrderTestTwo)
+
+    //TEST 3 WORKS NEW
+    const addingProductOrderTestThree = await addProductToOrder({ orderId: 5, productId: 4, price: 20, quantity: 3})
+    console.log("What is addingProductOrder TEST THREE Should be new", addingProductOrderTestThree)
+
+    //TESt 4 WORKS EXISTING
+    const addingProductOrderTEST = await addProductToOrder({ orderId: 2, productId: 3, price: 100, quantity: 100})
+    console.log("What is addingProductOrder for FOUR should be existing", addingProductOrderTEST)
+    console.log("Finished Testing Functions for addProductToOrder")
+
 
     console.log("Finished database tests!");
   } catch (error) {
