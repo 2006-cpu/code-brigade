@@ -261,6 +261,21 @@ async function createOrder({ status, userId }) {
   }
 };
 
+async function getOrderProductById(id) {
+  try  {
+    const { rows: [orderProduct] } = await client.query(`
+    SELECT *
+    FROM order_products
+    WHERE id=$1
+    `[id])
+
+    return orderProduct
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 // export
 module.exports = {

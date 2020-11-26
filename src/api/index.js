@@ -21,7 +21,33 @@ export const getProduct = async (id) => {
   }
 }
 
-export async function loginUser(username, password) {
+// export const signUp = async ({firstName, lastName, email, username, password, imageurl, isAdmin}) => {
+//   try {
+//     const response = await axios.post(`${ BASE_URL }api/users/register`, {firstName, lastName, email, username, password, imageurl, isAdmin})
+//     const responseToken = response.data.token;
+//     if(response){
+//         setUsername('');
+//         setPassword('');
+//         setFirstName(''); 
+//         setLastName('');
+//         setEmail('');
+//         setImageURL('');
+//         setToken(responseToken);
+//         const auth = {
+//             headers: {'Authorization': `Bearer ${responseToken}`
+//         }
+//           }
+//         const user = await axios.get(`${BASE_URL}api/users/me`, auth);
+//         console.log("THE USER:", user.data)
+//         setUser(user.data);
+//         return response;
+//     }
+// } catch (error) {
+//     console.error(error);
+// }
+// }
+
+export const loginUser = async (username, password) => {
   try {
     const existingUser = await fetch(`${BASE_URL}api/users/login`, {
   method: "POST",
