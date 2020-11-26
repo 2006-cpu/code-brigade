@@ -261,6 +261,19 @@ async function createOrder({ status, userId }) {
   }
 };
 
+async function updateOrderProduct({ id, price, quantity }) {
+
+  try {
+    await client.query(`
+      UPDATE orders_product 
+      SET quantity=${quantity}, price=${price}
+      WHERE id=${id};
+      `);
+
+  } catch (error) {
+    throw error;
+  }
+};
 
 // export
 module.exports = {
