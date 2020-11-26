@@ -18,6 +18,17 @@ ordersRouter.get('/', async (req, res, next) => {
     }
 })
 
+ordersRouter.get('/cart', requireUser, async (req, res, next) => {
+    try {
+        const cartByUserId = await getCartByUser(req.user.id);
+        if (cartByUserId) {
+        res.send(cartByUserId)
+        }
+    } catch (error) {
+      next (error)
+    }
+})
+
 ordersRouter.get('/:orderId', async (req, res, next) => {
    const id = req.params.orderId;
     try {
@@ -29,16 +40,7 @@ ordersRouter.get('/:orderId', async (req, res, next) => {
 })
 
 
-ordersRouter.get('/cart', requireUser, async (req, res, next) => {
-    try {
-        const cartByUserId = await getCartByUser(req.user.id);
-        if (cartByUserId) {
-        res.send(cartByUserId)
-        }
-    } catch (error) {
-      next (error)
-    }
-})
+
 
 ordersRouter.post('/', async (req, res, next) => {
     try {
