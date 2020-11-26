@@ -263,14 +263,13 @@ async function createOrder({ status, userId }) {
 
 async function getOrderProductById(id) {
   try  {
-    const { rows: [orderProduct] } = await client.query(`
+    const { rows: [ order_product ] } = await client.query(`
     SELECT *
     FROM order_products
     WHERE id=$1
-    `[id])
+    `, [ id ])
 
-    return orderProduct
-
+      return order_product;
   } catch (error) {
     throw error;
   }
@@ -307,6 +306,7 @@ module.exports = {
   getOrdersByUser,
   getCartByUser,
   createOrder,
-  createOrderProductsList
+  createOrderProductsList,
+  getOrderProductById
   // db methods
 }
