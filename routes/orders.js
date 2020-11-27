@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser, createOrder, getOrderById } = require('../db');
+const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder } = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
@@ -52,5 +52,25 @@ ordersRouter.post('/', async (req, res, next) => {
     }
 });
 
+//orders/:orderId/products
+ordersRouter.post('/:orderId/products', async (req, res, next) => {
+    const { orderId } = req.params;
+    const { productId, price, quantity } = req.body
+  
+    try { 
+      const addProduct =  await addProductToOrder({ orderId, productId, price, quantity })
+    
+      if (addProduct) {
+        res.send(addProduct);
+      } else {
+        next({ 
+          name: 'AddProductError', 
+          message: 'Sorry, no product added'
+          });
+      }
+    } catch ({ name, message }) {
+      next({ name, message })
+    }
+  });
 
 module.exports = ordersRouter;

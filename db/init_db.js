@@ -15,7 +15,9 @@ const {
   getOrdersByUser,
   getCartByUser,
   createOrderProductsList,
-  getOrderProductById
+  getOrderProductById,
+  getOrdersByProduct,
+  addProductToOrder
   // other db methods 
 } = require('./index');
 
@@ -159,7 +161,7 @@ async function createInitialOrders() {
   }
 }
 
-// createOrderProductsList({ productId, orderId, price, quantity })
+
 async function createInitialOrderProductList() {
   try {
     console.log('Starting to create Order Products...');
@@ -169,7 +171,8 @@ async function createInitialOrderProductList() {
       {productId: 3, orderId: 3, price: 3, quantity: 1},
       {productId: 2, orderId: 5, price: 2, quantity: 1},
       {productId: 3, orderId: 6, price: 3, quantity: 1},
-      {productId: 1, orderId: 8, price: 5, quantity: 1}
+      {productId: 1, orderId: 8, price: 5, quantity: 1},
+      {productId: 3, orderId: 2, price: 3, quantity: 1}
     ]
     const orderProductList = await Promise.all(orderProductsToCreate.map(orderProduct => createOrderProductsList(orderProduct)));
     console.log('Order Products Created: ', orderProductList)
@@ -229,16 +232,40 @@ async function testDB() {
     console.log("See Orders by User ID:", ordersOfUser)
 
     console.log("Get Open Cart by User Id");
-    const cartByUserId = await getCartByUser(1)
+    const cartByUserId = await getCartByUser(3)
     console.log("Cart by User id", cartByUserId) 
-
-    console.log("Get Order Product: Christmas Mask for Order #1 ");
-    const orderProduct = await createOrderProductsList({ productId: 3, orderId: 2, price: 3, quantity: 1 })
-    console.log("Create Order Product", orderProduct) 
 
     console.log("Get order product by Id");
     const orderProductById = await getOrderProductById(1)
     console.log("Get Order Product", orderProductById)
+
+    console.log("Testing Functions for addProductToOrder")
+    const orderList = await getOrdersByProduct({id:3})
+    const index = orderList.findIndex(order => order.id === 3)
+    console.log("What are the results:", orderList)
+    console.log("What is the index", index)
+    
+    console.log("Testing a non-existing product in order")
+    const nonExist = await getOrdersByProduct({id:4})
+    console.log("Testing a non-existing product ID in an order returns an empty array:", nonExist)
+
+    //TEST 1 WORKS EXISTING
+    const addingProductOrder = await addProductToOrder({ orderId: 3, productId: 3, price: 8, quantity: 2})
+    console.log("What is addingProductOrder Result for TEST ONE should be existing", addingProductOrder)
+  
+    //TEST 2 WORKS NEW
+    // const addingProductOrderTestTwo = await addProductToOrder({ orderId: 3, productId: 4, price: 10, quantity: 4})
+    // console.log("What is addingProductOrder Result for TEST TWO", addingProductOrderTestTwo)
+
+    //TEST 3 WORKS NEW
+    const addingProductOrderTestThree = await addProductToOrder({ orderId: 5, productId: 4, price: 20, quantity: 3})
+    console.log("What is addingProductOrder Result for TEST THREE Should be new", addingProductOrderTestThree)
+
+    //TESt 4 WORKS EXISTING
+    const addingProductOrderTEST = await addProductToOrder({ orderId: 2, productId: 3, price: 100, quantity: 100})
+    console.log("What is addingProductOrder Result for TEST FOUR should be existing", addingProductOrderTEST)
+    console.log("Finished Testing Functions for addProductToOrder")
+
 
     console.log("Finished database tests!");
   } catch (error) {

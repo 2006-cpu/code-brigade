@@ -144,11 +144,11 @@ async function getOrderById(id) {
       `, [id]);
 
       const { rows: productList }  = await client.query(`
-      SELECT products.*
+      SELECT products.*, order_products.id as "orderProductId", order_products."productId", order_products."orderId"
       FROM products
       JOIN order_products ON products.id=order_products."orderId"
       WHERE order_products."orderId"=$1;
-      `, [order.id])  
+      `, [id])  
 
       order.productList = productList
          
@@ -212,15 +212,16 @@ async function getOrdersByUser(userId) {
 async function getCartByUser(userId) {
   try {
     const { rows: [cart] } = await client.query(`
-      SELECT *
+      SELECT orders.*, users.username, users.id, orders.id as "orderId"
       FROM orders
+      JOIN users on users.id=orders."userId"
       WHERE "userId"=$1 AND status='created'
       `, [userId])
 
     const { rows: productList }  = await client.query(`
-      SELECT products.*
+      SELECT products.*, order_products.id as "orderProductId", order_products."orderId"
       FROM products
-      JOIN order_products ON products.id=order_products."orderId"
+      JOIN order_products ON products.id=order_products."productId"
       WHERE order_products."orderId"=$1;
       `, [cart.id])  
 
@@ -273,7 +274,8 @@ async function getOrderProductById(id) {
   } catch (error) {
     throw error;
   }
-}
+};
+
 //seed Data for order_products
 async function createOrderProductsList({ productId, orderId, price, quantity }) {
   try {
@@ -298,7 +300,42 @@ async function destroyOrderProduct(id){
   return order_product;
 }
 
+async function addProductToOrder({ orderId, productId, price, quantity }) {
+  try {
+    const orderList = await getOrdersByProduct({id: productId})
+    console.log("What is orderList in db adapter", orderList)
+    const index = orderList.findIndex(order => order.id === orderId)
+    console.log("What is the index in the db adapter", index)
+    if (index === -1 ) {
+      const { rows: [ orderProduct ] }  = await client.query(`
+      INSERT INTO order_products("orderId","productId", price, quantity)
+      VALUES($1, $2, $3, $4)
+      RETURNING *;
+    `, [ orderId, productId, price, quantity ])
+      
+      return orderProduct;
+    } else {
 
+      const orderDetails = await getOrderById(orderId)
+      console.log("what is the Order Details in db adapter for existing order_product", orderDetails)
+      const finding = orderDetails.productList.find(singleProduct => singleProduct.productId === productId);
+      console.log("What is EXISING ORDER-PRODUCT in db adapter:", finding)
+      console.log("What is the EXISTING ORDER-PRODUCT_ID:", finding.orderProductId)
+
+      const { rows: [ changeOrderProduct ] } = await client.query(`
+      UPDATE order_products
+      SET price=${price}, quantity=${quantity}
+      WHERE id=${ finding.orderProductId}
+      RETURNING *;
+    `);
+      console.log("What is the new CHANGE for the EXISTING ORDER-PRODUCT-ID:", changeOrderProduct)
+    return changeOrderProduct;
+      
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 
 // export
 module.exports = {
@@ -318,6 +355,8 @@ module.exports = {
   createOrder,
   createOrderProductsList,
   getOrderProductById,
-  destroyOrderProduct
+  destroyOrderProduct,
+  getOrdersByProduct,
+  addProductToOrder
   // db methods
 }

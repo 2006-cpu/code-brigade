@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 // import NavBar from './NavBar'
 import axios from 'axios';
 import {loginUser} from '../api/index.js'
-const BASE_URL = '/'
 
+const BASE_URL = '/'
 
 const Login = (props) => {
   const {setUser, setToken} = props
