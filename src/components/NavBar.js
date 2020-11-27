@@ -18,9 +18,7 @@ const NavBar = (props) => {
         if(token){
             setToken(token) ;
         } 
-    }, []);
 
-    useEffect(() => {
         if(user){
             setUser(user) ;
         } 

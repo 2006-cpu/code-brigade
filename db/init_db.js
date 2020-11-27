@@ -17,8 +17,8 @@ const {
   createOrderProductsList,
   getOrderProductById,
   getOrdersByProduct,
-  addProductToOrder
-  // other db methods 
+  addProductToOrder,
+  getOrderProductByOrderIdProductIdPair
 } = require('./index');
 
 async function dropTables() {
@@ -172,7 +172,6 @@ async function createInitialOrderProductList() {
       {productId: 2, orderId: 5, price: 2, quantity: 1},
       {productId: 3, orderId: 6, price: 3, quantity: 1},
       {productId: 1, orderId: 8, price: 5, quantity: 1},
-      {productId: 3, orderId: 2, price: 3, quantity: 1}
     ]
     const orderProductList = await Promise.all(orderProductsToCreate.map(orderProduct => createOrderProductsList(orderProduct)));
     console.log('Order Products Created: ', orderProductList)
@@ -239,33 +238,32 @@ async function testDB() {
     const orderProductById = await getOrderProductById(1)
     console.log("Get Order Product", orderProductById)
 
-    console.log("Testing Functions for addProductToOrder")
+    console.log("Testing Functions for addProductToOrder and First, we check to see list of orders with product id passed in for product Id 3 ")
     const orderList = await getOrdersByProduct({id:3})
     const index = orderList.findIndex(order => order.id === 3)
     console.log("What are the results:", orderList)
     console.log("What is the index", index)
     
-    console.log("Testing a non-existing product in order")
+    console.log("Testing a non-existing product in order First, we check to see list of orders with product id passed in for product Id 4")
     const nonExist = await getOrdersByProduct({id:4})
     console.log("Testing a non-existing product ID in an order returns an empty array:", nonExist)
 
-    //TEST 1 WORKS EXISTING
-    const addingProductOrder = await addProductToOrder({ orderId: 3, productId: 3, price: 8, quantity: 2})
-    console.log("What is addingProductOrder Result for TEST ONE should be existing", addingProductOrder)
-  
-    //TEST 2 WORKS NEW
-    // const addingProductOrderTestTwo = await addProductToOrder({ orderId: 3, productId: 4, price: 10, quantity: 4})
-    // console.log("What is addingProductOrder Result for TEST TWO", addingProductOrderTestTwo)
+    //TEST Nov 27 for New - tested on Nov 27th and it works
+    // const addingProductOrderForNewCombo = await addProductToOrder({ orderId: 5, productId: 4, price: 20, quantity: 3})
+    // console.log("What is addingProductOrder Result for TEST Nov 27 Should be new Order Product Id", addingProductOrderForNewCombo)
 
-    //TEST 3 WORKS NEW
-    const addingProductOrderTestThree = await addProductToOrder({ orderId: 5, productId: 4, price: 20, quantity: 3})
-    console.log("What is addingProductOrder Result for TEST THREE Should be new", addingProductOrderTestThree)
+    // TEST 5 for Existing - tested on Nov 27th and it works
+    // const addingProductToExistingOrderProduct = await addProductToOrder({orderId: 5, productId: 2, price: 23, quantity: 24})
+    // console.log("What is the result of TEST 5 addProductToOrder for existing order Id and product combo", addingProductToExistingOrderProduct)
+    // console.log("Finished TEST 5")
 
-    //TESt 4 WORKS EXISTING
-    const addingProductOrderTEST = await addProductToOrder({ orderId: 2, productId: 3, price: 100, quantity: 100})
-    console.log("What is addingProductOrder Result for TEST FOUR should be existing", addingProductOrderTEST)
-    console.log("Finished Testing Functions for addProductToOrder")
-
+    console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId)")
+    const getThePairOrderProductId = await getOrderProductByOrderIdProductIdPair(8, 1)
+    console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should be id: 5", getThePairOrderProductId)
+    
+    console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId) that does not exist")
+    const getThePairOrderProductId2 = await getOrderProductByOrderIdProductIdPair(2, 2)
+    console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should not exist returns undefined", getThePairOrderProductId2)
 
     console.log("Finished database tests!");
   } catch (error) {

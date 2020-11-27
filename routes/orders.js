@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder } = require('../db');
+const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair } = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
@@ -40,8 +40,6 @@ ordersRouter.get('/:orderId', async (req, res, next) => {
 })
 
 
-
-
 ordersRouter.post('/', async (req, res, next) => {
     try {
         const {status, userId} = req.body
@@ -58,16 +56,20 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
     const { productId, price, quantity } = req.body
   
     try { 
+      const existingPair = await getOrderProductByOrderIdProductIdPair(orderId, productId)
+
+      if (existingPair) {
+      return next({
+          name: 'DuplicateProduct',
+          message: "You already have this in your cart"
+       });
+      }   
+
       const addProduct =  await addProductToOrder({ orderId, productId, price, quantity })
-    
+      
       if (addProduct) {
         res.send(addProduct);
-      } else {
-        next({ 
-          name: 'AddProductError', 
-          message: 'Sorry, no product added'
-          });
-      }
+      }  
     } catch ({ name, message }) {
       next({ name, message })
     }
