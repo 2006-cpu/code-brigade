@@ -144,11 +144,11 @@ async function getOrderById(id) {
       `, [id]);
 
       const { rows: productList }  = await client.query(`
-      SELECT products.*, order_products.id as "orderProductId", order_products."productId" as "THEPRODUCTID", order_products."orderId" as "THEORDERID"
+      SELECT products.*, order_products.id as "orderProductId", order_products."productId", order_products."orderId"
       FROM products
       JOIN order_products ON products.id=order_products."orderId"
       WHERE order_products."orderId"=$1;
-      `, [order.id])  
+      `, [id])  
 
       order.productList = productList
          
@@ -212,15 +212,16 @@ async function getOrdersByUser(userId) {
 async function getCartByUser(userId) {
   try {
     const { rows: [cart] } = await client.query(`
-      SELECT *
+      SELECT orders.*, users.username, users.id, orders.id as "orderId"
       FROM orders
+      JOIN users on users.id=orders."userId"
       WHERE "userId"=$1 AND status='created'
       `, [userId])
 
     const { rows: productList }  = await client.query(`
-      SELECT products.*
+      SELECT products.*, order_products.id as "orderProductId", order_products."orderId"
       FROM products
-      JOIN order_products ON products.id=order_products."orderId"
+      JOIN order_products ON products.id=order_products."productId"
       WHERE order_products."orderId"=$1;
       `, [cart.id])  
 
@@ -317,7 +318,7 @@ async function addProductToOrder({ orderId, productId, price, quantity }) {
 
       const orderDetails = await getOrderById(orderId)
       console.log("what is the Order Details in db adapter for existing order_product", orderDetails)
-      const finding = orderDetails.productList.find(singleProduct => singleProduct.THEPRODUCTID == productId);
+      const finding = orderDetails.productList.find(singleProduct => singleProduct.productId === productId);
       console.log("What is EXISING ORDER-PRODUCT in db adapter:", finding)
       console.log("What is the EXISTING ORDER-PRODUCT_ID:", finding.orderProductId)
 
