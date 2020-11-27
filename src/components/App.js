@@ -18,6 +18,8 @@ import {
   Orders
 } from './index';
 
+import { getCartByUser } from '../api/index.js'
+
 import Cart from './Cart'
 
 import {
@@ -28,6 +30,7 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
+  const [ shoppingCart, setShoppingCart] = useState([]); 
 
   const fetchProducts = () => {
     getAllProducts()
@@ -38,6 +41,16 @@ const App = () => {
         console.error(error);
     });
   }
+
+  useEffect(() => {
+    getCartByUser(token)
+        .then(cart => {
+            setShoppingCart(cart.data)
+        })
+        .catch(error => {
+            console.error(error)
+        });
+}, [token]);
 
   useEffect(() => {
     fetchProducts();
@@ -64,10 +77,10 @@ const App = () => {
               <Product productList={productList}/>
           </Route>
           <Route path="/products">
-              <Products productList={productList}/>
+              <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart}/>
           </Route>
           <Route path="/cart">
-              <Cart user={user} token={token}/>
+              <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart}/>
           </Route>          
           <Route exact path="/orders">
             <Orders user={user} />
