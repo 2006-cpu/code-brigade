@@ -13,6 +13,7 @@ const {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
+  updateOrder,
   getCartByUser,
   createOrderProductsList,
   getOrderProductById,
@@ -264,6 +265,10 @@ async function testDB() {
     console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId) that does not exist")
     const getThePairOrderProductId2 = await getOrderProductByOrderIdProductIdPair(2, 2)
     console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should not exist returns undefined", getThePairOrderProductId2)
+
+    console.log("Update order status and userId")
+    const orderUpdated = await updateOrder({id: 5, status: 'completed', userId: 1}) 
+    console.log("See updated order:", orderUpdated)
 
     console.log("Finished database tests!");
   } catch (error) {
