@@ -1,6 +1,6 @@
 const express = require('express');
 const productsRouter = express.Router();
-const   { getAllProducts, updateOrderProducts } 
+const   { getAllProducts, updateOrderProduct } 
         = require('../db/')
 
 productsRouter.get('/', async (req, res, next) => {
@@ -12,12 +12,12 @@ productsRouter.get('/', async (req, res, next) => {
     }
   })
 
-  postsRouter.patch('/orders_products/:orderProductId', async (req, res, next) => {
-  
+  productsRouter.patch('/orders_products/:orderProductId', async (req, res, next) => {
+
     try {
-      await updateOrderProducts({
+      await updateOrderProduct({
           id: req.params.orderProductId, 
-          price: req.body.price, 
+          price: req.body.price,
           quantity: req.body.quantity
         });
         res.send(204)
