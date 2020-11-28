@@ -356,7 +356,7 @@ async function updateOrderProduct({ id, price, quantity }) {
       UPDATE orders_product 
       SET quantity=${quantity}, price=${price}
       WHERE id = $1;
-      `);
+      `, [id]);
 
   } catch (error) {
     throw error;
