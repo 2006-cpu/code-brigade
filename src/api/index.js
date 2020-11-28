@@ -73,3 +73,15 @@ export const getOrderById = async (id) => {
     throw error;
   }
 }
+
+export const deleteOrderProduct = async (id, token) => {
+  const requestToken = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+  try {
+      const response = await axios.delete(`${ BASE_URL }api/order_products/${id}`, requestToken)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+}
