@@ -4,27 +4,30 @@ import { getCartByUser, deleteOrderProduct } from '../api/index.js'
 const Cart = (props) => {
     const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
-    const {user, token} = props
+    const {user, token, setOrderId } = props
+    // const [ status, setStatus ] = useState('created')
 
     useEffect(() => {
         getCartByUser(token)
             .then(cart => {
                 setShoppingCart(cart.data)
+                console.log("What is cart id", cart.data.id)
+                setOrderId(cart.data.id)
             })
             .catch(error => {
                 console.error(error)
             });
     }, [token]);
 
-    useEffect(() => {
-        getCartByUser(token)
-            .then(cart => {
-                setShoppingCart(cart.data)
-            })
-            .catch(error => {
-                console.error(error)
-            });
-    }, [update]);
+    // useEffect(() => {
+    //     getCartByUser(token)
+    //         .then(cart => {
+    //             setShoppingCart(cart.data)
+    //         })
+    //         .catch(error => {
+    //             console.error(error)
+    //         });
+    // }, [update]);
 
     console.log("What is currently in the shopping cart", shoppingCart)
 

@@ -37,7 +37,7 @@ const NavBar = (props) => {
                 <NavLink to={"/products"} activeClassName="current">Products</NavLink>
                 <NavLink to={"/register"} activeClassName="current">Register</NavLink>
                 <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
-                <NavLink to="/cart">View Cart</NavLink>
+                <NavLink to="/guestcart">View Guest Cart</NavLink>
             </>
             }
             <>

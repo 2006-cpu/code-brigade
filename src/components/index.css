@@ -151,3 +151,11 @@ input {
     left: 500px; 
     border: 1px solid black;
   }
+
+  .guestPrompt {
+    position: fixed;
+    bottom: 400px;
+    left: 500px; 
+    width: 600px;
+    background-color: yellow;
+  }
