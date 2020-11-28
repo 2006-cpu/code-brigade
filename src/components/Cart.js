@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { getCartByUser } from '../api/index.js'
+import React, { useEffect, useState } from 'react';
+import { getCartByUser, deleteOrderProduct } from '../api/index.js'
 
 const Cart = (props) => {
-
+    const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
     const {user, token} = props
 
@@ -16,7 +16,23 @@ const Cart = (props) => {
             });
     }, [token]);
 
+    useEffect(() => {
+        getCartByUser(token)
+            .then(cart => {
+                setShoppingCart(cart.data)
+            })
+            .catch(error => {
+                console.error(error)
+            });
+    }, [update]);
+
     console.log("What is currently in the shopping cart", shoppingCart)
+
+    const handleRemove = (e) => {
+        e.preventDefault();
+        deleteOrderProduct(e.target.id, token);
+        update ? setUpdate(false) : setUpdate(true);
+      }
 
     return (
         <div>
@@ -47,6 +63,7 @@ const Cart = (props) => {
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                                 <p>Price: ${product.price}</p>
+                                <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }
                         </section>
