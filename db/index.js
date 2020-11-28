@@ -349,6 +349,20 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   }
 };
 
+async function updateOrderProduct({ id, price, quantity }) {
+
+  try {
+    await client.query(`
+      UPDATE orders_product 
+      SET quantity=${quantity}, price=${price}
+      WHERE id = $1;
+      `, [id]);
+
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 // export
 module.exports = {
@@ -371,6 +385,7 @@ module.exports = {
   destroyOrderProduct,
   getOrdersByProduct,
   addProductToOrder,
-  getOrderProductByOrderIdProductIdPair
+  getOrderProductByOrderIdProductIdPair,
+  updateOrderProduct
   // db methods
 }
