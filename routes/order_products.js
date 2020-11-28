@@ -1,6 +1,6 @@
 const express = require('express');
 const orderProductsRouter = express.Router();
-const { getOrderProductById, getOrderById, destroyOrderProduct } = require('../db');
+const { getOrderProductById, getOrderById, destroyOrderProduct, updateOrderProduct } = require('../db');
 
 orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
     const { orderProductId } = req.params;
@@ -26,5 +26,20 @@ orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
         next(error);
     }
 });
+
+orderProductsRouter.patch('/orders_products/:orderProductId', async (req, res, next) => {
+
+    try {
+      await updateOrderProduct({
+          id: req.params.orderProductId, 
+          price: req.body.price,
+          quantity: req.body.quantity
+        });
+        res.send(204)
+
+    } catch ({ name, message }) {
+      next({ name, message });
+    }
+  });
 
 module.exports = orderProductsRouter;
