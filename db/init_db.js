@@ -13,8 +13,12 @@ const {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
-  getCartByUser
-  // other db methods 
+  getCartByUser,
+  createOrderProductsList,
+  getOrderProductById,
+  getOrdersByProduct,
+  addProductToOrder,
+  getOrderProductByOrderIdProductIdPair
 } = require('./index');
 
 async function dropTables() {
@@ -87,6 +91,7 @@ async function buildTables() {
     await createInitialProducts();
     await createInitialUsers();
     await createInitialOrders();
+    await createInitialOrderProductList();
   } catch (error) {
     throw error;
   }
@@ -157,6 +162,26 @@ async function createInitialOrders() {
 }
 
 
+async function createInitialOrderProductList() {
+  try {
+    console.log('Starting to create Order Products...');
+
+    const orderProductsToCreate = [
+      {productId: 1, orderId: 1, price: 5, quantity: 1},
+      {productId: 3, orderId: 3, price: 3, quantity: 1},
+      {productId: 2, orderId: 5, price: 2, quantity: 1},
+      {productId: 3, orderId: 6, price: 3, quantity: 1},
+      {productId: 1, orderId: 8, price: 5, quantity: 1},
+    ]
+    const orderProductList = await Promise.all(orderProductsToCreate.map(orderProduct => createOrderProductsList(orderProduct)));
+    console.log('Order Products Created: ', orderProductList)
+    console.log('Finished creating Order Products.')
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 async function testDB() {
   try {
     console.log("Starting to test database...");
@@ -206,8 +231,39 @@ async function testDB() {
     console.log("See Orders by User ID:", ordersOfUser)
 
     console.log("Get Open Cart by User Id");
-    const cartByUserId = await getCartByUser(1)
+    const cartByUserId = await getCartByUser(3)
     console.log("Cart by User id", cartByUserId) 
+
+    console.log("Get order product by Id");
+    const orderProductById = await getOrderProductById(1)
+    console.log("Get Order Product", orderProductById)
+
+    console.log("Testing Functions for addProductToOrder and First, we check to see list of orders with product id passed in for product Id 3 ")
+    const orderList = await getOrdersByProduct({id:3})
+    const index = orderList.findIndex(order => order.id === 3)
+    console.log("What are the results:", orderList)
+    console.log("What is the index", index)
+    
+    console.log("Testing a non-existing product in order First, we check to see list of orders with product id passed in for product Id 4")
+    const nonExist = await getOrdersByProduct({id:4})
+    console.log("Testing a non-existing product ID in an order returns an empty array:", nonExist)
+
+    //TEST Nov 27 for New - tested on Nov 27th and it works
+    // const addingProductOrderForNewCombo = await addProductToOrder({ orderId: 5, productId: 4, price: 20, quantity: 3})
+    // console.log("What is addingProductOrder Result for TEST Nov 27 Should be new Order Product Id", addingProductOrderForNewCombo)
+
+    // TEST 5 for Existing - tested on Nov 27th and it works
+    // const addingProductToExistingOrderProduct = await addProductToOrder({orderId: 5, productId: 2, price: 23, quantity: 24})
+    // console.log("What is the result of TEST 5 addProductToOrder for existing order Id and product combo", addingProductToExistingOrderProduct)
+    // console.log("Finished TEST 5")
+
+    console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId)")
+    const getThePairOrderProductId = await getOrderProductByOrderIdProductIdPair(8, 1)
+    console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should be id: 5", getThePairOrderProductId)
+    
+    console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId) that does not exist")
+    const getThePairOrderProductId2 = await getOrderProductByOrderIdProductIdPair(2, 2)
+    console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should not exist returns undefined", getThePairOrderProductId2)
 
     console.log("Finished database tests!");
   } catch (error) {

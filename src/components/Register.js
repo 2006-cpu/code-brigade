@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './index.css';
 const BASE_URL = '/'
 
 
@@ -40,22 +41,49 @@ const Register = (props) => {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        signUp({firstName, lastName, email, username, password, imageurl, isAdmin: false})
+        try {
+            const result = signUp({firstName, lastName, email, username, password, imageurl, isAdmin: false})
+            if (result.error) {
+                console.log("gros probleme")
+            }
+        } catch(error) {
+            console.error(error)
+        }
     }
     
     return (<>   
-        <form onSubmit={handleSubmit}>
-        <h3>Register Here</h3>
-        <input type="text" placeholder={'First Name'} value={firstName} onChange={(event) => setFirstName(event.target.value)} />
-        <input type="text" placeholder={'Last Name'} value={lastName} onChange={(event) => setLastName(event.target.value)} />
-        <input type="text" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
-        <input type="text" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
-        <input type="password" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
-        <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
-        <button type="submit" >Sign Up</button>
-      </form>        
+    <div className="wrapper">
+        <div className="form-wrapper">
+            <h3>Register Here</h3>
+            <form onSubmit={handleSubmit}>
+                    <div className="firstName">
+                        <input type="text" placeholder={'First Name'} value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                    </div>
+                    <div className="lastName">
+                        <input type="text" placeholder={'Last Name'} value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                    </div>
+                    <div className="email">
+                        <input type="text" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
+                    </div>
+                    <div className="username">
+                        <input type="text" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
+                    </div>
+                    <div className="password">
+                         <input type="password" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
+                    </div>
+                    <div className="image">
+                        <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
+                    </div>
+                    
+                    <div className="createAccount">
+                        <button type="submit" >Sign Up</button>
+                    </div>
+
+            </form>   
+        </div>
+    </div>
     </>)
 }
 
