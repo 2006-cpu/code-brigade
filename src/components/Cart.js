@@ -5,7 +5,6 @@ const Cart = (props) => {
     const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
     const {user, token, setOrderId } = props
-    // const [ status, setStatus ] = useState('created')
 
     useEffect(() => {
         getCartByUser(token)
@@ -19,15 +18,15 @@ const Cart = (props) => {
             });
     }, [token]);
 
-    // useEffect(() => {
-    //     getCartByUser(token)
-    //         .then(cart => {
-    //             setShoppingCart(cart.data)
-    //         })
-    //         .catch(error => {
-    //             console.error(error)
-    //         });
-    // }, [update]);
+    useEffect(() => {
+        getCartByUser(token)
+            .then(cart => {
+                setShoppingCart(cart.data)
+            })
+            .catch(error => {
+                console.error(error)
+            });
+    }, [update]);
 
     console.log("What is currently in the shopping cart", shoppingCart)
 

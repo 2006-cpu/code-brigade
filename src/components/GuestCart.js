@@ -1,17 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { getOrderById } from '../api/index.js'
 
-
 const GuestCart = (props) => {
-    const {orderId, shoppingCart, setShoppingCart, guestCartChanged } = props
-    console.log("What are the props for Guest Cart", props)
+    const {orderId, guestCartChanged} = props
     const [ guestCart, setGuestCart] = useState([])
 
     useEffect(() => {
         getOrderById(orderId)
             .then(guestCart => {
-                console.log("What is guest cart data", guestCart)
-          
                 setGuestCart(guestCart)
             })
             .catch(error => {
@@ -19,16 +15,14 @@ const GuestCart = (props) => {
             });
     }, [guestCartChanged]);
 
-  
-
     return (
         <div>
             <h1>Your Shopping Cart</h1>
-            <p>Testing</p>
              { guestCart ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
                     maxWidth: "500px", padding: "10px", topMargin: "10px"}}>
-                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
+                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}
+                    >
                     Order ID: {guestCart.id}</h3>  
 
                     {

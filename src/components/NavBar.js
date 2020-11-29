@@ -3,12 +3,14 @@ import { NavLink } from 'react-router-dom';
 import './index.css'
 
 const NavBar = (props) => { 
-    const {user, setUser, token, setToken} = props;
+    const {user, setUser, token, setToken, setShoppingCart, setOrderId} = props;
 
     const logout = () => {    
         if (token) {
             setToken('');
             setUser('');
+            setShoppingCart([])
+            setOrderId(0)
         } else {
            return 
         }

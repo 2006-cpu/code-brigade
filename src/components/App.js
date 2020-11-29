@@ -31,9 +31,8 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
-  const [ shoppingCart, setShoppingCart] = useState([]); 
-
-  const [ orderId, setOrderId] =   useState(shoppingCart.id)
+  const [ shoppingCart, setShoppingCart ] = useState([]); 
+  const [ orderId, setOrderId] = useState(shoppingCart.id)
 
   const fetchProducts = () => {
     getAllProducts()
@@ -63,7 +62,7 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Masks Co.</h1>
-      <NavBar user={user} setUser={setUser} token={token} setToken={setToken}/>
+      <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId}/>
         <Switch>
           <Route path="/Login">
             <Login setUser={setUser} token={token} setToken={setToken} />

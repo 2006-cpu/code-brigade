@@ -1,9 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-//new Nov 28
-import { createInitialOrderId } from '../api/index.js'
 import GuestCart from './GuestCart'
-//end of new Nov 28
 const BASE_URL = '/'
 
 const Products = (props) => {
@@ -17,14 +14,6 @@ const Products = (props) => {
     const [ modal, setModal ] = useState(true)
     const [ guestCartChanged, setGuestCartChanged ] = useState(false)
 
-    console.log("What is  shopping cart inside of Products.js", shoppingCart)
-    console.log("what is cart id", shoppingCart.id )
-    console.log("What is the productList", shoppingCart.productList)
-    //new
-    console.log("What is CURRENT ORDER ID", orderId, "PRODUCT ID:", productId, "PRICE:", price, "QUANTITY:", quantity )
-    
-
-    //new
     const newOrder = async ({status}) => {
         try {
             const { data } = await axios.post(`${BASE_URL}api/orders`, {status});
@@ -33,7 +22,6 @@ const Products = (props) => {
           } catch (error) {
           }
     };
-    //new
 
     const buttonHandler = async (event) => {
         try {
@@ -63,15 +51,9 @@ const Products = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-           
-           const result = await createProductOrder({orderId, productId, price, quantity})
-           console.log("What is the response of callback", result)
-
-            console.log("What is RESULT DATA", result.data)
-            console.log("What is ERROR MESSAGE", result.data.message)
-            console.log("What is RESULT ERROR", { error: result.data.error})
+            setErrorMessage('')
+            const result = await createProductOrder({orderId, productId, price, quantity})
             setGuestCartChanged(true)
-           
 
            if (result.data.message) {
                 setError(true)
@@ -81,8 +63,6 @@ const Products = (props) => {
             console.error(error)
         }
     };
-
-    console.log("What is the current error message?", errorMessage)
 
     return (
         <>
@@ -95,18 +75,11 @@ const Products = (props) => {
                     { product.inStock ? <p>Yes</p> : <p>No</p> 
                 }</div>
                 <p>Category: {product.category}</p>  
-
-
             <form onSubmit={ handleSubmit }>
                 <button onClick={()=> {
-              
                 setProductId(product.id)
                 setPrice(product.price)
-          
-                console.log("INSIDE HANDLE SUBMIT What is CURRENT ORDER ID", orderId, "PRODUCT ID:", productId, "PRICE:", price, "QUANTITY:", quantity )
-
-                }} style={{color: "blue"}}>Add to Cart</button>
-               
+                }} style={{color: "rgb(12, 56, 47)"}}>Add to Cart</button>
             </form>
             </div>
             )}
@@ -120,9 +93,9 @@ const Products = (props) => {
             <div className="guestPrompt">
                 <form onSubmit={ buttonHandler } style={{display: modal? 'block' : 'none'}}> 
                 <span className="close" style={{color: "red"}} onClick={() => setModal(false)}> X CLOSE</span> 
-                <h3>GUEST Prompt</h3>
-                <p>Do you have an account?</p>
-                <button>NO</button>
+                <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
+                <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
+                <button style={{textAlign: "center"}}>NO</button>
                 </form>
             </div>
              : 
