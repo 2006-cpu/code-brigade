@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair, cancelOrder } = require('../db');
+const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair, updateOrder, cancelOrder } = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
@@ -75,6 +75,16 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
     }
   });
 
+  ordersRouter.patch('/:orderId', async (req, res, next) => {
+    const { orderId } = req.params;
+    const {status, userId} = req.body
+    try {     
+            const updatedOrder = await updateOrder({id: orderId, ...req.body});
+            res.send(updatedOrder);    
+    } catch (error) {
+        next(error);
+    }
+  });
   ordersRouter.delete('/:orderId', async (req, res, next) => {
     const id = req.params.orderId;
 
