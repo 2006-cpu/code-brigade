@@ -10,7 +10,6 @@ const Cart = (props) => {
         getCartByUser(token)
             .then(cart => {
                 setShoppingCart(cart.data)
-                console.log("What is cart id", cart.data.id)
                 setOrderId(cart.data.id)
             })
             .catch(error => {
@@ -27,8 +26,6 @@ const Cart = (props) => {
                 console.error(error)
             });
     }, [update]);
-
-    console.log("What is currently in the shopping cart", shoppingCart)
 
     const handleRemove = (e) => {
         e.preventDefault();
