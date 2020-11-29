@@ -107,3 +107,14 @@ export const createInitialOrderId = async (status, userId) => {
   }catch (error) {
   }
 };
+
+export const cancelledOrder = async (id, token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`} }
+  try {
+    const { data } = await axios.delete(`${BASE_URL}api/orders/${id}`, auth);
+    console.log('dataCancelledOrder', data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}; 

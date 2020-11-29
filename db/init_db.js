@@ -13,13 +13,14 @@ const {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
-  updateOrder,
+  updateOrder, 
   getCartByUser,
   createOrderProductsList,
   getOrderProductById,
   getOrdersByProduct,
   addProductToOrder,
-  getOrderProductByOrderIdProductIdPair
+  getOrderProductByOrderIdProductIdPair,
+  cancelOrder
 } = require('./index');
 
 async function dropTables() {
@@ -269,6 +270,10 @@ async function testDB() {
     console.log("Update order status and userId")
     const orderUpdated = await updateOrder({id: 5, status: 'completed', userId: 1}) 
     console.log("See updated order:", orderUpdated)
+
+    console.log("Update order status to cancelled")
+    const orderCancelled = await cancelOrder(1)
+    console.log("See order cancelled:", orderCancelled) 
 
     console.log("Finished database tests!");
   } catch (error) {

@@ -387,6 +387,22 @@ async function updateOrderProduct({ id, price, quantity }) {
   }
 };
 
+async function cancelOrder(id) {
+  try {
+    const { rows: [orderCancelled] } = await client.query(`
+    UPDATE orders
+    SET
+    status='cancelled'
+    WHERE id=$1
+    RETURNING *
+    `, [ id ])
+
+    return orderCancelled;
+
+  } catch (error) {
+    throw error;
+  }
+}
 
 // export
 module.exports = {
@@ -411,6 +427,7 @@ module.exports = {
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
-  updateOrderProduct
+  updateOrderProduct,
+  cancelOrder
   // db methods
 }
