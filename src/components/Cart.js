@@ -44,7 +44,7 @@ const Cart = (props) => {
             {
                 shoppingCart.id ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
-                    maxWidth: "500px", padding: "10px", topMargin: "10px"}}>
+                     padding: "10px", topMargin: "10px"}}>
                     <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
                     Order ID: {shoppingCart.id}</h3>  
 

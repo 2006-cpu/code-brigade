@@ -15,15 +15,16 @@ import {
   Account,
   SingleOrder,
   Orders,
+  Cart,
   GuestCart
 } from './index';
 
-import { getCartByUser } from '../api/index.js'
-
-import Cart from './Cart'
+//new 
+import { getCurrentCart } from '../auth';
 
 import {
-  getAllProducts
+  getAllProducts, 
+  getCartByUser
 } from '../api';
 
 const App = () => {
@@ -31,7 +32,8 @@ const App = () => {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
   const [ shoppingCart, setShoppingCart ] = useState([]); 
-  const [ orderId, setOrderId] = useState(shoppingCart.id)
+  const [ orderId, setOrderId ] = useState(shoppingCart.id)
+  const [ oldGuestCart, setOldGuestCart ] = useState(getCurrentCart())
 
   const fetchProducts = () => {
     getAllProducts()
@@ -64,7 +66,7 @@ const App = () => {
       <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId}/>
         <Switch>
           <Route path="/Login">
-            <Login setUser={setUser} token={token} setToken={setToken} />
+            <Login setUser={setUser} token={token} setToken={setToken} setOrderId={setOrderId}/>
           </Route>
           <Route path="/register">
               <Register user={user} setUser={setUser} setToken={setToken} setOrderId={setOrderId}/>
@@ -84,7 +86,7 @@ const App = () => {
               <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
           <Route path="/guestcart">
-              <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
+              <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}  oldGuestCart={oldGuestCart} setOldGuestCart={setOldGuestCart}/>
           </Route>            
           <Route exact path="/orders">
             <Orders user={user} />

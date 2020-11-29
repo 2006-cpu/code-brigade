@@ -105,7 +105,8 @@ async function createInitialProducts() {
     const productsToCreate = [
       { name: 'Sports Team masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
       { name: 'Marvel masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'},
-      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/61M4QKuk0-L._AC_SL1024_.jpg', inStock: true, category: 'adults'}
+      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/61M4QKuk0-L._AC_SL1024_.jpg', inStock: true, category: 'adults'},
+      { name: 'Two pack face masks', description: 'stretch fabric', price: 8, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/71%2BkBuBMQ2L._AC_SL1500_.jpg', inStock: true, category: 'adults'},
       ]
 
     console.log('products created')
