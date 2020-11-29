@@ -4,12 +4,14 @@ import { getCartByUser, deleteOrderProduct } from '../api/index.js'
 const Cart = (props) => {
     const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
-    const {user, token} = props
+    const {user, token, setOrderId } = props
 
     useEffect(() => {
         getCartByUser(token)
             .then(cart => {
                 setShoppingCart(cart.data)
+                console.log("What is cart id", cart.data.id)
+                setOrderId(cart.data.id)
             })
             .catch(error => {
                 console.error(error)

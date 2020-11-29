@@ -1,57 +1,68 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import GuestCart from './GuestCart'
 const BASE_URL = '/'
 
 const Products = (props) => {
-    const {productList, shoppingCart, setShoppingCart} = props
+    const {productList, shoppingCart, setShoppingCart, orderId, setOrderId} = props
     const [ price, setPrice ] = useState(1)
     const [ quantity, setQuantity ] = useState(1)
     const [ productId, setProductId ] = useState(1)
-    const [ orderId,  setOrderId ] = useState(shoppingCart.id)
     const [ error, setError ] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [ status, setStatus ] = useState('created')
+    const [ modal, setModal ] = useState(true)
+    const [ guestCartChanged, setGuestCartChanged ] = useState(false)
 
-    console.log("What is  shopping cart inside of Products.js", shoppingCart)
-    console.log("what is cart id", shoppingCart.id )
-    console.log("What is the productList", shoppingCart.productList)
+    const newOrder = async ({status}) => {
+        try {
+            const { data } = await axios.post(`${BASE_URL}api/orders`, {status});
+            console.log("What is NEW Guest Order Id", data)
+            return data;
+          } catch (error) {
+          }
+    };
 
-    const finder = (id) => {
-        const product = shoppingCart.productList.filter(singleProduct => id === singleProduct.id);
-        console.log(product)
+    const buttonHandler = async (event) => {
+        try {
+            event.preventDefault();
+            setShoppingCart('')
+            const createGuestCart = await newOrder({status})
+            console.log("What is the CREATE GUEST CART", createGuestCart)
+            setOrderId(createGuestCart.id)
+            setShoppingCart(createGuestCart)
+            setModal(false)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
 
-    //NEW
     const createProductOrder = async ({orderId, productId, price, quantity}) => {
         try {
-            const response = await axios.post(`${ BASE_URL }api/orders/${shoppingCart.id}/products`, {orderId, productId, price, quantity})
+            const response = await axios.post(`${ BASE_URL }api/orders/${orderId}/products`, {orderId, productId, price, quantity})
             console.log("response from :orderId route", response)
             return response;
         } catch (error) {
             console.error(error);
         }
     };
-    //NEW
+  
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-           const result = await createProductOrder({orderId, productId, price, quantity})
-           console.log("What is the response of callback", result)
+            setErrorMessage('')
+            const result = await createProductOrder({orderId, productId, price, quantity})
+            setGuestCartChanged(true)
 
-            console.log("What is RESULT DATA", result.data)
-            console.log("What is ERROR MESSAGE", result.data.message)
-            console.log("What is RESULT ERROR", { error: result.data.error})
            if (result.data.message) {
                 setError(true)
                 setErrorMessage(result.data.message)
-           }
-
+                }
         } catch(error) {
             console.error(error)
         }
     };
-
-    console.log("What is the current error message?", errorMessage)
 
     return (
         <>
@@ -64,20 +75,11 @@ const Products = (props) => {
                     { product.inStock ? <p>Yes</p> : <p>No</p> 
                 }</div>
                 <p>Category: {product.category}</p>  
-
-
             <form onSubmit={ handleSubmit }>
-                { shoppingCart.productList ? 
                 <button onClick={()=> {
-                const found = finder(product.price) 
-                console.log("What is the found price", found)
                 setProductId(product.id)
                 setPrice(product.price)
-                // setOrderId(shoppingCart.orderId)
-                }} style={{color: finder ? "blue" : "red"}}>Add to Cart</button>
-                 : <button>Add</button>
-                }
-               
+                }} style={{color: "rgb(12, 56, 47)"}}>Add to Cart</button>
             </form>
             </div>
             )}
@@ -86,6 +88,21 @@ const Products = (props) => {
                     >{errorMessage}
                     <span className="close" style={{color: "red"}} onClick={() => setError(false)}> X CLOSE</span> 
                     </div> : '' }
+
+            { !orderId ?
+            <div className="guestPrompt">
+                <form onSubmit={ buttonHandler } style={{display: modal? 'block' : 'none'}}> 
+                <span className="close" style={{color: "red"}} onClick={() => setModal(false)}> X CLOSE</span> 
+                <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
+                <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
+                <button style={{textAlign: "center"}}>NO</button>
+                </form>
+            </div>
+             : 
+             ''
+            }
+        
+            <GuestCart orderId={orderId} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} guestCartChanged={guestCartChanged}/>
         </>
     );
 }

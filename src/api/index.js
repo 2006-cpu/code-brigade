@@ -85,3 +85,12 @@ export const deleteOrderProduct = async (id, token) => {
       console.error(error);
   }
 }
+//New Nov 28
+export const createInitialOrderId = async (status, userId) => {
+  try {
+    const { data } = await axios.post(`${BASE_URL}api/orders`, {status, userId});
+    console.log("What is NEW Guest Order Id from API Index", data)
+    return data;
+  }catch (error) {
+  }
+};
