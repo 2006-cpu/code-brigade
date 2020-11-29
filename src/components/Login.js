@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 // import NavBar from './NavBar'
 import axios from 'axios';
-import {loginUser} from '../api/index.js'
+import {loginUser, createInitialOrderId, getCartByUser} from '../api/index.js'
 
 const BASE_URL = '/'
 
@@ -18,6 +18,7 @@ const Login = (props) => {
     const data = await loginUser(login.username, login.password);
     console.log('data:', data);
     setToken(data.token);
+    
     const auth = {
         headers: {'Authorization': `Bearer ${data.token}`
     }
@@ -25,11 +26,15 @@ const Login = (props) => {
     const user = await axios.get(`${BASE_URL}api/users/me`, auth);
     setUser(user.data);
     console.log("THE USER:", user.data)
+
     setLogin({
       username: '',
       password: ''
     })
-    
+      const getCart = await getCartByUser(data.token)
+      if (getCart.data.error) {
+        const makeNewOrder = await createInitialOrderId('created', user.data.id)
+      }
   }
 
   return (

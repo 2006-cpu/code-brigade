@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { createInitialOrderId } from '../api/index.js'
 import './index.css';
 const BASE_URL = '/'
 
-
-
 const Register = (props) => {
-    const { setUser, setToken } = props;
+    const { setUser, setToken, setOrderId } = props;
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,6 +25,7 @@ const Register = (props) => {
                 setLastName('');
                 setEmail('');
                 setImageURL('');
+                setOrderId(0)
                 setToken(responseToken);
                 const auth = {
                     headers: {'Authorization': `Bearer ${responseToken}`
@@ -33,6 +33,7 @@ const Register = (props) => {
                   }
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
                 console.log("THE USER:", user.data)
+                const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
                 return response;
             }

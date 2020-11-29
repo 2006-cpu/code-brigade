@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import NavBar from './NavBar';
 
 import {
@@ -68,7 +67,7 @@ const App = () => {
             <Login setUser={setUser} token={token} setToken={setToken} />
           </Route>
           <Route path="/register">
-              <Register user={user} setUser={setUser} setToken={setToken}/>
+              <Register user={user} setUser={setUser} setToken={setToken} setOrderId={setOrderId}/>
           </Route>
           {user && token && 
             <Route path="/account">
