@@ -20,7 +20,9 @@ const {
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
-  cancelOrder
+  cancelOrder,
+  completeOrder,
+  getCartByOrderId
 } = require('./index');
 
 async function dropTables() {
@@ -66,7 +68,7 @@ async function createTables() {
       id SERIAL PRIMARY KEY,
       status VARCHAR(255) DEFAULT 'created',
       "userId" INTEGER REFERENCES users(id),
-      "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP + interval '1 day'
+      "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE order_products (
       id SERIAL PRIMARY KEY,
@@ -274,6 +276,14 @@ async function testDB() {
     console.log("Update order status to cancelled")
     const orderCancelled = await cancelOrder(1)
     console.log("See order cancelled:", orderCancelled) 
+
+    console.log("Update order status to completed") 
+    const orderCompleted = await completeOrder(1)
+    console.log("See order completed:", orderCompleted)
+
+    console.log("see Cart By orderId")
+    const cartByOrderId = await getCartByOrderId(6)
+    console.log("See Cart By orderId:", cartByOrderId)
 
     console.log("Finished database tests!");
   } catch (error) {
