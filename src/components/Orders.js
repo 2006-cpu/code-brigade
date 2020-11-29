@@ -1,9 +1,9 @@
 import React, {useState, useEffect }from 'react';
 import { NavLink } from 'react-router-dom';
-import {getAllOrders} from '../api'
+import {getAllOrders, cancelledOrder} from '../api'
 
 const Orders = (props) => {
-    const {user} = props;
+    const {user, token} = props;
     const [orders, setOrders] = useState([]);
 
     const fetchAllOrders = () => {

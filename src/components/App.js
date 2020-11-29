@@ -88,7 +88,7 @@ const App = () => {
               <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
           </Route>            
           <Route exact path="/orders">
-            <Orders user={user} />
+            <Orders user={user} token={token}/>
           </Route>
           <Route exact path="/orders/:orderId">
             <SingleOrder user={user} />

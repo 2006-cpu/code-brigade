@@ -20,8 +20,7 @@ const {
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
-  cancelOrder,
-  // completeOrder
+  cancelOrder
 } = require('./index');
 
 async function dropTables() {

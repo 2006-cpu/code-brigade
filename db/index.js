@@ -404,7 +404,6 @@ async function cancelOrder(id) {
   }
 }
 
-
 // export
 module.exports = {
   client,
@@ -429,6 +428,6 @@ module.exports = {
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
   updateOrderProduct,
-  cancelOrder
+  cancelOrder,
   // db methods
 }

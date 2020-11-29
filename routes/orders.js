@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair } = require('../db');
+const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair, cancelOrder } = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
@@ -74,5 +74,26 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
       next({ name, message })
     }
   });
+
+  ordersRouter.delete('/:orderId', async (req, res, next) => {
+    const id = req.params.orderId;
+
+    try {
+            const order = await getOrderById(id)
+
+            if (order) {
+               const cancelledOrder = await cancelOrder(id); 
+
+               res.send(cancelledOrder);
+            } else {
+                next({
+                    name: "OrderNotFoundError",
+                    message: 'That order does not exist'
+                });
+            } 
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = ordersRouter;
