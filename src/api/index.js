@@ -74,6 +74,20 @@ export const getOrderById = async (id) => {
   }
 }
 
+export const editOrder = async ({status, userId}, id) => {
+
+  const body = {
+      status: status,
+      userId: userId,
+  };
+  try {
+      const response = await axios.patch(`${ BASE_URL }api/orders/${id}`, body)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+}
+
 export const deleteOrderProduct = async (id, token) => {
   const requestToken = {
       headers: { Authorization: `Bearer ${token}` }
