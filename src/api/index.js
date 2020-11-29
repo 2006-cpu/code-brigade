@@ -74,6 +74,20 @@ export const getOrderById = async (id) => {
   }
 }
 
+export const editOrder = async ({status, userId}, id) => {
+
+  const body = {
+      status: status,
+      userId: userId,
+  };
+  try {
+      const response = await axios.patch(`${ BASE_URL }api/orders/${id}`, body)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+}
+
 export const deleteOrderProduct = async (id, token) => {
   const requestToken = {
       headers: { Authorization: `Bearer ${token}` }
@@ -89,7 +103,6 @@ export const deleteOrderProduct = async (id, token) => {
 export const createInitialOrderId = async (status, userId) => {
   try {
     const { data } = await axios.post(`${BASE_URL}api/orders`, {status, userId});
-    console.log("What is NEW Guest Order Id from API Index", data)
     return data;
   }catch (error) {
   }

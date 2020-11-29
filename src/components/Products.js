@@ -17,7 +17,6 @@ const Products = (props) => {
     const newOrder = async ({status}) => {
         try {
             const { data } = await axios.post(`${BASE_URL}api/orders`, {status});
-            console.log("What is NEW Guest Order Id", data)
             return data;
           } catch (error) {
           }
@@ -28,20 +27,19 @@ const Products = (props) => {
             event.preventDefault();
             setShoppingCart('')
             const createGuestCart = await newOrder({status})
-            console.log("What is the CREATE GUEST CART", createGuestCart)
             setOrderId(createGuestCart.id)
             setShoppingCart(createGuestCart)
             setModal(false)
         } catch (error) {
             console.error(error)
         }
-    }
+    };
 
 
     const createProductOrder = async ({orderId, productId, price, quantity}) => {
         try {
             const response = await axios.post(`${ BASE_URL }api/orders/${orderId}/products`, {orderId, productId, price, quantity})
-            console.log("response from :orderId route", response)
+
             return response;
         } catch (error) {
             console.error(error);
