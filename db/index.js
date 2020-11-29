@@ -428,6 +428,6 @@ module.exports = {
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
   updateOrderProduct,
-  cancelOrder,
+  cancelOrder
   // db methods
 }
