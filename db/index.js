@@ -208,6 +208,30 @@ async function getOrdersByUser(userId) {
   }
 };
 
+async function updateOrder({id, ...fields}){
+  const setString = Object.keys(fields).map(
+      (key, index) => `"${ key }"=$${ index + 1}`
+  ).join(', ');
+  
+  const objectVals = Object.values(fields)
+  if( setString.length === 0){
+      return;
+  }
+
+  objectVals.push(id);
+  try {
+      const {rows: [order]} = await client.query(`
+          UPDATE orders
+          SET ${setString}
+          WHERE id = $${objectVals.length}
+          RETURNING *;
+      `, objectVals);
+      return order;
+  } catch (error) {
+      throw error;
+  }
+}
+
 
 async function getCartByUser(userId) {
   try {
@@ -378,6 +402,7 @@ module.exports = {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
+  updateOrder,
   getCartByUser,
   createOrder,
   createOrderProductsList,
