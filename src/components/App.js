@@ -25,6 +25,7 @@ import Cart from './Cart'
 import {
   getAllProducts
 } from '../api';
+import { checkout } from '../../routes';
 
 const App = () => {
   const [productList, setProductList] = useState([]);
@@ -91,6 +92,9 @@ const App = () => {
           </Route>
           <Route exact path="/orders/:orderId">
             <SingleOrder user={user} />
+          </Route>
+          <Route exact path="/cart/checkout">
+            <Checkout />
           </Route>
         </Switch>
       </div>
