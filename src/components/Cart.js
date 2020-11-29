@@ -6,6 +6,11 @@ const Cart = (props) => {
     const {shoppingCart, setShoppingCart} = props
     const {user, token} = props
 
+    const updateQuantity = (quantity, productIndex) => {
+        shoppingCart.productList[productIndex].quantity = quantity
+        console.log('shoppingCart: ', shoppingCart)
+    }
+
     useEffect(() => {
         getCartByUser(token)
             .then(cart => {
@@ -38,7 +43,8 @@ const Cart = (props) => {
                         <>
                         <section>
                         <h3>Items in your Cart</h3>
-                        {   shoppingCart.productList.map((product) =>
+                        {   shoppingCart.productList.map((product, productIndex) =>
+                            <div>
                             <div key={product.id} style={{border: "1px solid gray",
                             maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
                                 <p>{product.name} {product.description}</p>
@@ -47,7 +53,17 @@ const Cart = (props) => {
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                                 <p>Price: ${product.price}</p>
-                            </div>)
+                            </div>
+                            <select onChange={event => updateQuantity(event.target.value, productIndex)}>
+
+                            {[1,2,3,4,5].map(quantity => (
+                             <option value={quantity} key={quantity}>Quantity{quantity}</option>   
+                            ) 
+                            
+                            )}
+                            </select>
+                            </div>
+                        )
                         }
                         </section>
                         </>
@@ -57,7 +73,7 @@ const Cart = (props) => {
                 </div>    
                 :
                 ''
-            }     
+            }                          
         </div>
     )
 };

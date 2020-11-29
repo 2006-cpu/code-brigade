@@ -60,6 +60,7 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Masks Co.</h1>
+      <p>{shoppingCart.productList ? shoppingCart.productList[0].quantity : 0}</p>
       <NavBar user={user} setUser={setUser} token={token} setToken={setToken}/>
         <Switch>
           <Route path="/Login">
