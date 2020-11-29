@@ -73,3 +73,16 @@ export const getOrderById = async (id) => {
     throw error;
   }
 }
+
+export const getStripe = async (token) => {
+  try {
+    console.log(token)
+    const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
+      token: token,
+      test: 'test'
+    })
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
