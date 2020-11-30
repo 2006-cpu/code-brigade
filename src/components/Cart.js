@@ -6,28 +6,11 @@ const Cart = (props) => {
     const {shoppingCart, setShoppingCart} = props
     const {user, token, setOrderId } = props
 
-    const handleCompleteOrder = async (id) => {
-        try {
-            // event.preventDefault();
-            const result = await completedOrder(id, token) 
-            console.log('resultcancellation', result)
-            // console.log("What is RESULT ERROR", result.error)
-            // console.log("What is ERROR MESSAGE", result.data.message)
-            // console.log("What is RESULT ERROR", { error: result.data.error})
-        } catch(error) {
-            console.error(error)
-        }
-    };
-
     const handleCancelOrder = async (id) => {
         try {
-            // event.preventDefault();
             const result = await cancelledOrder(id, token) 
             console.log('resultcancellation', result)
             update ? setUpdate(false) : setUpdate(true);
-            // console.log("What is RESULT ERROR", result.error)
-            // console.log("What is ERROR MESSAGE", result.data.message)
-            // console.log("What is RESULT ERROR", { error: result.data.error})
         } catch(error) {
             console.error(error)
         }
