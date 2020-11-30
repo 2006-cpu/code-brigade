@@ -1,10 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { getCartByUser, deleteOrderProduct } from '../api/index.js'
+import { NavLink } from 'react-router-dom';
+import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder } from '../api/index.js'
 
 const Cart = (props) => {
     const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
     const {user, token, setOrderId } = props
+
+    // const handleCompleteOrder = async (id) => {
+    //     try {
+    //         // event.preventDefault();
+    //         const result = await completedOrder(id, token) 
+    //         console.log('resultcancellation', result)
+    //         // console.log("What is RESULT ERROR", result.error)
+    //         // console.log("What is ERROR MESSAGE", result.data.message)
+    //         // console.log("What is RESULT ERROR", { error: result.data.error})
+    //     } catch(error) {
+    //         console.error(error)
+    //     }
+    // };
+
+    // const handleCancelOrder = async (id) => {
+    //     try {
+    //         // event.preventDefault();
+    //         const result = await cancelledOrder(id, token) 
+    //         console.log('resultcancellation', result)
+    //         // console.log("What is RESULT ERROR", result.error)
+    //         // console.log("What is ERROR MESSAGE", result.data.message)
+    //         // console.log("What is RESULT ERROR", { error: result.data.error})
+    //     } catch(error) {
+    //         console.error(error)
+    //     }
+    // };
 
     useEffect(() => {
         getCartByUser(token)
@@ -44,7 +71,7 @@ const Cart = (props) => {
             {
                 shoppingCart.id ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
-                    maxWidth: "500px", padding: "10px", topMargin: "10px"}}>
+                     padding: "10px", topMargin: "10px"}}>
                     <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
                     Order ID: {shoppingCart.id}</h3>  
 
@@ -65,6 +92,7 @@ const Cart = (props) => {
                                 <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }
+                            <NavLink to="/cart/checkout">Continue to Checkout</NavLink>
                         </section>
                         </>
                         : ''
