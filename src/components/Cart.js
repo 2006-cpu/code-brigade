@@ -16,6 +16,16 @@ const Cart = (props) => {
         }
     };
 
+    const handleCompleteOrder = async (id) => {
+        try {
+            const result = await completedOrder(id, token) 
+            console.log('resultcompletion', result)
+            update ? setUpdate(false) : setUpdate(true);
+        } catch(error) {
+            console.error(error)
+        }
+    };
+
     useEffect(() => {
         getCartByUser(token)
             .then(cart => {
@@ -75,7 +85,8 @@ const Cart = (props) => {
                                 <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }
-                        <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>cancel Order</button>
+                        <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>Cancel Order</button>
+                        <button type="submit" onClick={() => handleCompleteOrder(shoppingCart.id)}>Complete Order</button>
                         </section>
                         </>
                         : ''

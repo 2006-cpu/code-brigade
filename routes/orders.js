@@ -109,7 +109,7 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
     }
 });
 
-ordersRouter.patch('/cart/:orderId', async (req, res, next) => { 
+ordersRouter.delete('/cart/:orderId', async (req, res, next) => { 
     const  id = req.params.orderId;
     try {
             const cartByOrderId = await getCartByOrderId(id);

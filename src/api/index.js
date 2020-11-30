@@ -119,10 +119,12 @@ export const cancelledOrder = async (id, token) => {
   }
 }; 
 
-export const completedOrder = async (id) => {
+export const completedOrder = async (id, token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`} }
+
   console.log('id', id);
   try {
-    const { data } = await axios.patch(`${BASE_URL}api/orders/cart/${id}`);
+    const { data } = await axios.delete(`${BASE_URL}api/orders/cart/${id}`, auth);
     console.log('datacompletedOrder', data);
     return data;
   } catch (error) {
