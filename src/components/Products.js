@@ -64,8 +64,6 @@ const Products = (props) => {
         }
     };
 
-    console.log("What is shopping cart?", shoppingCart)
-
     return (
         <>
             {productList && productList.map((product) => <div key={product.id}>

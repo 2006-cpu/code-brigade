@@ -60,7 +60,7 @@ const GuestCart = (props) => {
                         oldGuestCart && oldGuestCart.productList ?
                         <div className="oldGuestCart">
                             <h2>Your Previous Cart</h2>
-                            <p>Please check out now or lose your previous guest order. You cannot change a previous guest cart. 
+                            <p> 
                              Please create an account to take advantage of updating and deleting an account cart. Thank you.</p>
                             <p>Order Number: {oldGuestCart.id}</p>
                             { 

@@ -50,6 +50,7 @@ const App = () => {
     getCartByUser(token)
         .then(cart => {
             setShoppingCart(cart.data)
+            setOrderId(cart.data.id)
         })
         .catch(error => {
             console.error(error)
