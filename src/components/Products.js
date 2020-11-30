@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import GuestCart from './GuestCart'
 const BASE_URL = '/'
 
 const Products = (props) => {
@@ -12,7 +11,7 @@ const Products = (props) => {
     const [errorMessage, setErrorMessage] = useState('')
     const [ status, setStatus ] = useState('created')
     const [ modal, setModal ] = useState(true)
-    const [ guestCartChanged, setGuestCartChanged ] = useState(false)
+    const [ persistentModal, setPersistentModal ] = useState(false)
 
     const newOrder = async ({status}) => {
         try {
@@ -30,6 +29,7 @@ const Products = (props) => {
             setOrderId(createGuestCart.id)
             setShoppingCart(createGuestCart)
             setModal(false)
+            setPersistentModal(false)
         } catch (error) {
             console.error(error)
         }
@@ -51,13 +51,15 @@ const Products = (props) => {
         try {
             setErrorMessage('')
             const result = await createProductOrder({orderId, productId, price, quantity})
-            setGuestCartChanged(true)
 
-           if (result.data.message) {
+            if (result.data.message == `column "undefined" does not exist`) {
+                setPersistentModal(true)
+                setErrorMessage ("Please log in or click on SHOP AS GUEST")
+            } else if (result.data.message) {
                 setError(true)
                 setErrorMessage(result.data.message)
                 }
-        } catch(error) {
+            } catch(error) {
             console.error(error)
         }
     };
@@ -67,7 +69,7 @@ const Products = (props) => {
             {productList && productList.map((product) => <div key={product.id}>
                 <h2>{product.name}</h2>
                 <p>{product.description}</p>
-                <p>Price: ${product.price}</p>
+                <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
                 <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
                 <div>In Stock?
                     { product.inStock ? <p>Yes</p> : <p>No</p> 
@@ -88,19 +90,26 @@ const Products = (props) => {
                     </div> : '' }
 
             { !orderId ?
-            <div className="guestPrompt">
-                <form onSubmit={ buttonHandler } style={{display: modal? 'block' : 'none'}}> 
-                <span className="close" style={{color: "red"}} onClick={() => setModal(false)}> X CLOSE</span> 
+            <div className="guestPrompt" style={{display: modal? 'block' : 'none'}}>
+                <form onSubmit={ buttonHandler }> 
                 <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
                 <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
-                <button style={{textAlign: "center"}}>NO</button>
+                <p className="buttons"><button>SHOP AS GUEST</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
                 </form>
             </div>
              : 
              ''
             }
-        
-            <GuestCart orderId={orderId} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} guestCartChanged={guestCartChanged}/>
+
+            { 
+            <div className="noOrderIdAlert" style={{display: persistentModal? 'block' : 'none'}}>
+                <form onSubmit={ buttonHandler }>
+                <h3>You are not logged in yet.</h3>
+                <p>Continue as Guest Shopper?</p>
+                <p className="buttons"><button>OK</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
+                </form>
+            </div>
+            }
         </>
     );
 }

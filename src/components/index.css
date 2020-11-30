@@ -68,6 +68,10 @@ input {
     font-family: "Segoe UI", "Open Sans", "Helvetica Neue", sans-serif;
   }
 
+  p {
+    font-family: "Segoe UI", "Open Sans", "Helvetica Neue", sans-serif;     
+  }
+
   label {
     font-size: 0.8em;
     margin-bottom: 0.25em;
@@ -165,7 +169,14 @@ input {
     padding: 20px;
   }
 
-  .cart {
+  .noOrderIdAlert form{
     display: flex;
-    
+    flex-direction: column;
+    background-color:"orange";
+    align-items: center;
+    padding: 20px;
+    background-color: orange;
+    position: fixed;
+    bottom: 300px;
+    width: 500px;
   }

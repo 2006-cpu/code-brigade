@@ -256,6 +256,28 @@ async function getCartByUser(userId) {
   }
 };
 
+async function getCartByOrderId(orderId) {
+  try {
+    const { rows: [cart] } = await client.query(`
+      SELECT * 
+      FROM orders
+      WHERE id=$1 AND status='created'
+      `, [orderId])
+
+    const { rows: productList }  = await client.query(`
+      SELECT products.*, order_products.id as "orderProductId", order_products."orderId", order_products.price as "cartPrice", order_products.quantity
+      FROM products
+      JOIN order_products ON products.id=order_products."productId"
+      WHERE order_products."orderId"=$1;
+      `, [cart.id])  
+
+      cart.productList = productList
+      return cart;
+  } catch(error) { 
+    throw error;
+  }
+};
+
 async function getOrdersByProduct({id}) {
   try {
     const { rows: orders } = await client.query(`
@@ -447,7 +469,24 @@ async function cancelOrder(id) {
   } catch (error) {
     throw error;
   }
-}
+};
+
+async function completeOrder(id) {
+  try {
+    const {rows: [ completedOrder ]} = await client.query(`
+    UPDATE orders
+    SET
+    status='completed'
+    WHERE id=$1
+    RETURNING *
+    `, [ id ])
+
+    return completedOrder;
+
+  } catch (error) {
+    throw error;
+  }
+};
 
 // export
 module.exports = {
@@ -473,6 +512,8 @@ module.exports = {
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
   updateOrderProduct,
-  cancelOrder
+  cancelOrder,
+  completeOrder,
+  getCartByOrderId
   // db methods
 }

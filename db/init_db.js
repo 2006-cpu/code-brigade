@@ -21,7 +21,9 @@ const {
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
   cancelOrder,
-  updateOrderProduct
+  updateOrderProduct,
+  completeOrder,
+  getCartByOrderId
 } = require('./index');
 
 async function dropTables() {
@@ -67,7 +69,7 @@ async function createTables() {
       id SERIAL PRIMARY KEY,
       status VARCHAR(255) DEFAULT 'created',
       "userId" INTEGER REFERENCES users(id),
-      "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP + interval '1 day'
+      "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE order_products (
       id SERIAL PRIMARY KEY,
@@ -106,7 +108,8 @@ async function createInitialProducts() {
     const productsToCreate = [
       { name: 'Sports Team masks', description: 'adult sizes', price: 5, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/sewingmachine.jpg', inStock: true, category: 'adults'},
       { name: 'Marvel masks', description: 'for kids', price: 2, imageURL: 'https://gracious-mcnulty-e733ac.netlify.app/images/kidsmasks.jpg', inStock: true, category: 'kids'},
-      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/61M4QKuk0-L._AC_SL1024_.jpg', inStock: true, category: 'adults'}
+      { name: 'Christmas masks', description: 'great as a gift', price: 3, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/61M4QKuk0-L._AC_SL1024_.jpg', inStock: true, category: 'adults'},
+      { name: 'Two pack face masks', description: 'stretch fabric', price: 8, imageURL: 'https://images-na.ssl-images-amazon.com/images/I/71%2BkBuBMQ2L._AC_SL1500_.jpg', inStock: true, category: 'adults'},
       ]
 
     console.log('products created')
@@ -279,6 +282,13 @@ async function testDB() {
     console.log("Update order price and quantity")
     const orderUpdatedProduct = await updateOrderProduct({id: 5, price: 20, quantity: 3}) 
     console.log("See updated order:", orderUpdatedProduct)
+    console.log("Update order status to completed") 
+    const orderCompleted = await completeOrder(1)
+    console.log("See order completed:", orderCompleted)
+
+    console.log("see Cart By orderId")
+    const cartByOrderId = await getCartByOrderId(6)
+    console.log("See Cart By orderId:", cartByOrderId)
 
     console.log("Finished database tests!");
   } catch (error) {
