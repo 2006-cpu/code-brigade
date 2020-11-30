@@ -40,6 +40,7 @@ const Register = (props) => {
                 console.log("THE USER:", user.data)
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
+                setOrderId(makeNewOrder.id)
                 return response;
             }
         } catch (error) {
