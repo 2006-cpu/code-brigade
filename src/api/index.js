@@ -118,3 +118,14 @@ export const cancelledOrder = async (id, token) => {
     throw error;
   }
 }; 
+
+export const completedOrder = async (id) => {
+  console.log('id', id);
+  try {
+    const { data } = await axios.patch(`${BASE_URL}api/orders/cart/${id}`);
+    console.log('datacompletedOrder', data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

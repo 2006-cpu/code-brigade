@@ -16,7 +16,7 @@ import {
   SingleOrder,
   Orders,
   Cart,
-  GuestCart
+  GuestCart,
 } from './index';
 
 //new 
@@ -83,7 +83,7 @@ const App = () => {
           <Route path="/products">
               <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
-          <Route path="/cart">
+          <Route exact path="/cart">
               <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
           <Route path="/guestcart">

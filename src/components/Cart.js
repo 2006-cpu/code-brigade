@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { getCartByUser, deleteOrderProduct } from '../api/index.js'
+import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder } from '../api/index.js'
 
 const Cart = (props) => {
     const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
     const {user, token, setOrderId } = props
+
+    const handleCancelOrder = async (id) => {
+        try {
+            const result = await cancelledOrder(id, token) 
+            console.log('resultcancellation', result)
+            update ? setUpdate(false) : setUpdate(true);
+        } catch(error) {
+            console.error(error)
+        }
+    };
 
     useEffect(() => {
         getCartByUser(token)
@@ -65,6 +75,7 @@ const Cart = (props) => {
                                 <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }
+                        <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>cancel Order</button>
                         </section>
                         </>
                         : ''
