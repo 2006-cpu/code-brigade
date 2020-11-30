@@ -8,4 +8,3 @@ export { default as Cart } from './Cart';
 export { default as SingleOrder } from './SingleOrder';
 export { default as Orders } from './Orders';
 export { default as GuestCart } from './GuestCart';
-export { default as Checkout } from './Checkout';

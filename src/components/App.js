@@ -17,7 +17,6 @@ import {
   Orders,
   Cart,
   GuestCart,
-  Checkout
 } from './index';
 
 //new 
@@ -95,9 +94,6 @@ const App = () => {
           </Route>
           <Route exact path="/orders/:orderId">
             <SingleOrder user={user} />
-          </Route>
-          <Route path="/cart/checkout">
-            <Checkout user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
         </Switch>
       </div>

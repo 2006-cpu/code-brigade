@@ -24,6 +24,7 @@ const Cart = (props) => {
             // event.preventDefault();
             const result = await cancelledOrder(id, token) 
             console.log('resultcancellation', result)
+            update ? setUpdate(false) : setUpdate(true);
             // console.log("What is RESULT ERROR", result.error)
             // console.log("What is ERROR MESSAGE", result.data.message)
             // console.log("What is RESULT ERROR", { error: result.data.error})
@@ -92,7 +93,6 @@ const Cart = (props) => {
                             </div>)
                         }
                         <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>cancel Order</button>
-                        <button type="submit" onClick={() => handleCompleteOrder(shoppingCart.id)}>Complete Order</button>
                         </section>
                         </>
                         : ''
