@@ -1,11 +1,34 @@
-import React, { useEffect } from 'react';
-import { getCartByUser, getStripe } from '../api/index.js'
+import React, { useEffect, useState } from 'react';
 import TakeMoney from './TakeMoney.js'
+import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder, getStripe } from '../api/index.js'
 
 const Cart = (props) => {
-
+    const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
-    const {user, token} = props
+    const {user, token, setOrderId } = props
+
+    const handleCancelOrder = async (id) => {
+        try {
+            const result = await cancelledOrder(id, token) 
+            console.log('resultcancellation', result)
+            update ? setUpdate(false) : setUpdate(true);
+        } catch(error) {
+            console.error(error)
+        }
+    };
+
+    useEffect(() => {
+        getCartByUser(token)
+            .then(cart => {
+                setShoppingCart(cart.data)
+                setOrderId(cart.data.id)
+            })
+            .catch(error => {
+                console.error(error)
+            });
+    }, [token]);
+  
+    console.log("What is currently in the shopping cart", shoppingCart)
 
     useEffect(() => {
         getCartByUser(token)
@@ -15,9 +38,13 @@ const Cart = (props) => {
             .catch(error => {
                 console.error(error)
             });
-    }, [token]);
-  
-    console.log("What is currently in the shopping cart", shoppingCart)
+    }, [update]);
+
+    const handleRemove = (e) => {
+        e.preventDefault();
+        deleteOrderProduct(e.target.id, token);
+        update ? setUpdate(false) : setUpdate(true);
+      }
 
     return (
         <div>
@@ -30,7 +57,7 @@ const Cart = (props) => {
             {
                 shoppingCart.id ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
-                    maxWidth: "500px", padding: "10px", topMargin: "10px"}}>
+                     padding: "10px", topMargin: "10px"}}>
                     <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
                     Order ID: {shoppingCart.id}</h3>  
 
@@ -47,10 +74,11 @@ const Cart = (props) => {
                                 <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                <p>Price: ${product.price}</p>
-                                
+                                <p>Price: ${product.price}</p>                    
+                                <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }
+                        <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>cancel Order</button>
                         </section>
                         </>
                         : ''

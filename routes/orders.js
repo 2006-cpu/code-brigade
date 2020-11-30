@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair } = require('../db');
+const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair, updateOrder, cancelOrder, completeOrder, getCartByOrderId } = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
@@ -74,5 +74,62 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
       next({ name, message })
     }
   });
+
+  ordersRouter.patch('/:orderId', async (req, res, next) => {
+    const { orderId } = req.params;
+    const {status, userId} = req.body
+    try {     
+            const updatedOrder = await updateOrder({id: orderId, ...req.body});
+            res.send(updatedOrder);    
+    } catch (error) {
+        next(error);
+    }
+  });
+
+  ordersRouter.delete('/:orderId', requireUser, async (req, res, next) => {
+    const id = req.params.orderId;
+    try {
+            const order = await getOrderById(id)
+
+            if (order && order.userId === req.user.id ) {
+               const cancelledOrder = await cancelOrder(order.id); 
+
+               res.send(cancelledOrder);
+            } else {
+                next(order ? {
+                    name: "UnauthorizedUserError",
+                    message: "You cannot cancel an order which is not yours"
+                } : {
+                    name: "OrderNotFoundError",
+                    message: "That order does not exist"
+                });
+            } 
+    } catch (error) {
+        next(error);
+    }
+});
+
+ordersRouter.patch('/cart/:orderId', async (req, res, next) => { 
+    const  id = req.params.orderId;
+    try {
+            const cartByOrderId = await getCartByOrderId(id);
+
+            if (cartByOrderId && cartByOrderId.userId === req.user.id) {
+               const completedOrder = await completeOrder(cartByOrderId.id); 
+
+               res.send(completedOrder);
+            } else {
+                next(cartByOrderId ? {
+                    name: "UnauthorizedUserError",
+                    message: "You cannot complete an order which is not yours"
+                    } : {
+                    name: "CartNotFoundError", 
+                    message: "That cart does not exist"
+                });
+            } 
+    } catch (error) {
+        next(error); 
+    }
+});
 
 module.exports = ordersRouter;

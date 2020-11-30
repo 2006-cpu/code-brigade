@@ -208,6 +208,30 @@ async function getOrdersByUser(userId) {
   }
 };
 
+async function updateOrder({id, ...fields}){
+  const setString = Object.keys(fields).map(
+      (key, index) => `"${ key }"=$${ index + 1}`
+  ).join(', ');
+  
+  const objectVals = Object.values(fields)
+  if( setString.length === 0){
+      return;
+  }
+
+  objectVals.push(id);
+  try {
+      const {rows: [order]} = await client.query(`
+          UPDATE orders
+          SET ${setString}
+          WHERE id = $${objectVals.length}
+          RETURNING *;
+      `, objectVals);
+      return order;
+  } catch (error) {
+      throw error;
+  }
+}
+
 
 async function getCartByUser(userId) {
   try {
@@ -228,6 +252,28 @@ async function getCartByUser(userId) {
       cart.productList = productList
       return cart;
   } catch(error) {
+    throw error;
+  }
+};
+
+async function getCartByOrderId(orderId) {
+  try {
+    const { rows: [cart] } = await client.query(`
+      SELECT * 
+      FROM orders
+      WHERE id=$1 AND status='created'
+      `, [orderId])
+
+    const { rows: productList }  = await client.query(`
+      SELECT products.*, order_products.id as "orderProductId", order_products."orderId", order_products.price as "cartPrice", order_products.quantity
+      FROM products
+      JOIN order_products ON products.id=order_products."productId"
+      WHERE order_products."orderId"=$1;
+      `, [cart.id])  
+
+      cart.productList = productList
+      return cart;
+  } catch(error) { 
     throw error;
   }
 };
@@ -363,6 +409,39 @@ async function updateOrderProduct({ id, price, quantity }) {
   }
 };
 
+async function cancelOrder(id) {
+  try {
+    const { rows: [orderCancelled] } = await client.query(`
+    UPDATE orders
+    SET
+    status='cancelled'
+    WHERE id=$1
+    RETURNING *
+    `, [ id ])
+
+    return orderCancelled;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+async function completeOrder(id) {
+  try {
+    const {rows: [ completedOrder ]} = await client.query(`
+    UPDATE orders
+    SET
+    status='completed'
+    WHERE id=$1
+    RETURNING *
+    `, [ id ])
+
+    return completedOrder;
+
+  } catch (error) {
+    throw error;
+  }
+};
 
 // export
 module.exports = {
@@ -378,6 +457,7 @@ module.exports = {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
+  updateOrder,
   getCartByUser,
   createOrder,
   createOrderProductsList,
@@ -386,6 +466,9 @@ module.exports = {
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
-  updateOrderProduct
+  updateOrderProduct,
+  cancelOrder,
+  completeOrder,
+  getCartByOrderId
   // db methods
 }

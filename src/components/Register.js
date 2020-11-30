@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { createInitialOrderId } from '../api/index.js'
 import './index.css';
 const BASE_URL = '/'
 
-
-
 const Register = (props) => {
-    const { setUser, setToken } = props;
+    const { setUser, setToken, setOrderId } = props;
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [imageurl, setImageURL] = useState('');
+    const [ errorMessage , setErrorMessage ] = useState('')
 
     
     const signUp = async ({firstName, lastName, email, username, password, imageurl, isAdmin}) => {
@@ -26,14 +26,21 @@ const Register = (props) => {
                 setLastName('');
                 setEmail('');
                 setImageURL('');
+                setOrderId(0)
                 setToken(responseToken);
                 const auth = {
                     headers: {'Authorization': `Bearer ${responseToken}`
                 }
                   }
+                if (response.data.error) {
+                    setErrorMessage(response.data.message)
+                }
+
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
                 console.log("THE USER:", user.data)
+                const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
+                setOrderId(makeNewOrder.id)
                 return response;
             }
         } catch (error) {
@@ -57,6 +64,7 @@ const Register = (props) => {
     <div className="wrapper">
         <div className="form-wrapper">
             <h3>Register Here</h3>
+            <p className="error" style={{color: "red"}}>{errorMessage}</p>
             <form onSubmit={handleSubmit}>
                     <div className="firstName">
                         <input type="text" placeholder={'First Name'} value={firstName} onChange={(event) => setFirstName(event.target.value)} />
