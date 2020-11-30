@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { createInitialOrderId } from '../api/index.js'
 import './index.css';
@@ -13,6 +14,7 @@ const Register = (props) => {
     const [password, setPassword] = useState('');
     const [imageurl, setImageURL] = useState('');
     const [ errorMessage , setErrorMessage ] = useState('')
+    const history = useHistory();
 
     
     const signUp = async ({firstName, lastName, email, username, password, imageurl, isAdmin}) => {
@@ -36,11 +38,18 @@ const Register = (props) => {
                     setErrorMessage(response.data.message)
                 }
 
+                if (!response.data.error) {
+                    history.push('/products')
+                    } else { 
+                     return
+                }
+
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
                 console.log("THE USER:", user.data)
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
                 setOrderId(makeNewOrder.id)
+               
                 return response;
             }
         } catch (error) {
