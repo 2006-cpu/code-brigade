@@ -73,3 +73,60 @@ export const getOrderById = async (id) => {
     throw error;
   }
 }
+
+export const editOrder = async ({status, userId}, id) => {
+
+  const body = {
+      status: status,
+      userId: userId,
+  };
+  try {
+      const response = await axios.patch(`${ BASE_URL }api/orders/${id}`, body)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+}
+
+export const deleteOrderProduct = async (id, token) => {
+  const requestToken = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+  try {
+      const response = await axios.delete(`${ BASE_URL }api/order_products/${id}`, requestToken)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+}
+//New Nov 28
+export const createInitialOrderId = async (status, userId) => {
+  try {
+    const { data } = await axios.post(`${BASE_URL}api/orders`, {status, userId});
+    return data;
+  }catch (error) {
+  }
+};
+
+export const cancelledOrder = async (id, token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`} }
+  try {
+    const { data } = await axios.delete(`${BASE_URL}api/orders/${id}`, auth);
+    console.log('dataCancelledOrder', data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}; 
+
+export const editCartItem = async (orderProductId, price, quantity, token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`}}
+  try {
+    const data = await axios.patch(`${BASE_URL}api/orders_products/${orderProductId}`,
+    {price, quantity}
+  )
+    
+  } catch (error) {
+    throw error
+  }
+}

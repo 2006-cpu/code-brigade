@@ -1,15 +1,36 @@
-import React, { useEffect } from 'react';
-import { getCartByUser } from '../api/index.js'
+import React, { useEffect, useState } from 'react';
+import { getCartByUser, deleteOrderProduct, editOrder, editCartItem } from '../api/index.js'
+import Axios from 'axios';
 
 const Cart = (props) => {
-
+    const [update, setUpdate] = useState(false)
     const {shoppingCart, setShoppingCart} = props
-    const {user, token} = props
+    const {user, token, setOrderId } = props
+    const [ price, setPrice ] = useState('')
+    const [ quantity, setQuantity ] = useState('')
+    const [ orderProductId, setOrderProductId ] = useState('')
+    // const [token, setToken] = useState()
 
-    const updateQuantity = (quantity, productIndex) => {
-        shoppingCart.productList[productIndex].quantity = quantity
-        console.log('shoppingCart: ', shoppingCart)
-    }
+
+    // const updateQuantity = (quantity, productIndex) => {
+    //     shoppingCart.productList[productIndex].quantity = quantity
+    //     const currentProduct = shoppingCart.productList[productIndex]
+    //     console.log('shoppingCart: ', shoppingCart)
+    //     const finalPrice = quantity * currentProduct.price
+    //     setShoppingCart(shoppingCart)
+    //     editCartItem(currentProduct.orderProductId, finalPrice, quantity)
+    // }
+
+    useEffect(() => {
+        getCartByUser(token)
+            .then(cart => {
+                setShoppingCart(cart.data)
+                setOrderId(cart.data.id)
+            })
+            .catch(error => {
+                console.error(error)
+            });
+    }, [token]);
 
     useEffect(() => {
         getCartByUser(token)
@@ -19,9 +40,18 @@ const Cart = (props) => {
             .catch(error => {
                 console.error(error)
             });
-    }, [token]);
+    }, [update]);
 
-    console.log("What is currently in the shopping cart", shoppingCart)
+    const handleRemove = (e) => {
+        e.preventDefault();
+        deleteOrderProduct(e.target.id, token);
+        update ? setUpdate(false) : setUpdate(true);
+      }
+
+      const handleEdit = (e) => {
+          e.preventDefault();
+          editCartItem(orderProductId, price, quantity, token)
+      }
 
     return (
         <div>
@@ -44,7 +74,7 @@ const Cart = (props) => {
                         <section>
                         <h3>Items in your Cart</h3>
                         {   shoppingCart.productList.map((product, productIndex) =>
-                            <div>
+                            <div key={productIndex}>
                             <div key={product.id} style={{border: "1px solid gray",
                             maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
                                 <p>{product.name} {product.description}</p>
@@ -54,7 +84,7 @@ const Cart = (props) => {
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                                 <p>Price: ${product.price}</p>
                             </div>
-                            <select onChange={event => updateQuantity(event.target.value, productIndex)}>
+                          <select onChange={(e) => setQuantity(e.target.value)}>
 
                             {[1,2,3,4,5].map(quantity => (
                              <option value={quantity} key={quantity}>Quantity{quantity}</option>   
@@ -62,8 +92,9 @@ const Cart = (props) => {
                             
                             )}
                             </select>
-                            </div>
-                        )
+                        
+                                <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
+                            </div>)
                         }
                         </section>
                         </>

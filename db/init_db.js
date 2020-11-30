@@ -13,12 +13,15 @@ const {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
+  updateOrder, 
   getCartByUser,
   createOrderProductsList,
   getOrderProductById,
   getOrdersByProduct,
   addProductToOrder,
-  getOrderProductByOrderIdProductIdPair
+  getOrderProductByOrderIdProductIdPair,
+  cancelOrder,
+  updateOrderProduct
 } = require('./index');
 
 async function dropTables() {
@@ -264,6 +267,18 @@ async function testDB() {
     console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId) that does not exist")
     const getThePairOrderProductId2 = await getOrderProductByOrderIdProductIdPair(2, 2)
     console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should not exist returns undefined", getThePairOrderProductId2)
+
+    console.log("Update order status and userId")
+    const orderUpdated = await updateOrder({id: 5, status: 'completed', userId: 1}) 
+    console.log("See updated order:", orderUpdated)
+
+    console.log("Update order status to cancelled")
+    const orderCancelled = await cancelOrder(1)
+    console.log("See order cancelled:", orderCancelled) 
+
+    console.log("Update order price and quantity")
+    const orderUpdatedProduct = await updateOrderProduct({id: 5, price: 20, quantity: 3}) 
+    console.log("See updated order:", orderUpdatedProduct)
 
     console.log("Finished database tests!");
   } catch (error) {

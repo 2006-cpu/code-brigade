@@ -208,6 +208,30 @@ async function getOrdersByUser(userId) {
   }
 };
 
+async function updateOrder({id, ...fields}){
+  const setString = Object.keys(fields).map(
+      (key, index) => `"${ key }"=$${ index + 1}`
+  ).join(', ');
+  
+  const objectVals = Object.values(fields)
+  if( setString.length === 0){
+      return;
+  }
+
+  objectVals.push(id);
+  try {
+      const {rows: [order]} = await client.query(`
+          UPDATE orders
+          SET ${setString}
+          WHERE id = $${objectVals.length}
+          RETURNING *;
+      `, objectVals);
+      return order;
+  } catch (error) {
+      throw error;
+  }
+}
+
 
 async function getCartByUser(userId) {
   try {
@@ -349,20 +373,81 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   }
 };
 
-async function updateOrderProduct({ id, price, quantity }) {
+// async function updateOrderProduct({ id, price, quantity }) {
+// console.log('id: ', id, 'price: ', price)
+//   try {
+//     const query = await client.query(`
+//       UPDATE order_products
+//       SET quantity=${quantity}, price=${price}
+//       WHERE id = $1;
+//       `, [id]);
+// console.log('query: ', query)
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
+// async function updateOrderProduct({id, ...fields}){
+//   const setString = Object.keys(fields).map(
+//       (key, index) => `"${ key }"=$${ index + 1}`
+//   ).join(', ');
+  
+//   const objectVals = Object.values(fields)
+//   if( setString.length === 0){
+//       return;
+//   }
+
+//   objectVals.push(id);
+//   try {
+//       const {rows: [order]} = await client.query(`
+//           UPDATE order_products
+//           SET ${setString}
+//           WHERE id = $1
+//           RETURNING *;
+//       `, [id]);
+//       return order;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
+
+async function updateOrderProduct({ id, price, quantity }) {
+  const fields  = { price, quantity }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    await client.query(`
-      UPDATE orders_product 
-      SET quantity=${quantity}, price=${price}
-      WHERE id = $1;
-      `, [id]);
+    const { rows: [ order_product ] } = await client.query(`
+      UPDATE order_products
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+      return order_product;
+  } catch (error) {
+    throw error;
+  }        
+};
+
+async function cancelOrder(id) {
+  try {
+    const { rows: [orderCancelled] } = await client.query(`
+    UPDATE orders
+    SET
+    status='cancelled'
+    WHERE id=$1
+    RETURNING *
+    `, [ id ])
+
+    return orderCancelled;
 
   } catch (error) {
     throw error;
   }
-};
-
+}
 
 // export
 module.exports = {
@@ -378,6 +463,7 @@ module.exports = {
   getOrderById,
   getAllOrders,
   getOrdersByUser,
+  updateOrder,
   getCartByUser,
   createOrder,
   createOrderProductsList,
@@ -386,6 +472,7 @@ module.exports = {
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
-  updateOrderProduct
+  updateOrderProduct,
+  cancelOrder
   // db methods
 }
