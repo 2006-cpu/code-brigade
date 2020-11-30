@@ -63,7 +63,7 @@ export const getAllOrders = async () => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const getOrderById = async (id) => {
   try {
@@ -72,7 +72,20 @@ export const getOrderById = async (id) => {
   } catch (error) {
     throw error;
   }
-}
+};
+
+export const getStripe = async (token) => {
+  try {
+    console.log(token)
+    const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
+      token: token,
+      test: 'test'
+    })
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const editOrder = async ({status, userId}, id) => {
 
@@ -86,7 +99,7 @@ export const editOrder = async ({status, userId}, id) => {
   } catch (error) {
       console.error(error);
   }
-}
+};
 
 export const deleteOrderProduct = async (id, token) => {
   const requestToken = {
@@ -98,7 +111,7 @@ export const deleteOrderProduct = async (id, token) => {
   } catch (error) {
       console.error(error);
   }
-}
+};
 //New Nov 28
 export const createInitialOrderId = async (status, userId) => {
   try {
