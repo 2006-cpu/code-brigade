@@ -165,7 +165,14 @@ input {
     padding: 20px;
   }
 
-  .cart {
+  .noOrderIdAlert form{
     display: flex;
-    
+    flex-direction: column;
+    background-color:"orange";
+    align-items: center;
+    padding: 20px;
+    background-color: orange;
+    position: fixed;
+    bottom: 300px;
+    width: 500px;
   }
