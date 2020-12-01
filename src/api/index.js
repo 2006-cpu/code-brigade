@@ -21,7 +21,7 @@ export const getProduct = async (id) => {
   }
 }
 
-export async function loginUser(username, password) {
+export const loginUser = async (username, password) => {
   try {
     const existingUser = await fetch(`${BASE_URL}api/users/login`, {
   method: "POST",
@@ -63,4 +63,85 @@ export const getAllOrders = async () => {
   } catch (error) {
     throw error;
   }
-}
+};
+
+export const getOrderById = async (id) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/orders/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getStripe = async (token) => {
+  try {
+    console.log(token)
+    const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
+      token: token,
+      test: 'test'
+    })
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const editOrder = async ({status, userId}, id) => {
+
+  const body = {
+      status: status,
+      userId: userId,
+  };
+  try {
+      const response = await axios.patch(`${ BASE_URL }api/orders/${id}`, body)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+};
+
+export const deleteOrderProduct = async (id, token) => {
+  const requestToken = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+  try {
+      const response = await axios.delete(`${ BASE_URL }api/order_products/${id}`, requestToken)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+};
+//New Nov 28
+export const createInitialOrderId = async (status, userId) => {
+  try {
+    const { data } = await axios.post(`${BASE_URL}api/orders`, {status, userId});
+    return data;
+  }catch (error) {
+  }
+};
+
+export const cancelledOrder = async (id, token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`} }
+  try {
+    const { data } = await axios.delete(`${BASE_URL}api/orders/${id}`, auth);
+    console.log('dataCancelledOrder', data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}; 
+
+
+export const completedOrder = async (id, token) => {
+  const auth = {headers: {'Authorization': `Bearer ${token}`} }
+
+  console.log('id', id);
+  try {
+    const { data } = await axios.delete(`${BASE_URL}api/orders/cart/${id}`, auth);
+    console.log('datacompletedOrder', data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

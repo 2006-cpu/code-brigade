@@ -1,6 +1,10 @@
 // This is the Web Server
 const express = require('express');
 const server = express();
+
+//dotenv
+require('dotenv').config();
+
 const cors = require('cors')
 
 server.use(cors())

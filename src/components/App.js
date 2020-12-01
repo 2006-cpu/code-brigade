@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import NavBar from './NavBar';
 
 import {
@@ -14,19 +13,27 @@ import {
   Login,
   Register,
   Account,
-  SingleOrder
+  SingleOrder,
+  Orders,
+  Cart,
+  GuestCart,
 } from './index';
 
-import Cart from './Cart'
+//new 
+import { getCurrentCart } from '../auth';
 
 import {
-  getAllProducts
+  getAllProducts, 
+  getCartByUser
 } from '../api';
 
 const App = () => {
   const [productList, setProductList] = useState([]);
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
+  const [ shoppingCart, setShoppingCart ] = useState([]); 
+  const [ orderId, setOrderId ] = useState(shoppingCart.id)
+  const [ oldGuestCart, setOldGuestCart ] = useState(getCurrentCart())
 
   const fetchProducts = () => {
     getAllProducts()
@@ -39,6 +46,17 @@ const App = () => {
   }
 
   useEffect(() => {
+    getCartByUser(token)
+        .then(cart => {
+            setShoppingCart(cart.data)
+            setOrderId(cart.data.id)
+        })
+        .catch(error => {
+            console.error(error)
+        });
+}, [token]);
+
+  useEffect(() => {
     fetchProducts();
 }, []);
 
@@ -46,31 +64,37 @@ const App = () => {
     <Router>
       <div className="App">
       <h1>Masks Co.</h1>
-      <NavBar token={token} setToken={setToken}/>
+      <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId}/>
         <Switch>
           <Route path="/Login">
-            <Login setUser={setUser} token={token} setToken={setToken} />
+            <Login setUser={setUser} token={token} setToken={setToken} setOrderId={setOrderId}/>
           </Route>
           <Route path="/register">
-              <Register user={user} setUser={setUser} setToken={setToken}/>
+              <Register user={user} setUser={setUser} setToken={setToken} setOrderId={setOrderId}/>
           </Route>
-          <Route path="/account">
+          {user && token && 
+            <Route path="/account">
               <Account user={user} />
-          </Route>
+            </Route>
+          }
           <Route path="/product/:productId">
               <Product productList={productList}/>
           </Route>
           <Route path="/products">
-              <Products productList={productList}/>
+              <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
-
-          <Route path="/cart">
-              <Cart user={user} token={token}/>
+          <Route exact path="/cart">
+              <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
-          <Route path="/orders/:orderId">
-            <SingleOrder />
+          <Route path="/guestcart">
+              <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}  oldGuestCart={oldGuestCart} setOldGuestCart={setOldGuestCart}/>
+          </Route>            
+          <Route exact path="/orders">
+            <Orders user={user} />
           </Route>
-
+          <Route exact path="/orders/:orderId">
+            <SingleOrder user={user} />
+          </Route>
         </Switch>
       </div>
     </Router>

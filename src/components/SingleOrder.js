@@ -1,15 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { getAllOrders } from '../api/index.js';
+import {getOrderById, editOrder} from '../api'
 
 
-const SingleOrder = () => {
+
+const SingleOrder = (props) => {
+    const [order, setOrder] = useState({});
+    const [edit, setEdit ] = useState(false);
+    const [userId, setUserId ] = useState(0);
+    const [status, setStatus ] = useState('');
     const {orderId} = useParams();
-    const [orders, setOrders] = useState([])
-    const fetchAllOrders = () => {
-      getAllOrders()
-      .then(orders => {
-          setOrders(orders);
+    const {user} = props;
+    const statusSelect = ["Select Status", "created", "completed", "cancelled"];
+
+    const fetchOrder = () => {
+      getOrderById(orderId)
+      .then(order => {
+          setOrder(order);
       })
       .catch(error => {
           console.error(error);
@@ -17,20 +24,51 @@ const SingleOrder = () => {
     }
     
     useEffect(() => {
-      fetchAllOrders()
-    }, [])
+      fetchOrder()
+    }, [edit])
 
-    const singleOrder = orders.find(singleElm => Number(orderId) === singleElm.id);
+    const handleForm = (e) => {
+      e.preventDefault();
+      setStatus(order.status);
+      setUserId(order.userId);
+      edit ? setEdit(false) : setEdit(true);
+    }
 
+    const handleEdit = (e) => {
+      e.preventDefault();
+      editOrder({ userId, status}, e.target.id);
+      setUserId('');
+      setStatus('');
+      edit ? setEdit(false) : setEdit(true);
+    }
+
+    
     return (
       <div>
       <h1>Orders</h1>
       {
-      singleOrder && 
+      order && user.isAdmin &&
       <>
-          <p>{singleOrder.id}</p>
-          <p>{singleOrder.status}</p>
-          <p>{singleOrder.datePlaced}</p>
+          <p>Order Number: {order.id}</p>
+          <p>User ID: {order.userId}</p>
+          <p>Order Status: {order.status}</p>
+          <p>Date Placed: {order.datePlaced}</p>
+          <button className="edit-order" onClick={handleForm}>Edit Order</button>
+          <div>{edit &&
+          <form>
+            <h3>Edit Order</h3>
+            <input type="text" placeholder={"New User ID"} value={userId} onChange={(e) => setUserId(e.target.value)}/>
+            <select onChange={(e) => {
+              setStatus(e.target.value)
+             }}>{
+              statusSelect.map(status => (
+                  <option key={ status } value={ status }>
+                  { status }
+                  </option>
+              ))
+            }</select>
+            <button id={order.id} type="submit" onClick={handleEdit}>Update</button>
+          </form>}</div>
       </>
       }   
   </div>

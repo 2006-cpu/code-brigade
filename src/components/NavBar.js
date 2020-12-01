@@ -3,11 +3,14 @@ import { NavLink } from 'react-router-dom';
 import './index.css'
 
 const NavBar = (props) => { 
-    const {token, setToken} = props;
+    const {user, setUser, token, setToken, setShoppingCart, setOrderId, orderId} = props;
 
     const logout = () => {    
         if (token) {
             setToken('');
+            setUser('');
+            setShoppingCart([])
+            setOrderId(0)
         } else {
            return 
         }
@@ -16,6 +19,10 @@ const NavBar = (props) => {
     useEffect(() => {
         if(token){
             setToken(token) ;
+        } 
+
+        if(user){
+            setUser(user) ;
         } 
     }, []);
 
@@ -32,9 +39,12 @@ const NavBar = (props) => {
                 <NavLink to={"/products"} activeClassName="current">Products</NavLink>
                 <NavLink to={"/register"} activeClassName="current">Register</NavLink>
                 <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
-                <NavLink to="/cart">View Cart</NavLink>
+                <NavLink to="/guestcart">View Guest Cart</NavLink>
             </>
             }
+            <>
+            {user && user.isAdmin && <NavLink to="/orders">View Orders</NavLink>}
+            </>
         </div>
     )
 };
