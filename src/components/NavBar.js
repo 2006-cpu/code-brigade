@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './index.css'
 
 const NavBar = (props) => { 
-    const {user, setUser, token, setToken, setShoppingCart, setOrderId} = props;
+    const {user, setUser, token, setToken, setShoppingCart, setOrderId, orderId} = props;
 
     const logout = () => {    
         if (token) {

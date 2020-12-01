@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { getOrderById, getStripe } from '../api/index.js'
+import { getOrderById, cancelledGuestOrder, getStripe } from '../api/index.js'
+   //new below for localStorage
 import { storeCurrentCart } from '../auth';
 import TakeMoney from './TakeMoney.js'
 
