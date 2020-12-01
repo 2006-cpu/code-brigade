@@ -48,7 +48,6 @@ const Cart = (props) => {
             });
     }, [token]);
   
-    console.log("What is currently in the shopping cart", shoppingCart)
 
     useEffect(() => {
         getCartByUser(token)
@@ -65,6 +64,14 @@ const Cart = (props) => {
         deleteOrderProduct(e.target.id, token);
         update ? setUpdate(false) : setUpdate(true);
       }
+
+    const totalSales = () => {
+        let total = 0;
+        shoppingCart.productList.forEach(product => {
+            total += product.cartPrice * product.quantity      
+        })
+        return total
+    };
 
     return (
         <div>
@@ -87,8 +94,7 @@ const Cart = (props) => {
                         <section>
                         <h3>Items in your Cart</h3>
                         {   shoppingCart.productList.map((product) =>
-                            <div key={product.id} style={{border: "1px solid gray",
-                            maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
+                            <div key={product.id} style={{border: "1px solid gray", padding: "20px", topMargin: "10px"}}>
                                 <p>{product.name} {product.description}</p>
                                 <p>Product Id:{product.id}</p>
                                 <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
@@ -102,6 +108,10 @@ const Cart = (props) => {
                         {/* <button type="submit" onClick={() => handleCompleteOrder(shoppingCart.id)}>Complete Order</button> */}
                         </section>
                         </>
+                        : ''
+                    }
+                    { shoppingCart && shoppingCart.productList ?
+                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ totalSales() }</div>
                         : ''
                     }
 

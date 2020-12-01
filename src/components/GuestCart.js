@@ -21,14 +21,21 @@ const GuestCart = (props) => {
             });
     }, []);
 
+    const totalSales = () => {
+        let total = 0;
+        guestCart.productList.forEach(product => {
+            total += product.price * product.quantity 
+        })
+        return total
+    };
+
     return (
         <div>
             <h1>Guest Shopping Cart</h1>
              { guestCart ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
-                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}
-                    >
+                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
                     Order ID: {guestCart.id}</h3>  
 
                     {
@@ -37,8 +44,7 @@ const GuestCart = (props) => {
                         <section>
                         <h3>Items in your Cart</h3>
                         {   guestCart.productList.map((product) =>
-                            <div key={product.id} style={{border: "1px solid gray",
-                            maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
+                            <div key={product.id} style={{border: "1px solid gray", padding: "20px", topMargin: "10px"}}>
                                 <p>{product.name} {product.description}</p>
                                 <p>Product Id:{product.id}</p>
                                 <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
@@ -48,10 +54,12 @@ const GuestCart = (props) => {
                             </div>)
                         }
                         </section>
+                 
+                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ totalSales() }</div>
+                
                         </>
                         : ''
                     }
-
                 </div>    
                 :
                 ''
@@ -60,7 +68,7 @@ const GuestCart = (props) => {
                     {
                         oldGuestCart && oldGuestCart.productList ?
                         <div className="oldGuestCart">
-                            <h2>Your Previous Cart</h2>
+                            <h2>Your Previous Cart History</h2>
                             <p> 
                              Please create an account to take advantage of updating and deleting an account cart. Thank you.</p>
                             <p>Order Number: {oldGuestCart.id}</p>
@@ -85,10 +93,11 @@ const GuestCart = (props) => {
                                 :
                                 ''
                             }
-                        </div>
-                        : ''
-                    }      
                     </div>
+                    : ''
+                }  
+        </div>            
+                  
                 <TakeMoney
                 name="Three Comma Co." // the pop-in header title
                 description="Big Data Stuff" // the pop-in header subtitle
