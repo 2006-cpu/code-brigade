@@ -28,38 +28,14 @@ orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
     }
 });
 
-// orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
-// console.log('hello')
-//     try {
-//       await updateOrderProduct({
-//           id: req.params.orderProductId, 
-//           price: req.body.price,
-//           quantity: req.body.quantity
-//         });
-//         res.send(204)
-
-//     } catch ({ name, message }) {
-//       next({ name, message });
-//     }
-//   });
-
 orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
     const { orderProductId } = req.params;
     const { price, quantity } = req.body;
       try {
-    //   const routineActivity = await getRoutineActivityById(routineActivityId)
-    //   const routine = await getRoutineById(routineActivity.routineId)
-    //   if (routine.creatorId === req.user.id) {
         const orderProduct = await updateOrderProduct({id: orderProductId, price, quantity})   
         if(orderProduct) {
             res.send(orderProduct);
         }
-    //   } else {
-    //     next({
-    //       name: 'UnauthorizedUserError',
-    //       message: 'You cannot update an activity that is not yours'
-    //     })
-    //   }
     } catch ({ name, message }) {
       next({ name, message });
     }
@@ -78,24 +54,6 @@ orderProductsRouter.post('/create-session', async (req, res) => {
 // need to get userId correctly (there is no cart for the user)
 // need to pass in amount from cart
 
-
-    // payment_method_types: ['card'],
-    // line_items: [
-    //   {
-    //     price_data: {
-    //       currency: 'usd',
-    //       product_data: {
-    //         name: 'Stubborn Attachments',
-    //         images: ['https://i.imgur.com/EHyR2nP.png'],
-    //       },
-    //       unit_amount: 2000,
-    //     },
-    //     quantity: 1,
-    //   },
-    // ],
-    // mode: 'payment',
-    // success_url: `http://localhost:3000`,
-    // cancel_url: `http://localhost:3000`,
   });
   res.json(charge);
 
