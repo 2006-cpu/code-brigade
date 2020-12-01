@@ -86,7 +86,7 @@ const Cart = (props) => {
                 <div style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
                     <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
-                    Order ID: {shoppingCart.id}</h3>  
+                    {shoppingCart.id? <p>Order ID: {shoppingCart.id}</p> : ''}</h3>  
 
                     {
                         shoppingCart.productList? 
@@ -100,7 +100,7 @@ const Cart = (props) => {
                                 <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                <p>Price: ${product.price}</p>                    
+                                <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>                    
                                 <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }

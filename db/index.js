@@ -322,7 +322,6 @@ async function getOrderProductById(id) {
   }
 };
 
-//seed Data for order_products
 async function createOrderProductsList({ orderId, productId, price, quantity }) {
   try {
     const { rows: [ orderProduct ] }  = await client.query(`
@@ -349,29 +348,21 @@ async function destroyOrderProduct(id){
 async function addProductToOrder({ orderId, productId, price, quantity }) {
   try {
     const orderList = await getOrdersByProduct({id: productId})
-    console.log("What is orderList in db adapter", orderList)
     const index = orderList.findIndex(order => order.id === orderId)
-    console.log("What is the index in the db adapter", index)
     if (index === -1 ) {
-
-    const newOrderProduct = await createOrderProductsList({ orderId, productId, price, quantity })
+      const newOrderProduct = await createOrderProductsList({ orderId, productId, price, quantity })
 
       return newOrderProduct
     } else {
 
       const orderDetails = await getOrderById(orderId)
-      console.log("what is the Order Details in db adapter for existing order_product", orderDetails)
-      const finding = orderDetails.productList.find(singleProduct => singleProduct.productidentity === productId);
-      console.log("What is EXISING ORDER-PRODUCT in db adapter:", finding)
-      console.log("What is the EXISTING ORDER-PRODUCT_ID:", finding.orderProductId)
-
+      const findExistingOrderProduct = orderDetails.productList.find(singleProduct => singleProduct.productidentity === productId);
       const { rows: [ changeOrderProduct ] } = await client.query(`
       UPDATE order_products
       SET price=${price}, quantity=${quantity}
-      WHERE id=${ finding.orderProductId}
+      WHERE id=${ findExistingOrderProduct.orderProductId}
       RETURNING *;
     `);
-      console.log("What is the new CHANGE for the EXISTING ORDER-PRODUCT-ID:", changeOrderProduct)
     return changeOrderProduct;
       
     }
@@ -380,7 +371,7 @@ async function addProductToOrder({ orderId, productId, price, quantity }) {
   }
 };
 
-//helper function
+
 async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   try {
       const { rows: [ orderProduct ] } = await client.query(`
@@ -395,19 +386,28 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   }
 };
 
+//from Spencer's pr request 
 async function updateOrderProduct({ id, price, quantity }) {
-
+  const fields  = { price, quantity }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    await client.query(`
-      UPDATE orders_product 
-      SET quantity=${quantity}, price=${price}
-      WHERE id = $1;
-      `, [id]);
-
+    const { rows: [ order_product ] } = await client.query(`
+      UPDATE order_products
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+      return order_product;
   } catch (error) {
     throw error;
-  }
+  }      
 };
+
 
 async function cancelOrder(id) {
   try {

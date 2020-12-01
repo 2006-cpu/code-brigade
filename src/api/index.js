@@ -112,7 +112,7 @@ export const deleteOrderProduct = async (id, token) => {
       console.error(error);
   }
 };
-//New Nov 28
+
 export const createInitialOrderId = async (status, userId) => {
   try {
     const { data } = await axios.post(`${BASE_URL}api/orders`, {status, userId});
@@ -143,5 +143,16 @@ export const completedOrder = async (id, token) => {
     return data;
   } catch (error) {
     throw error;
+  }
+};
+
+
+//Note to Spencer -- was wrong path -- no need token since we can do what makes sense for guest to edit
+export const editCartItem = async (orderProductId, price, quantity) => {
+  try {
+    const { data } = await axios.patch(`${BASE_URL}api/order_products/${orderProductId}`, {price, quantity})
+    console.log(data)
+  } catch (error) {
+    throw error
   }
 };
