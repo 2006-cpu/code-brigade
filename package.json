@@ -21,6 +21,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "history": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "pg": "^8.2.1",
@@ -30,7 +31,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "react-stripe-checkout": "^2.6.3",
-    "stripe": "^8.126.0"
+    "stripe": "^8.126.0",
+    "sweetalert": "^2.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

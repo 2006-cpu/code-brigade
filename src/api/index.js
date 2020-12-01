@@ -132,6 +132,7 @@ export const cancelledOrder = async (id, token) => {
   }
 }; 
 
+
 export const completedOrder = async (id, token) => {
   const auth = {headers: {'Authorization': `Bearer ${token}`} }
 

@@ -109,6 +109,17 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
     }
 });
 
+ordersRouter.delete('/guestcart/:orderId', async (req, res, next) => {
+    const id = req.params.orderId;
+    try {
+               const cancelledOrder = await cancelOrder(id); 
+
+               res.send(cancelledOrder); 
+    } catch (error) {
+        next(error);
+    }
+});
+
 ordersRouter.delete('/cart/:orderId', async (req, res, next) => { 
     const  id = req.params.orderId;
     try {
