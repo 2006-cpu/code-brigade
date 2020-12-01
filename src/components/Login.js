@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 // import NavBar from './NavBar'
 import axios from 'axios';
 import {loginUser, createInitialOrderId, getCartByUser} from '../api/index.js'
@@ -11,7 +12,7 @@ const Login = (props) => {
     username: '',
     password: ''
   })
-
+  const history = useHistory();
   const [ error, setError ] = useState('')
 
 
@@ -39,11 +40,17 @@ const Login = (props) => {
       setError(data.message)
     }
 
-      const getCart = await getCartByUser(data.token)
-      if (getCart.data.error) {
-        const makeNewOrder = await createInitialOrderId('created', user.data.id)
-        const orderId = setOrderId(makeNewOrder.id)
-      }
+    if (!data.error) {
+      history.push('/products')
+      } else { 
+       return
+    }
+
+    const getCart = await getCartByUser(data.token)
+    if (getCart.data.error) {
+      const makeNewOrder = await createInitialOrderId('created', user.data.id)
+      const orderId = setOrderId(makeNewOrder.id)
+    }
   }
 
   return (
