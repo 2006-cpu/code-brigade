@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 // import NavBar from './NavBar'
+
+//new for localStorage
+import {  storeCurrentUser, storeCurrentToken } from '../auth';
 import axios from 'axios';
 import {loginUser, createInitialOrderId, getCartByUser} from '../api/index.js'
 
@@ -30,6 +33,11 @@ const Login = (props) => {
     const user = await axios.get(`${BASE_URL}api/users/me`, auth);
     setUser(user.data);
     console.log("THE USER:", user.data)
+
+      //new for localStorage    
+    storeCurrentUser(user.data)
+    storeCurrentToken(data.token)
+    //end of localStorage
     
     setLogin({
       username: '',
@@ -50,6 +58,7 @@ const Login = (props) => {
     if (getCart.data.error) {
       const makeNewOrder = await createInitialOrderId('created', user.data.id)
       const orderId = setOrderId(makeNewOrder.id)
+
     }
   }
 

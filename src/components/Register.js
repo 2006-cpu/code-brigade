@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { createInitialOrderId } from '../api/index.js'
+//new
+import {  storeCurrentUser, storeCurrentToken  } from '../auth';
 import './index.css';
 const BASE_URL = '/'
 
@@ -49,6 +51,9 @@ const Register = (props) => {
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
                 setOrderId(makeNewOrder.id)
+             //new both below
+             storeCurrentUser(user.data)  
+             storeCurrentToken(responseToken) 
                
                 return response;
             }
