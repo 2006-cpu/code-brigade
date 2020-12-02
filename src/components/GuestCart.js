@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { getOrderById, cancelledGuestOrder, getStripe } from '../api/index.js'
 import { storeCurrentCart } from '../auth';
-
+import theTotal from './Utility.js'
 import TakeMoney from './TakeMoney.js'
 
 const GuestCart = (props) => {
@@ -18,14 +18,6 @@ const GuestCart = (props) => {
                 console.error(error)
             });
     }, []);
-
-    const totalSales = () => {
-        let total = 0;
-        guestCart.productList.forEach(product => {
-            total += product.price * product.quantity 
-        })
-        return total
-    };
 
     //new
     const PreviousGuestCart = () => {
@@ -78,7 +70,7 @@ const GuestCart = (props) => {
                         }
                         </section>
                  
-                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ totalSales() }</div>
+                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ theTotal(guestCart.productList) }</div>
                 
                         </>
                         : ''

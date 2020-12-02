@@ -210,3 +210,7 @@ input {
   button:hover {
     color:white;
   }
+
+  .editOrderProductQuantity {
+    text-align: right;
+  }
