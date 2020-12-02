@@ -67,7 +67,7 @@ const Cart = (props) => {
                 .catch(error => {
                     console.error(error)
                 });
-    }, [token]);
+    }, [token, update]);
   
     console.log("what is token", token, "user", user)
   

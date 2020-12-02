@@ -24,12 +24,12 @@ const GuestCart = (props) => {
         getOrder();
     }, []);
     
-    const totalSales = () => {
-        let total = 0;
-        guestCart.productList.forEach(product => {
-            total += product.price * product.quantity 
-        })
-        return total
+    // const totalSales = () => {
+    //     let total = 0;
+    //     guestCart.productList.forEach(product => {
+    //         total += product.price * product.quantity 
+    //     })
+    //     return total
 
     //new
     const PreviousGuestCart = () => {
