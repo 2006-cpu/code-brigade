@@ -396,17 +396,24 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
 };
 
 async function updateOrderProduct({ id, price, quantity }) {
-
+  const fields  = { price, quantity }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    await client.query(`
-      UPDATE orders_product 
-      SET quantity=${quantity}, price=${price}
-      WHERE id = $1;
-      `, [id]);
-
+    const { rows: [ orderProduct ] } = await client.query(`
+      UPDATE order_products
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+      return orderProduct;
   } catch (error) {
     throw error;
-  }
+  }        
 };
 
 async function cancelOrder(id) {

@@ -28,7 +28,7 @@ orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
     }
 });
 
-orderProductsRouter.patch('/orders_products/:orderProductId', async (req, res, next) => {
+orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
 
     try {
       await updateOrderProduct({
@@ -36,7 +36,7 @@ orderProductsRouter.patch('/orders_products/:orderProductId', async (req, res, n
           price: req.body.price,
           quantity: req.body.quantity
         });
-        res.send(204)
+        res.sendStatus(204)
 
     } catch ({ name, message }) {
       next({ name, message });

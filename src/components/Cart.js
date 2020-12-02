@@ -37,27 +37,19 @@ const Cart = (props) => {
         }
     };
 
-    useEffect(() => {
-        getCartByUser(token)
-            .then(cart => {
-                setShoppingCart(cart.data)
-                setOrderId(cart.data.id)
-            })
-            .catch(error => {
-                console.error(error)
-            });
-    }, [token]);
-  
+    const fetchCart = async () => {
+        try {
+          const cart = await getCartByUser(token);
+          setShoppingCart(cart.data);
+          setOrderId(cart.data.id);
+        } catch (error) {
+          
+        }
+      }
 
     useEffect(() => {
-        getCartByUser(token)
-            .then(cart => {
-                setShoppingCart(cart.data)
-            })
-            .catch(error => {
-                console.error(error)
-            });
-    }, [update]);
+        fetchCart();
+    }, [token, update]);
 
     const handleRemove = (e) => {
         e.preventDefault();
