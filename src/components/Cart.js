@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import TakeMoney from './TakeMoney.js';
+import theTotal from './Utility.js'
 import { useHistory } from "react-router-dom";
 import swal from 'sweetalert';
-import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder, getStripe } from '../api/index.js'
+import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder, getStripe, editCartItem, createInitialOrderId } from '../api/index.js'
+import { get } from 'react-hook-form';
 
 const Cart = (props) => {
     const history = useHistory();
     const [update, setUpdate] = useState(false)
+    //new
+    const [editOrderProductId, setEditOrderProductId] = useState(1)
+    const [editQuantity, setEditQuantity] = useState(1)
+    const [editPrice, setEditPrice] = useState(2)
+    //end of new
     const {shoppingCart, setShoppingCart} = props
-    const {user, token, setOrderId } = props
+    const {user, token, setOrderId, orderId } = props
 
     const handleCancelOrder = async (id) => {
         try {
@@ -28,35 +35,54 @@ const Cart = (props) => {
 
             const handleCompleteOrder = async (id) => {
         try {
-            console.log('button test');
             const result = await completedOrder(id, token) 
-            console.log('resultcompletion', result)
             update ? setUpdate(false) : setUpdate(true);
         } catch(error) {
             console.error(error)
         }
     };
 
-    useEffect(() => {
-        getCartByUser(token)
-            .then(cart => {
-                setShoppingCart(cart.data)
-                setOrderId(cart.data.id)
-            })
-            .catch(error => {
-                console.error(error)
-            });
-    }, [token]);
-  
+
+    const getInitialCart = async () => {
+        try {
+                const getCart = await getCartByUser(token)               
+                    if (getCart.data.id) {
+                        setShoppingCart(getCart.data)
+                        setOrderId(getCart.data.id)
+                    }  else if (!getCart.data.id) {
+                        const {id} = user
+                        const makeNewOrder = await createInitialOrderId('created', id)
+                        setOrderId(makeNewOrder.id)
+                    }
+        }   catch(error) {
+            console.error(error)
+        }
+    }
+
 
     useEffect(() => {
-        getCartByUser(token)
-            .then(cart => {
-                setShoppingCart(cart.data)
-            })
-            .catch(error => {
-                console.error(error)
-            });
+        getInitialCart()
+        .then(cart => {
+                })
+                .catch(error => {
+                    console.error(error)
+                });
+    }, [token, update]);
+  
+    console.log("what is token", token, "user", user)
+  
+    const fetchCart = async () => {
+      try {
+        const cart = await getCartByUser(token);
+        setShoppingCart(cart.data);
+        setOrderId(cart.data.id);
+      } catch (error) {
+
+      }
+    }
+
+    useEffect(() => {
+        fetchCart();
     }, [update]);
 
     const handleRemove = (e) => {
@@ -65,18 +91,26 @@ const Cart = (props) => {
         update ? setUpdate(false) : setUpdate(true);
       }
 
-    const totalSales = () => {
-        let total = 0;
-        shoppingCart.productList.forEach(product => {
-            total += product.cartPrice * product.quantity      
-        })
-        return total
+    //new Edit
+    const handleEdit = async(event) => {
+        event.preventDefault();
+        console.log("What is edit Price", editPrice, "What is edit Quantity", editQuantity, "What is setOrderProductId", editOrderProductId)
+        try {
+            const newEdit = await editCartItem(editOrderProductId, editPrice, editQuantity)
+            console.log("EDIT", newEdit)
+                if (newEdit) {
+                    setUpdate(true)
+                } 
+            } catch(error) {
+            console.error(error)
+        }
     };
 
     return (
         <div>
+            
             {
-                user.username && token ?  
+                user?  
                 <h2>{user.username}'s Shopping Cart</h2>
                 : 
                 <h2>Your Shopping Cart</h2>
@@ -86,7 +120,7 @@ const Cart = (props) => {
                 <div style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
                     <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
-                    Order ID: {shoppingCart.id}</h3>  
+                    {shoppingCart.id? <p>Order ID: {shoppingCart.id}</p> : ''}</h3>  
 
                     {
                         shoppingCart.productList? 
@@ -100,7 +134,28 @@ const Cart = (props) => {
                                 <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                <p>Price: ${product.price}</p>                    
+                                <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
+                        {/* Editing quantity                     */}
+
+                                <form className="editOrderProductQuantity" 
+                                onSubmit={handleEdit}> 
+                                <label>Quantity:</label>
+                                <input type="number" min="0" value={ editQuantity} name="editQuantity"
+                                onChange={(event) => { 
+                                    setEditQuantity(event.target.value) 
+                                    setEditPrice(product.price)
+                                    setEditOrderProductId(product.orderProductId)
+                                    console.log("What is edit Price", editPrice, "What is edit Quantity", editQuantity, "What is setOrderProductId", editOrderProductId)
+                                                         }}/>
+                                <button 
+                                    onClick={()=> {
+                                    setUpdate(false)
+                                    console.log("What is edit Price", editPrice, "What is edit Quantity", editQuantity, "What is setOrderProductId", editOrderProductId)
+                                }} 
+                                className="editButton">Update Quantity</button>
+                                </form>
+
+                        {/* end of Editing quantity */}
                                 <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
                             </div>)
                         }
@@ -111,10 +166,9 @@ const Cart = (props) => {
                         : ''
                     }
                     { shoppingCart && shoppingCart.productList ?
-                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ totalSales() }</div>
+                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ theTotal(shoppingCart.productList) }</div>
                         : ''
                     }
-
                 </div>    
                 :
                 ''

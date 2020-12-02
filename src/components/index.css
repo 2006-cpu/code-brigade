@@ -154,7 +154,24 @@ input {
     bottom: 500px;
     left: 500px; 
     border: 1px solid black;
+    background:rgb(12, 56, 47);
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
   }
+
+  .added {
+    position: fixed;
+    bottom: 500px;
+    left: 200px; 
+    border: 1px solid black;
+    background: black;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    width: 150px;
+    text-align: center;
+  }  
 
   .guestPrompt {
     display: flex;
@@ -179,4 +196,21 @@ input {
     position: fixed;
     bottom: 300px;
     width: 500px;
+  }
+
+  .orderProductForm {
+    font-size: 1.2em;
+  }
+
+  .priceQuantity {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  button:hover {
+    color:white;
+  }
+
+  .editOrderProductQuantity {
+    text-align: right;
   }

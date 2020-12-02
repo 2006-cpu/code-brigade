@@ -253,15 +253,6 @@ async function testDB() {
     const nonExist = await getOrdersByProduct({id:4})
     console.log("Testing a non-existing product ID in an order returns an empty array:", nonExist)
 
-    //TEST Nov 27 for New - tested on Nov 27th and it works
-    // const addingProductOrderForNewCombo = await addProductToOrder({ orderId: 5, productId: 4, price: 20, quantity: 3})
-    // console.log("What is addingProductOrder Result for TEST Nov 27 Should be new Order Product Id", addingProductOrderForNewCombo)
-
-    // TEST 5 for Existing - tested on Nov 27th and it works
-    // const addingProductToExistingOrderProduct = await addProductToOrder({orderId: 5, productId: 2, price: 23, quantity: 24})
-    // console.log("What is the result of TEST 5 addProductToOrder for existing order Id and product combo", addingProductToExistingOrderProduct)
-    // console.log("Finished TEST 5")
-
     console.log("Testing getOrderProductByOrderIdProductIdPair(orderId, productId)")
     const getThePairOrderProductId = await getOrderProductByOrderIdProductIdPair(8, 1)
     console.log("What is the id using the getOrderProductByOrderIdProductIdPair(orderId, productId), should be id: 5", getThePairOrderProductId)

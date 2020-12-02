@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+//new below
+import { clearCurrentUser, clearCurrentToken} from '../auth';
 import './index.css'
 
 const NavBar = (props) => { 
@@ -11,6 +13,10 @@ const NavBar = (props) => {
             setUser('');
             setShoppingCart([])
             setOrderId(0)
+
+            //new both
+            clearCurrentUser()
+            clearCurrentToken()
         } else {
            return 
         }
@@ -20,7 +26,6 @@ const NavBar = (props) => {
         if(token){
             setToken(token) ;
         } 
-
         if(user){
             setUser(user) ;
         } 
@@ -40,6 +45,8 @@ const NavBar = (props) => {
                 <NavLink to={"/register"} activeClassName="current">Register</NavLink>
                 <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
                 <NavLink to="/guestcart">View Guest Cart</NavLink>
+           {/* testing view cart    remove from here later  */}
+                <NavLink to="/cart">View Cart</NavLink>
             </>
             }
             <>

@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { createInitialOrderId } from '../api/index.js'
 //new
-// import {  storeCurrentUser, storeCurrentToken  } from '../auth';
+import {  storeCurrentUser, storeCurrentToken  } from '../auth';
 import './index.css';
 const BASE_URL = '/'
 
@@ -53,8 +53,8 @@ const Register = (props) => {
                 setUser(user.data);
                 setOrderId(makeNewOrder.id)
              //new both below
-            //  storeCurrentUser(user.data)  
-            //  storeCurrentToken(responseToken) 
+             storeCurrentUser(user.data)  
+             storeCurrentToken(responseToken) 
                
                 return response;
             }
