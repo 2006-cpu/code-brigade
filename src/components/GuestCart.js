@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { getOrderById, cancelledGuestOrder, getStripe } from '../api/index.js'
-   //new below for localStorage
 import { storeCurrentCart } from '../auth';
+import theTotal from './Utility.js'
 import TakeMoney from './TakeMoney.js'
-
-
 
 const GuestCart = (props) => {
     const {orderId, oldGuestCart, setOldGuestCart} = props 
     const [ guestCart, setGuestCart ] = useState([])
+
 
     const getOrder = async () => {
         try {
@@ -31,7 +30,32 @@ const GuestCart = (props) => {
             total += product.price * product.quantity 
         })
         return total
+
+    //new
+    const PreviousGuestCart = () => {
+        return (
+            <section>
+            <h2>Your Previous Guest Cart History</h2>
+            <p> 
+             Please create an account to take advantage of our services. Thank you.</p>
+            <p>Order Number: {oldGuestCart.id}</p>
+            <h3>Items in your Previous Cart</h3>
+            {   oldGuestCart.productList.map((product) =>
+                <div key={product.id} style={{border: "1px solid gray",
+                maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
+                    <p>{product.name} {product.description}</p>
+                    <p>Product Id:{product.id}</p>
+                    <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
+                    <p>Category: {product.category}</p>
+                    <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
+                    <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
+                </div>)
+            }
+            </section>
+        )
+
     };
+    //end of new
 
     return (
         <div>
@@ -54,12 +78,12 @@ const GuestCart = (props) => {
                                 <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                <p>Price: ${product.price}</p>
+                                <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
                             </div>)
                         }
                         </section>
                  
-                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ totalSales() }</div>
+                        <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ theTotal(guestCart.productList) }</div>
                 
                         </>
                         : ''
@@ -68,39 +92,7 @@ const GuestCart = (props) => {
                 :
                 ''
                 } 
-                <div>
-                    {
-                        oldGuestCart && oldGuestCart.productList ?
-                        <div className="oldGuestCart">
-                            <h2>Your Previous Cart History</h2>
-                            <p> 
-                             Please create an account to take advantage of updating and deleting an account cart. Thank you.</p>
-                            <p>Order Number: {oldGuestCart.id}</p>
-                            { 
-                                oldGuestCart.productList ?
-                                <>
-                                <section>
-                                <h3>Items in your Previous Cart</h3>
-                                {   oldGuestCart.productList.map((product) =>
-                                    <div key={product.id} style={{border: "1px solid gray",
-                                    maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
-                                        <p>{product.name} {product.description}</p>
-                                        <p>Product Id:{product.id}</p>
-                                        <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                                        <p>Category: {product.category}</p>
-                                        <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                        <p>Price: ${product.price}</p>
-                                    </div>)
-                                }
-                                </section>
-                                </>
-                                :
-                                ''
-                            }
-                    </div>
-                    : ''
-                }  
-        </div>            
+                <div> { oldGuestCart && oldGuestCart.productList ? <PreviousGuestCart /> : ''}</div>            
                   
                 <TakeMoney
                 name="Three Comma Co." // the pop-in header title
