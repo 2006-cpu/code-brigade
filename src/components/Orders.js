@@ -5,20 +5,19 @@ import {getAllOrders} from '../api'
 const Orders = (props) => {
     const {user} = props;
     const [orders, setOrders] = useState([]);
-
-    const fetchAllOrders = () => {
-        getAllOrders()
-        .then(orders => {
+    
+    const fetchAllOrders = async () =>{
+        try {
+            const orders = await getAllOrders();
             setOrders(orders);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error(error);
-        });
-      }
+        }
+    }  
       
-      useEffect(() => {
-        fetchAllOrders()
-      }, [])
+    useEffect(() => {
+    fetchAllOrders();
+    }, [])
     
     console.log(orders)
     return (<>

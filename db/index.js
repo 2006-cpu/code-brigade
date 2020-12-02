@@ -396,16 +396,18 @@ async function updateOrderProduct({ id, price, quantity }) {
     return;
   }
   try {
-    const { rows: [ order_product ] } = await client.query(`
+
+    const { rows: [ orderProduct ] } = await client.query(`
       UPDATE order_products
       SET ${ setString }
       WHERE id=${ id }
       RETURNING *;
       `, Object.values(fields));
-      return order_product;
+
+      return orderProduct;
   } catch (error) {
     throw error;
-  }      
+  }        
 };
 
 

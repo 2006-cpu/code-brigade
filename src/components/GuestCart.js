@@ -7,17 +7,29 @@ import TakeMoney from './TakeMoney.js'
 const GuestCart = (props) => {
     const {orderId, oldGuestCart, setOldGuestCart} = props 
     const [ guestCart, setGuestCart ] = useState([])
-    
-    useEffect(() => {
-        getOrderById(orderId)
-            .then(guestCart => {
-                setGuestCart(guestCart)
-                storeCurrentCart(guestCart)
-            })
-            .catch(error => {
-                console.error(error)
-            });
+
+
+    const getOrder = async () => {
+        try {
+            const guestCart = await getOrderById(orderId);
+            setGuestCart(guestCart);
+            storeCurrentCart(guestCart);
+        } catch (error) {
+            console.error(error); 
+        }
+        
+    }
+
+    useEffect(()=> {
+        getOrder();
     }, []);
+    
+    const totalSales = () => {
+        let total = 0;
+        guestCart.productList.forEach(product => {
+            total += product.price * product.quantity 
+        })
+        return total
 
     //new
     const PreviousGuestCart = () => {
@@ -41,6 +53,7 @@ const GuestCart = (props) => {
             }
             </section>
         )
+
     };
     //end of new
 

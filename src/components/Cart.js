@@ -42,6 +42,7 @@ const Cart = (props) => {
         }
     };
 
+
     const getInitialCart = async () => {
         try {
                 const getCart = await getCartByUser(token)               
@@ -69,15 +70,19 @@ const Cart = (props) => {
     }, [token]);
   
     console.log("what is token", token, "user", user)
+  
+    const fetchCart = async () => {
+      try {
+        const cart = await getCartByUser(token);
+        setShoppingCart(cart.data);
+        setOrderId(cart.data.id);
+      } catch (error) {
+
+      }
+    }
 
     useEffect(() => {
-        getCartByUser(token)
-            .then(cart => {
-                setShoppingCart(cart.data)
-            })
-            .catch(error => {
-                console.error(error)
-            });
+        fetchCart();
     }, [update]);
 
     const handleRemove = (e) => {

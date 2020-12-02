@@ -42,30 +42,32 @@ const App = () => {
   const [ orderId, setOrderId ] = useState(shoppingCart.id)
   const [ oldGuestCart, setOldGuestCart ] = useState(getCurrentCart())
 
-  const fetchProducts = () => {
-    getAllProducts()
-    .then(products => {
-        setProductList(products);
-    })
-    .catch(error => {
-        console.error(error);
-    });
+  const fetchProducts = async () => {
+    try {
+      const products = await getAllProducts();
+      setProductList(products);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  useEffect(() => {
-    getCartByUser(token)
-        .then(cart => {
-            setShoppingCart(cart.data)
-            setOrderId(cart.data.id)
-        })
-        .catch(error => {
-            console.error(error)
-        });
-}, [token]);
+  const fetchCart = async () => {
+    try {
+      const cart = await getCartByUser(token);
+      setShoppingCart(cart.data);
+      setOrderId(cart.data.id);
+    } catch (error) {
+      
+    }
+  }
 
-  useEffect(() => {
+useEffect(() => {
     fetchProducts();
 }, []);
+
+useEffect(() => {
+  fetchCart();
+}, [token]);
 
   return (
     <Router>
