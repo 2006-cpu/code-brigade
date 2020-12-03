@@ -11,9 +11,11 @@ const GuestCart = (props) => {
 
     const getOrder = async () => {
         try {
-            const guestCart = await getOrderById(orderId);
-            setGuestCart(guestCart);
-            storeCurrentCart(guestCart);
+            const theGuestCart = await getOrderById(orderId);
+            if(theGuestCart) {
+            setGuestCart(theGuestCart);
+            storeCurrentCart(theGuestCart);
+            }
         } catch (error) {
             console.error(error); 
         }
@@ -24,14 +26,8 @@ const GuestCart = (props) => {
         getOrder();
     }, []);
     
-    // const totalSales = () => {
-    //     let total = 0;
-    //     guestCart.productList.forEach(product => {
-    //         total += product.price * product.quantity 
-    //     })
-    //     return total
-
-    //new
+console.log("What is localStorage just straight out", localStorage.cart, "What is oldGuestCart", oldGuestCart)
+console.log("What is oldGuestCart", oldGuestCart, "What is guestCart", guestCart)
     const PreviousGuestCart = () => {
         return (
             <section>
@@ -40,7 +36,9 @@ const GuestCart = (props) => {
              Please create an account to take advantage of our services. Thank you.</p>
             <p>Order Number: {oldGuestCart.id}</p>
             <h3>Items in your Previous Cart</h3>
-            {   oldGuestCart.productList.map((product) =>
+            {  oldGuestCart && !oldGuestCart.error ?
+               
+                oldGuestCart.productList.map((product) => 
                 <div key={product.id} style={{border: "1px solid gray",
                 maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
                     <p>{product.name} {product.description}</p>
@@ -50,12 +48,13 @@ const GuestCart = (props) => {
                     <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                     <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
                 </div>)
+                
+                : ''
             }
             </section>
         )
 
     };
-    //end of new
 
     return (
         <div>
@@ -92,7 +91,10 @@ const GuestCart = (props) => {
                 :
                 ''
                 } 
-                <div> { oldGuestCart && oldGuestCart.productList ? <PreviousGuestCart /> : ''}</div>            
+
+                { oldGuestCart && oldGuestCart.productList ? <PreviousGuestCart /> : ''}
+             
+
                   
                 <TakeMoney
                 name="Three Comma Co." // the pop-in header title
