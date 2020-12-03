@@ -1,14 +1,22 @@
 import React from 'react'
 import StripeCheckout from 'react-stripe-checkout';
-import { getStripe } from '../api/index.js'
+import {useHistory} from 'react-router-dom';
+import { getStripe, getAllProducts } from '../api/index.js'
+const STRIPE_API_KEY = process.env.REACT_APP_STRIPE_API_KEY
+console.log(STRIPE_API_KEY)
 
 
- 
+
+
 export default class TakeMoney extends React.Component {
   onToken = (token) => {
     console.log(token)
+    const history = useHistory();
     const stripe = async () => {
       try { 
+        if (token) {
+          history.push('/products')
+        }
        console.log(await getStripe(token))
       } catch (error) {
        throw error;
@@ -34,7 +42,7 @@ export default class TakeMoney extends React.Component {
       // ...
       <StripeCheckout
         token={this.onToken}
-        stripeKey = "pk_test_51HswdxHuqx5U03uj4yQViOm0ih4DJOewXkXfCyeDjD2fLt9SITtRVX1xEox1lOFzJNfQGdtxmBZb5QQ15ym68xzw009QQu1e9j"
+        stripeKey = {STRIPE_API_KEY}
         billingAddress
       />
     )

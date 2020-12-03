@@ -120,7 +120,7 @@ const Cart = (props) => {
                 ''
             } 
             <TakeMoney
-                name="Three Comma Co." // the pop-in header title
+            name="Three Comma Co." // the pop-in header title
             description="Big Data Stuff" // the pop-in header subtitle
             image="https://www.vidhub.co/assets/logos/vidhub-icon-2e5c629f64ced5598a56387d4e3d0c7c.png" // the pop-in header image (default none)
             ComponentClass="div"
@@ -140,7 +140,7 @@ const Cart = (props) => {
             alipay // accept Alipay (default false)
             bitcoin // accept Bitcoins (default false)
             allowRememberMe // "Remember Me" option (default true)
-            //   token={this.onToken} // submit callback
+            // token={this.onToken} // submit callback
             //   opened={this.onOpened} // called when the checkout popin is opened (no IE6/7)
             //   closed={this.onClosed} // called when the checkout popin is closed (no IE6/7)
             // Note: `reconfigureOnUpdate` should be set to true IFF, for some reason
