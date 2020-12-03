@@ -13,6 +13,10 @@ const Products = (props) => {
     const [ modal, setModal ] = useState(true)
     const [ persistentModal, setPersistentModal ] = useState(false)
     const [ addedToCart, setAddedToCart ] = useState(false)
+ 
+    const [ formId, setFormId ] = useState(0)
+    const [ form, setForm ] = useState(false)
+   
 
     useEffect(() => {
         const timer = setTimeout(() =>  setAddedToCart(false), 1000);
@@ -54,6 +58,10 @@ const Products = (props) => {
   
     const handleSubmit = async (event) => {
         event.preventDefault();
+    
+        setForm(true)
+        setFormId(event.target.id);
+ 
         try {
             setErrorMessage('')
             const result = await createProductOrder({orderId, productId, price, quantity})
@@ -66,12 +74,20 @@ const Products = (props) => {
                 setErrorMessage(result.data.message)
             } else {
                 setAddedToCart(true)
-                setQuantity(1)
             }
+                setForm(false)
+                setQuantity(0)
             } catch(error) {
             console.error(error)
         }
     };
+
+    const handleQuantity = (event) => {
+        event.preventDefault();
+        setFormId(event.target.id);
+        form ? setForm(false) : setForm(true);
+    };
+
 
     return (
         <>
@@ -84,16 +100,26 @@ const Products = (props) => {
                     { product.inStock ? <p>Yes</p> : <p>No</p> 
                 }</div>
                 <p>Category: {product.category}</p>  
-                <form className="orderProductForm" onSubmit={ handleSubmit }>
-                    <label>Quantity:</label>    
-                    <input type="number" min="0" value={ quantity} name="quantity"
-                    onChange={(event) => { setQuantity(event.target.value) }}/>
 
-                    <button onClick={()=> {
+                <button id={product.id} className="activateQuantity" 
+                onClick={handleQuantity}>Add Quantity</button>
+
+                  {  form && formId == product.id &&
+                    <form className="orderProductForm" onSubmit={ handleSubmit }>
+                    <label>Quantity:</label>
+               
+                    <input id={formId} type="number" min="0" value={ quantity} name="quantity"
+                     onChange={(event) => { setQuantity(event.target.value) }}/>
+                  
+                    <button onClick={(event)=> {
+                    setFormId(event.target.id)
                     setProductId(product.id)
                     setPrice(product.price)
-                    }} className="addProductButton">Add to Cart</button>
-                </form>
+                    }} className="addProductButton"
+                    id={formId}                    
+                    >Add to Cart</button>
+                    </form>
+                  }
             </div>
             )}
 

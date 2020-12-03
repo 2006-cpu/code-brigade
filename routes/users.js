@@ -1,7 +1,7 @@
 const express = require('express');
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const JWT_SECRET =  process.env.JWT_SECRET 
+const JWT_SECRET =  process.env.JWT_SECRET || 'codebrigadez';
 
 const { createUser,
         getUser,

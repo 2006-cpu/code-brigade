@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 //new below
-import { clearCurrentUser, clearCurrentToken} from '../auth';
+import { clearCurrentUser, clearCurrentToken, clearCurrentCart } from '../auth';
 import './index.css'
 
 const NavBar = (props) => { 
-    const {user, setUser, token, setToken, setShoppingCart, setOrderId, orderId} = props;
+    const {user, setUser, token, setToken, setShoppingCart, setOrderId, orderId, setOldGuestCart} = props;
 
     const logout = () => {    
         if (token) {
@@ -17,6 +17,10 @@ const NavBar = (props) => {
             //new both
             clearCurrentUser()
             clearCurrentToken()
+            setOldGuestCart([])
+        //maybe this will fix localStorage below  with clearCurrentCart
+            clearCurrentCart()
+
         } else {
            return 
         }
@@ -45,8 +49,8 @@ const NavBar = (props) => {
                 <NavLink to={"/register"} activeClassName="current">Register</NavLink>
                 <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
                 <NavLink to="/guestcart">View Guest Cart</NavLink>
-           {/* testing view cart    remove from here later  */}
-                <NavLink to="/cart">View Cart</NavLink>
+                {/* testing view cart    remove from here later  */}
+                {/* <NavLink to="/cart">View Cart</NavLink> */}
             </>
             }
             <>

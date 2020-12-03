@@ -147,7 +147,6 @@ export const completedOrder = async (id, token) => {
 };
 
 
-//Changed -- no need token since we can do what makes sense for guest to edit
 export const editCartItem = async (orderProductId, price, quantity) => {
   try {
     const { data } = await axios.patch(`${BASE_URL}api/order_products/${orderProductId}`, {price, quantity})
