@@ -37,13 +37,13 @@ async function getAllProducts() {
 
 
 async function createProduct(product) {
-  const { name, description, price, imageURL, inStock, category } = product
+  const { name, description, price, imageurl, inStock, category } = product
   try {
     const { rows: [ newProduct ] } = await client.query(`
-      INSERT INTO products(name, description, price, imageURL, "inStock", category) 
+      INSERT INTO products(name, description, price, imageurl, "inStock", category) 
       VALUES($1, $2, $3, $4, $5, $6) 
       RETURNING *;
-    `, [name, description, price, imageURL, inStock, category]);
+    `, [name, description, price, imageurl, inStock, category]);
 
     return newProduct;
   } catch (error) {
@@ -445,6 +445,29 @@ async function completeOrder(id) {
   }
 };
 
+async function updateProduct({id, name, description, price, imageurl, inStock, category}) {
+  const fields  = { name, description, price, imageurl, inStock, category }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const {rows: [ product ]} = await client.query(`
+    UPDATE products
+    SET ${setString}
+    WHERE id=${id}
+    RETURNING *
+    `, Object.values(fields))
+
+    return product;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
 // export
 module.exports = {
   client,
@@ -471,6 +494,7 @@ module.exports = {
   updateOrderProduct,
   cancelOrder,
   completeOrder,
-  getCartByOrderId
+  getCartByOrderId,
+  updateProduct
   // db methods
 }
