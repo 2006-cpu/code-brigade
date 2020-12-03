@@ -15,7 +15,8 @@ const Register = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [imageurl, setImageURL] = useState('');
-    const [ errorMessage , setErrorMessage ] = useState('')
+    const [errorMessage , setErrorMessage] = useState('');
+    const [errors, setErrors] = useState({});
     const history = useHistory();
 
     
@@ -78,27 +79,31 @@ const Register = (props) => {
     <div className="wrapper">
         <div className="form-wrapper">
             <h3>Register Here</h3>
-            <p className="error" style={{color: "red"}}>{errorMessage}</p>
             <form onSubmit={handleSubmit}>
                     <div className="firstName">
-                        <input type="text" placeholder={'First Name'} value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                        <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                        {errors && errors.firstName && <p style={{color: "red"}}>{errors.firstName}</p>}
                     </div>
                     <div className="lastName">
-                        <input type="text" placeholder={'Last Name'} value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                        <input type="text" required placeholder={'Last Name'} title="Please provide a last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                        {errors && errors.lastName && <p style={{color: "red"}}>{errors.lastName}</p>}
                     </div>
                     <div className="email">
-                        <input type="text" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
+                        <input type="email" required pattern="[^ @]*@[^ @]*" title="Please provide an address email" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
+                        {errors && errors.email && <p style={{color: "red"}}>{errors.email}</p>}
                     </div>
                     <div className="username">
-                        <input type="text" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
+                        <input type="text" required title="Please provide a username" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
+                        {errors && errors.username && <p style={{color: "red"}}>{errors.username}</p>}
                     </div>
                     <div className="password">
-                         <input type="password" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
+                         <input type="password" required minLength="8" title="Password must be at least 8 or more characters" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
+                         {errors && errors.password && <p style={{color: "red"}}>{errors.password}</p>}
                     </div>
                     <div className="image">
                         <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
                     </div>
-                    
+                    <p className="error" style={{color: "red"}}>{errorMessage}</p>
                     <div className="createAccount">
                         <button type="submit" >Sign Up</button>
                     </div>
