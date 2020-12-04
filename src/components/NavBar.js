@@ -33,21 +33,27 @@ const NavBar = (props) => {
 
     return (
         <div>
-            {token ? <>
-                <NavLink to={"/account"} activeClassName="current">My Account</NavLink>
-                <NavLink to={"/products"} activeClassName="current">Products</NavLink>
-                <NavLink to="/cart">View Cart</NavLink>
-                <button style={{padding: "7px"}}onClick={logout}>Logout</button> 
-                </>
+            {token ? 
+                <div>
+                    <nav className="navBar">
+                        <NavLink to={"/account"} activeClassName="current">My Account</NavLink>
+                        <NavLink to={"/products"} activeClassName="current">Products</NavLink>
+                        <NavLink to="/cart">View Cart</NavLink>
+                        <button style={{padding: "7px"}}onClick={logout}>Logout</button> 
+                    </nav>
+                </div>
             : 
-            <>
-                <NavLink to={"/products"} activeClassName="current">Products</NavLink>
-                <NavLink to={"/register"} activeClassName="current">Register</NavLink>
-                <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
-                <NavLink to="/guestcart">View Guest Cart</NavLink>
-           {/* testing view cart    remove from here later  */}
-                <NavLink to="/cart">View Cart</NavLink>
-            </>
+            
+                <div>
+                    <nav className="navBar">
+                        <NavLink to={"/products"} activeClassName="current">Products</NavLink>
+                        <NavLink to={"/register"} activeClassName="current">Register</NavLink>
+                        <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
+                        <NavLink to="/guestcart">View Guest Cart</NavLink>
+                        {/* testing view cart    remove from here later  */}
+                        <NavLink to="/cart">View Cart</NavLink>
+                    </nav>
+                </div>
             }
             <>
             {user && user.isAdmin && <NavLink to="/orders">View Orders</NavLink>}

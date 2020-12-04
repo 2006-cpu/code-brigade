@@ -75,27 +75,34 @@ const Products = (props) => {
 
     return (
         <>
-            {productList && productList.map((product) => <div key={product.id} className="productCard">
-                <h2>{product.name}</h2>
-                <p>{product.description}</p>
-                <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
-                <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
-                <div>In Stock?
-                    { product.inStock ? <p>Yes</p> : <p>No</p> 
-                }</div>
-                <p>Category: {product.category}</p>  
-                <form className="orderProductForm" onSubmit={ handleSubmit }>
-                    <label>Quantity:</label>    
-                    <input type="number" min="0" value={ quantity} name="quantity"
-                    onChange={(event) => { setQuantity(event.target.value) }}/>
-
-                    <button onClick={()=> {
-                    setProductId(product.id)
-                    setPrice(product.price)
-                    }} className="addProductButton">Add to Cart</button>
-                </form>
-            </div>
+            <form className="search-form" action="/search">
+                <input className="search" type="text" name="serach-term" placeholder="search"></input>
+                <button class="search-button" type="submit"><i class="material-icons">search</i></button>
+            </form>
+        
+            <section class="cards">
+            {productList && productList.map((product) => 
+                <div key={product.id} className="productCard">
+                    <h2>{product.name}</h2>
+                    <p>{product.description}</p>
+                    <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
+                    <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
+                    <div>
+                        { product.inStock ? <p>In Stock</p> : <p style={{color: "red"}}>Out of Stock</p> 
+                    }</div>
+                    <p>Category: {product.category}</p>  
+                    <form className="orderProductForm" onSubmit={ handleSubmit }>
+                        <label>Quantity:</label>    
+                        <input type="number" min="0" value={ quantity} name="quantity"
+                        onChange={(event) => { setQuantity(event.target.value) }}/>
+                                <button onClick={()=> {
+                                setProductId(product.id)
+                                setPrice(product.price)
+                                }} className="addProductButton">Add to Cart</button> 
+                    </form>
+                </div>
             )}
+            </section>
 
             { errorMessage ? <div className="errorMessage"
                 style={{display: error ? 'block' : 'none', textAlign: "center"}}>{errorMessage}
