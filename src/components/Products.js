@@ -13,6 +13,12 @@ const Products = (props) => {
     const [ modal, setModal ] = useState(true)
     const [ persistentModal, setPersistentModal ] = useState(false)
     const [ addedToCart, setAddedToCart ] = useState(false)
+    const [item, setItemToActive ] = useState(false)
+    const product = productList.find(singleProduct => Number(productId) === singleProduct.id);
+ 
+    const [ formId, setFormId ] = useState(0)
+    const [ form, setForm ] = useState(false)
+   
 
     useEffect(() => {
         const timer = setTimeout(() =>  setAddedToCart(false), 1000);
@@ -54,6 +60,10 @@ const Products = (props) => {
   
     const handleSubmit = async (event) => {
         event.preventDefault();
+    
+        setForm(true)
+        setFormId(event.target.id);
+ 
         try {
             setErrorMessage('')
             const result = await createProductOrder({orderId, productId, price, quantity})
@@ -66,44 +76,59 @@ const Products = (props) => {
                 setErrorMessage(result.data.message)
             } else {
                 setAddedToCart(true)
-                setQuantity(1)
             }
+                setForm(false)
+                setQuantity(0)
             } catch(error) {
             console.error(error)
         }
     };
 
+    const handleQuantity = (event) => {
+        event.preventDefault();
+        setFormId(event.target.id);
+        form ? setForm(false) : setForm(true);
+    };
+
+
     return (
         <>
-            <form className="search-form" action="/search">
+            <div className="search-form" action="/search">
                 <input className="search" type="text" name="serach-term" placeholder="search"></input>
-                <button class="search-button" type="submit"><i class="material-icons">search</i></button>
-            </form>
-        
+                <button class="search-button" type="submit">Go</button>
+            </div>
+            {
+            product && 
             <section class="cards">
             {productList && productList.map((product) => 
                 <div key={product.id} className="productCard">
+                    <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
                     <h2>{product.name}</h2>
                     <p>{product.description}</p>
                     <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
-                    <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
                     <div>
                         { product.inStock ? <p>In Stock</p> : <p style={{color: "red"}}>Out of Stock</p> 
                     }</div>
                     <p>Category: {product.category}</p>  
+
                     <form className="orderProductForm" onSubmit={ handleSubmit }>
-                        <label>Quantity:</label>    
-                        <input type="number" min="0" value={ quantity} name="quantity"
-                        onChange={(event) => { setQuantity(event.target.value) }}/>
-                                <button onClick={()=> {
-                                setProductId(product.id)
-                                setPrice(product.price)
-                                }} className="addProductButton">Add to Cart</button> 
+                    <label>Quantity:</label>
+               
+                    <input id={productId} type="number" min="0" value={ quantity} name="quantity"
+                     onChange={(event) => { setQuantity(event.target.value) }}/>
+                  
+                    <button onClick={(event)=> {
+                    setFormId(event.target.id)
+                    setProductId(product.id)
+                    setPrice(product.price)
+                    }} className="addProductButton"
+                    id={productId}                    
+                    >Add to Cart</button>
                     </form>
-                </div>
+            </div>
             )}
             </section>
-
+}
             { errorMessage ? <div className="errorMessage"
                 style={{display: error ? 'block' : 'none', textAlign: "center"}}>{errorMessage}
                 <span className="close" style={{color: "red"}} onClick={() => setError(false)}> X CLOSE</span> 

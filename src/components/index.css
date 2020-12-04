@@ -27,7 +27,6 @@ button {
     padding: 5px;
     border-radius: 5px;
     background-color: darkgray;
-    margin: 5px;
 }
 
 input {
@@ -69,7 +68,7 @@ input {
   }
 
   p {
-    font-family: "Segoe UI", "Open Sans", "Helvetica Neue", sans-serif;     
+    font-family: "arial", "Open Sans", "Helvetica Neue", sans-serif;     
   }
 
   label {
@@ -229,7 +228,7 @@ input {
 }
 
   .productCard {
-      display: flex;
+      display: block;
       flex-direction: column;
       max-width: 250px;
       margin-right: 10px; 
@@ -239,7 +238,7 @@ input {
       text-align: center;
   }
 
-  .addProductButton {
+  .addProductButton, .activateQuantity {
     color: white;
     background-color: black;
     justify-content: center;
@@ -255,7 +254,7 @@ input {
     padding: 0 2rem;  
   }
 
-  .orderProductForm{
+  .orderProductForm {
     align-items: center;
   }
 
@@ -264,15 +263,26 @@ input {
   }
 
   .search-form {
-    padding: 20px;
-    margin: 20px;
     display: flex;
-    width:100%;
-    border-bottom: #2A4B7C;
-    flex-wrap: wrap;
+    padding: 20px;
+    justify-content: space-between;
 }
 
 .search {
   flex-grow: 1;
   height: 35px;
+  border-right: none;
+  border-radius: 20px 0 0 20px;
 }
+
+  .search-button {
+    width: 40px;
+    height: 35px;
+    border: 1px solid black;
+    border-left: none ;
+    text-align: center;
+    color: white;
+    background-color: black;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+  }
