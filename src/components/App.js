@@ -19,6 +19,8 @@ import {
   Orders,
   Cart,
   GuestCart,
+  Users,
+  SingleUser
 } from './index';
 
 //new 
@@ -135,6 +137,12 @@ useEffect(() => {
           </Route>
           <Route exact path="/orders/:orderId">
             <SingleOrder user={user} />
+          </Route>
+          <Route exact path="/users">
+            <Users user={user} />
+          </Route>
+          <Route exact path="/users/:userId">
+            <SingleUser user={user} />
           </Route>
         </Switch>
       </div>

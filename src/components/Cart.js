@@ -139,12 +139,27 @@ const Cart = (props) => {
                         <section>
                         <h3>Items in your Cart</h3>
                         {   shoppingCart.productList.map((product) =>
-                            <div key={product.id} style={{border: "1px solid gray", padding: "20px", topMargin: "10px"}}>
-                                <p>{product.name} {product.description}</p>
-                                <p>Product Id:{product.id}</p>
-                                <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                                <p>Category: {product.category}</p>
-                                <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
+                                <div className="cartInfoContainer">
+                                    <div className="infoContainer">
+                                        <div className="imageContainer">
+                                           <img src={product.imageurl} alt="Mask" width="250" height="250"></img> 
+                                        </div>
+                                        <div key={product.id} className="cartDetails">
+                                        <div className="productName">
+                                        <p>{product.name} {product.description}</p>
+                                        </div>
+                                        <div className="productId">
+                                        <p>Product Id:{product.id}</p>
+                                        </div>
+                                        <div className="orderProductId">
+                                        <p>Order Product Id (for temporary testing):{product.orderProductId}</p>    
+                                        </div>
+                                        <div className="productCategory">
+                                        <p>Category: {product.category}</p>    
+                                        </div>
+                                    </div>
+                                        
+                                </div>
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
 
                                 <button id={product.id} className="editCartQuantity" 
@@ -168,8 +183,9 @@ const Cart = (props) => {
                                 className="editButton">Update Quantity</button>
                                 </form>
                             }
-
+                                <div className="removeFromCart">
                                 <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
+                                </div>    
                             </div>)
                         }
                         <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>Cancel Order</button>

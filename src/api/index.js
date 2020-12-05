@@ -156,3 +156,34 @@ export const editCartItem = async (orderProductId, price, quantity) => {
     throw error
   }
 };
+
+
+//new for Dec 3
+export const getAllUsers = async () => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/users/`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//new for Dec 3
+export const getUserById = async (id) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/users/user/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//new for Dec 3
+export const editUser = async (id, firstName, lastName, email, imageurl, username, password, isAdmin) => {
+  try {
+      const { data } = await axios.patch(`${ BASE_URL }api/users/${id}`, {firstName, lastName, email, imageurl, username, password, isAdmin})
+      return data;
+  } catch (error) {
+      console.error(error);
+  }
+};

@@ -80,11 +80,11 @@ const Register = (props) => {
         <div className="form-wrapper">
             <h3>Register Here</h3>
             <form onSubmit={handleSubmit}>
-                    <div className="firstName">
+                    <div className="firstNameRegister">
                         <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
                         {errors && errors.firstName && <p style={{color: "red"}}>{errors.firstName}</p>}
                     </div>
-                    <div className="lastName">
+                    <div className="lastNameRegister">
                         <input type="text" required placeholder={'Last Name'} title="Please provide a last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
                         {errors && errors.lastName && <p style={{color: "red"}}>{errors.lastName}</p>}
                     </div>

@@ -77,13 +77,10 @@ const Products = (props) => {
     };
 
     return (
-        <>
-            <div className="search-form" action="/search">
+        <>  <div className="search-form" action="/search">
                 <input className="search" type="text" name="search-term" placeholder="search"></input>
                 <button className="search-button" type="submit">Go</button>
             </div>
-            {
-
             <section className="cards">
             {productList && productList.map((product) => 
                 <div key={product.id} className="productCard">
@@ -111,10 +108,10 @@ const Products = (props) => {
                         </form>
                     </div>
 
-            </div>
+                </div>
             )}
             </section>
-}
+            
             { errorMessage ? <div className="errorMessage"
                 style={{display: error ? 'block' : 'none', textAlign: "center"}}>{errorMessage}
                 <span className="close" style={{color: "red"}} onClick={() => setError(false)}> X CLOSE</span> 

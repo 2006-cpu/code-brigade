@@ -7,7 +7,9 @@ const { createUser,
         getUser,
         getUserByUsername,
         getUserById,
-        getOrdersByUser
+        getOrdersByUser,
+        getAllUsers, 
+        updateUser,
         } = require('../db/')
 
         
@@ -80,7 +82,6 @@ usersRouter.post('/register', async (req, res, next) => {
           });
       }
     try {
-      // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
       const user = await createUser({firstName, lastName, email, imageurl, username, password, isAdmin})
       const token = jwt.sign({  
         id: user.id,
@@ -120,6 +121,41 @@ usersRouter.get('/:userId/orders', async (req, res, next) => {
     res.send(ordersOfUser);
   } catch ({ name, message }) {
     next({ name, message })
+  }
+});
+
+//Dec 3
+usersRouter.get('/', async (req, res, next) => {
+  try {
+      const users = await getAllUsers();
+      res.send(users);
+  } catch (error) {
+      next(error);
+  }
+});
+
+//Dec 3
+usersRouter.patch('/:userId', async (req, res, next) => {
+  const { userId } = req.params;
+  const { firstName, lastName, email, imageurl, username, password, isAdmin } = req.body
+    try {     
+        const updatedUser = await updateUser({id: userId, firstName, lastName, email, imageurl, username, password, isAdmin});
+        res.send(updatedUser);
+    } catch (error) {
+      next(error);
+  }
+});
+
+//Dec 3 getUserbyId for admin
+usersRouter.get('/user/:userId', async (req, res, next) => {
+  const id = req.params.userId;
+  try {
+      const userById = await getUserById(id);
+      if(userById) {
+      res.send(userById);
+      }
+  } catch (error) {
+     next(error);
   }
 });
   

@@ -22,7 +22,8 @@ const {
   getOrderProductByOrderIdProductIdPair,
   cancelOrder,
   completeOrder,
-  getCartByOrderId
+  getCartByOrderId,
+  updateUser
 } = require('./index');
 
 async function dropTables() {
@@ -112,7 +113,7 @@ async function createInitialProducts() {
       { name: 'Hulk Face Mask', description: 'Do I need to say more?', price: 5, imageURL: 'https://i.postimg.cc/3NBNBM2M/hulk.jpg', inStock: true, category: 'Kids'},
       { name: 'Ice Cream Face Mask', description: 'While waiting for the summer to come back', price: 8, imageURL: 'https://i.postimg.cc/MpXHyFT4/icecream.jpg', inStock: true, category: 'Kids'},
       { name: 'Karen Face Mask', description: 'Because there is a little bit of Karen in all of us', price: 12, imageURL: 'https://i.postimg.cc/Wb11vHM3/karen.jpg', inStock: true, category: 'Adults'},
-      { name: 'Kombucha Face Mask', description: 'Perfect paired with an overpriced Lululemon yoga pants', price: 8, imageURL: 'https://i.postimg.cc/wBL628dW/kombucha.jpg', inStock: true, category: 'Adults'},
+      { name: 'Hippie Face Mask', description: 'Perfect paired with Kombucha', price: 8, imageURL: 'https://i.postimg.cc/wBL628dW/kombucha.jpg', inStock: true, category: 'Adults'},
       { name: 'Pomegranata Face Mask', description: 'Beautiful fruits', price: 9, imageURL: 'https://i.postimg.cc/zG5ZNbmk/pomegranate.jpg', inStock: true, category: 'Adults'},
       { name: 'VanGogh Face Mask', description: 'Prefect for all your starry nights', price: 10, imageURL: 'https://i.postimg.cc/fbTG3GRt/vangogh.jpg', inStock: true, category: 'Adults'},
       ]
@@ -282,6 +283,10 @@ async function testDB() {
     console.log("see Cart By orderId")
     const cartByOrderId = await getCartByOrderId(6)
     console.log("See Cart By orderId:", cartByOrderId)
+
+    // console.log("Update a User")
+    // const updatedUser = await updateUser({ id: 2, firstName: 'Monica', lastName: 'Charles', email: 'monica@gmail.com', imageurl: 'https://picsum.photos/20', username: 'december', password: 'december', isAdmin: true})
+    // console.log("What is the updated User", updatedUser)
 
     console.log("Finished database tests!");
   } catch (error) {
