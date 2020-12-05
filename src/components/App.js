@@ -12,6 +12,7 @@ import {
 import {
   Product,
   Products,
+  ManageProducts,
   Login,
   Register,
   Account,
@@ -125,6 +126,9 @@ useEffect(() => {
           </Route>
           <Route path="/products">
               <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>
+          </Route>
+          <Route path="/manage-products">
+              <ManageProducts productList={productList} setProductList={setProductList} user={user} token={token}/>
           </Route>
           <Route exact path="/cart">
               <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId} oldGuestCart={oldGuestCart}/>

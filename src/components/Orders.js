@@ -25,13 +25,13 @@ const Orders = (props) => {
         <div className="orders-div">
             <h1>All Orders</h1>
             {orders.map(({id, status, userId, datePlaced}) => {
-                return <>
+                return(
                 <div key={id}>
                     <p>Order Number:{id}</p>
                     <p>User ID:{userId}</p>
                     <NavLink to={"/orders/" + id} activeClassName="current">Details</NavLink>
                 </div>
-            </>})}
+            )})}
         </div>
     }
         
