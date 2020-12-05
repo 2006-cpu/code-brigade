@@ -18,11 +18,6 @@ const ManageProducts = (props) => {
         fetchProducts();
     }, [updateProduct]);
 
-      
-    // useEffect(() => {
-    //     setMProducts(productList)
-    // }, [productList])
-
     const handleDelete = (e) => {
         e.preventDefault();
         deleteProduct(e.target.id, token);
