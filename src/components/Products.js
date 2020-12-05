@@ -83,7 +83,9 @@ const Products = (props) => {
             </div>
             <section className="cards">
             {productList && productList.map((product) => 
+            
                 <div key={product.id} className="productCard">
+                    <>
                     <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
                     <div className="productName">
                         <h2>{product.name}</h2>
@@ -95,6 +97,7 @@ const Products = (props) => {
                     <div>
                         { product.inStock ? <p>In Stock</p> : <p style={{color: "red"}}>Out of Stock</p> 
                     }</div>
+                    <>
                     <p>Category: {product.category}</p>  
                     <div className="orderButtonWrapper" >
                         <form className="orderProductForm" onSubmit= {handleSubmit}>
@@ -107,8 +110,10 @@ const Products = (props) => {
                             </div>
                         </form>
                     </div>
-
+                    </>
+                    </>
                 </div>
+               
             )}
             </section>
             
