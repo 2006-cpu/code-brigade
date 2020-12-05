@@ -26,8 +26,7 @@ const GuestCart = (props) => {
         getOrder();
     }, []);
     
-console.log("What is localStorage just straight out", localStorage.cart, "What is oldGuestCart", oldGuestCart)
-console.log("What is oldGuestCart", oldGuestCart, "What is guestCart", guestCart)
+
     const PreviousGuestCart = () => {
         return (
             <section>
@@ -83,7 +82,6 @@ console.log("What is oldGuestCart", oldGuestCart, "What is guestCart", guestCart
                         </section>
                  
                         <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ theTotal(guestCart.productList) }</div>
-                
                         </>
                         : ''
                     }
