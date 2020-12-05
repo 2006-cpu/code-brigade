@@ -13,8 +13,10 @@ const Products = (props) => {
     const [ modal, setModal ] = useState(true)
     const [ persistentModal, setPersistentModal ] = useState(false)
     const [ addedToCart, setAddedToCart ] = useState(false)
+    const [item, setItemToActive ] = useState(false)
  
-
+    const [ formId, setFormId ] = useState(0)
+    const [ form, setForm ] = useState(false)
    
 
     useEffect(() => {
@@ -57,6 +59,9 @@ const Products = (props) => {
   
     const handleSubmit = async (event) => {
         event.preventDefault();
+    
+        setForm(true)
+        setFormId(event.target.id);
  
         try {
             setErrorMessage('')
@@ -71,10 +76,19 @@ const Products = (props) => {
             } else {
                 setAddedToCart(true)
             }
+                setForm(false)
+                setQuantity(0)
             } catch(error) {
             console.error(error)
         }
     };
+
+    const handleQuantity = (event) => {
+        event.preventDefault();
+        setFormId(event.target.id);
+        form ? setForm(false) : setForm(true);
+    };
+
 
     return (
         <>
@@ -88,29 +102,28 @@ const Products = (props) => {
             {productList && productList.map((product) => 
                 <div key={product.id} className="productCard">
                     <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
-                    <div className="productName">
-                        <h2>{product.name}</h2>
-                    </div>
-                    <div className="descriptionName">
-                    <p>{product.description}</p> 
-                    </div>
+                    <h2>{product.name}</h2>
+                    <p>{product.description}</p>
                     <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
                     <div>
                         { product.inStock ? <p>In Stock</p> : <p style={{color: "red"}}>Out of Stock</p> 
                     }</div>
                     <p>Category: {product.category}</p>  
-                    <div className="orderButtonWrapper" >
-                        <form className="orderProductForm" onSubmit= {handleSubmit}>
-                            <div className="orderButton">
-                                <button onClick={(event)=> {
-                                setProductId(product.id)
-                                setPrice(product.price)
-                                }} className="addProductButton"
-                                >Add to Cart</button>
-                            </div>
-                        </form>
-                    </div>
 
+                    <form className="orderProductForm" onSubmit={ handleSubmit }>
+                    <label>Quantity:</label>
+               
+                    <input id={productId} type="number" min="0" value={ quantity} name="quantity"
+                     onChange={(event) => { setQuantity(event.target.value) }}/>
+                  
+                    <button onClick={(event)=> {
+                    setFormId(event.target.id)
+                    setProductId(product.id)
+                    setPrice(product.price)
+                    }} className="addProductButton"
+                    id={productId}                    
+                    >Add to Cart</button>
+                    </form>
             </div>
             )}
             </section>
@@ -155,3 +168,36 @@ const Products = (props) => {
 }
 
 export default Products;
+
+import React from 'react';
+import { useParams } from 'react-router-dom';
+
+const Product = (props) => {
+    const {productList} = props
+    const {productId} = useParams();
+    const product = productList.find(singleProduct => Number(productId) === singleProduct.id);
+
+
+    return (
+        <div>
+            <h1>Product</h1>
+            {
+            product && 
+            <>
+                <h2>{product.name}</h2>
+                <p>{product.description}</p>
+                <p>{product.price}</p>
+                <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
+                <div>In Stock?
+                    { product.inStock 
+                ? <p>Yes</p> 
+                : <p>No</p> 
+                }</div>
+                <p>{product.category}</p>
+            </>}    
+        </div>
+    );
+}
+
+
+export default Product;

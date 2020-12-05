@@ -34,6 +34,33 @@ input {
     border: 1px solid black;
 }
 
+.main-nav {
+
+    /* display: flex;
+    padding: 20px;
+    justify-content: space-between; */
+
+    overflow: hidden;
+    background-color: #f1f1f1;
+    padding: 20px 10px;
+}
+
+.companyName {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header-right {
+  float: right;
+}
+
+.sub-nav {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
 .wrapper {
     height: 100vh;
     width: 100%;
@@ -238,7 +265,22 @@ input {
       text-align: center;
   }
 
-  .addProductButton, .activateQuantity {
+  .productName {
+    padding: 1rem;
+  }
+
+  .descriptionName {
+    padding: 1rem;
+  }
+
+  .orderProductForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .addProductButton {
     color: white;
     background-color: black;
     justify-content: center;
@@ -252,14 +294,7 @@ input {
     font-size: 0.9375rem;
     line-height: 1.0625rem;
     padding: 0 2rem;  
-  }
-
-  .orderProductForm {
-    align-items: center;
-  }
-
-  .buttonCenterContainer {
-    align-items: center;
+    margin: 1rem;
   }
 
   .search-form {

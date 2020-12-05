@@ -11,9 +11,9 @@ const Account = (props) => {
             <div><img src={user.imageurl} alt={user.username} width="250" height="250"></img></div>
              : <div><img src='https://picsum.photos/200' alt={user.username} width="250" height="250"></img></div>
             }
-            <p>{user.firstName}</p>
-            <p>{user.lastName}</p>
-            <p>{user.email}</p>
+            <p>First Name {user.firstName}</p>
+            <p>Last Name {user.lastName}</p>
+            <p>Email {user.email}</p>
             <div>{
                 user.isAdmin 
 
