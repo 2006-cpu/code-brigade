@@ -461,6 +461,53 @@ async function completeOrder(id) {
   }
 };
 
+async function updateProduct({ id, name, description, price, imageurl, inStock, category }) {
+  const fields = { name, description, price, imageurl, inStock, category }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}"=$${index + 1}`
+  ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [product] } = await client.query(`
+  UPDATE products
+  SET ${setString}
+  WHERE id=${id}
+  RETURNING *
+  `, Object.values(fields))
+
+    return product;
+
+  } catch (error) {
+    throw error;
+  }
+};
+//updateUser Dec 3
+
+async function updateUser({ id, firstName, lastName, email, imageurl, username, password, isAdmin }) {
+  const fields = { firstName, lastName, email, imageurl, username, password, isAdmin }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}"=$${index + 1}`
+  ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [user] } = await client.query(`
+      UPDATE users
+      SET ${ setString}
+      WHERE id=${ id}
+      RETURNING *;
+      `, Object.values(fields));
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 // export
 module.exports = {
   client,
@@ -488,6 +535,9 @@ module.exports = {
   updateOrderProduct,
   cancelOrder,
   completeOrder,
+  getCartByOrderId,
+  updateProduct,
+  updateUser,
   getCartByOrderId
   // db methods
 }
