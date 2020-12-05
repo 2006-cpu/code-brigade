@@ -55,6 +55,7 @@ const NavBar = (props) => {
             }
             <>
             {user && user.isAdmin && <NavLink to="/orders">View Orders</NavLink>}
+            {user && user.isAdmin && <NavLink to="/users">View Users</NavLink>}
             </>
         </div>
     )

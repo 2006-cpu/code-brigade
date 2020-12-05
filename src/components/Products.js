@@ -102,7 +102,7 @@ const Products = (props) => {
                 <p>Category: {product.category}</p>  
 
                 <button id={product.id} className="activateQuantity" 
-                onClick={handleQuantity}>Add Quantity</button>
+                onClick={handleQuantity}>Add to Cart</button>
 
                   {  form && formId == product.id &&
                     <form className="orderProductForm" onSubmit={ handleSubmit }>
@@ -117,7 +117,7 @@ const Products = (props) => {
                     setPrice(product.price)
                     }} className="addProductButton"
                     id={formId}                    
-                    >Add to Cart</button>
+                    >Add</button>
                     </form>
                   }
             </div>

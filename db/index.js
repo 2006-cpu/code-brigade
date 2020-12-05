@@ -445,6 +445,30 @@ async function completeOrder(id) {
   }
 };
 
+//updateUser Dec 3
+async function updateUser({ id, firstName, lastName, email, imageurl, username, password, isAdmin }) {
+  const fields  = { firstName, lastName, email, imageurl, username, password, isAdmin }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [ user ] } = await client.query(`
+      UPDATE users
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+
+      return user;
+  } catch (error) {
+    throw error;
+  }        
+};
+
+
 // export
 module.exports = {
   client,
@@ -471,6 +495,7 @@ module.exports = {
   updateOrderProduct,
   cancelOrder,
   completeOrder,
-  getCartByOrderId
+  getCartByOrderId,
+  updateUser
   // db methods
 }
