@@ -106,16 +106,16 @@ async function createInitialProducts() {
   try {
     console.log('Starting to create products...')
     const productsToCreate = [
-      { name: 'Baby Yoda Face Mask', description: 'May The Force Be With You', price: 5, imageURL: 'https://i.postimg.cc/Qt7j6LG4/babyyoda.jpg', inStock: true, category: 'adults'},
+      { name: 'Baby Yoda Face Mask', description: 'May The Force Be With You', price: 5, imageurl: 'https://i.postimg.cc/Qt7j6LG4/babyyoda.jpg', inStock: true, category: 'adults'},
       { name: 'Dog Face Mask', description: 'For all dogs lovers', price: 2, imageURL: 'https://i.postimg.cc/XqTFR6pr/dog.jpg', inStock: true, category: 'Kids'},
-      { name: 'Essential Face Mask', description: "Because you're awesome!", price: 3, imageURL: 'https://i.postimg.cc/TP7ctSqD/essential.jpg', inStock: true, category: 'Adults'},
-      { name: 'Grammar Face Mask', description: 'For lifelong learners', price: 10, imageURL: 'https://i.postimg.cc/hGjLQsWP/grammar.jpg', inStock: false, category: 'Adults'},
-      { name: 'Hulk Face Mask', description: 'Do I need to say more?', price: 5, imageURL: 'https://i.postimg.cc/3NBNBM2M/hulk.jpg', inStock: true, category: 'Kids'},
-      { name: 'Ice Cream Face Mask', description: 'While waiting for the summer to come back', price: 8, imageURL: 'https://i.postimg.cc/MpXHyFT4/icecream.jpg', inStock: true, category: 'Kids'},
-      { name: 'Karen Face Mask', description: 'Because there is a little bit of Karen in all of us', price: 12, imageURL: 'https://i.postimg.cc/Wb11vHM3/karen.jpg', inStock: true, category: 'Adults'},
-      { name: 'Hippie Face Mask', description: 'Perfect paired with Kombucha', price: 8, imageURL: 'https://i.postimg.cc/wBL628dW/kombucha.jpg', inStock: true, category: 'Adults'},
-      { name: 'Pomegranata Face Mask', description: 'Beautiful fruits', price: 9, imageURL: 'https://i.postimg.cc/zG5ZNbmk/pomegranate.jpg', inStock: true, category: 'Adults'},
-      { name: 'VanGogh Face Mask', description: 'Prefect for all your starry nights', price: 10, imageURL: 'https://i.postimg.cc/fbTG3GRt/vangogh.jpg', inStock: true, category: 'Adults'},
+      { name: 'Essential Face Mask', description: "Because you're awesome!", price: 3, imageurl: 'https://i.postimg.cc/TP7ctSqD/essential.jpg', inStock: true, category: 'Adults'},
+      { name: 'Grammar Face Mask', description: 'For lifelong learners', price: 10, imageurl: 'https://i.postimg.cc/hGjLQsWP/grammar.jpg', inStock: false, category: 'Adults'},
+      { name: 'Hulk Face Mask', description: 'Do I need to say more?', price: 5, imageurl: 'https://i.postimg.cc/3NBNBM2M/hulk.jpg', inStock: true, category: 'Kids'},
+      { name: 'Ice Cream Face Mask', description: 'While waiting for the summer to come back', price: 8, imageurl: 'https://i.postimg.cc/MpXHyFT4/icecream.jpg', inStock: true, category: 'Kids'},
+      { name: 'Karen Face Mask', description: 'Because there is a little bit of Karen in all of us', price: 12, imageurl: 'https://i.postimg.cc/Wb11vHM3/karen.jpg', inStock: true, category: 'Adults'},
+      { name: 'Hippie Face Mask', description: 'Perfect paired with Kombucha', price: 8, imageurl: 'https://i.postimg.cc/wBL628dW/kombucha.jpg', inStock: true, category: 'Adults'},
+      { name: 'Pomegranata Face Mask', description: 'Beautiful fruits', price: 9, imageurl: 'https://i.postimg.cc/zG5ZNbmk/pomegranate.jpg', inStock: true, category: 'Adults'},
+      { name: 'VanGogh Face Mask', description: 'Prefect for all your starry nights', price: 10, imageurl: 'https://i.postimg.cc/fbTG3GRt/vangogh.jpg', inStock: true, category: 'Adults'},
       ]
 
     console.log('products created')

@@ -39,11 +39,11 @@ const NavBar = (props) => {
 
         <div>
             {token ? <>
-            <div class="topnav">
+            <div className="topnav">
                 <NavLink to={"/account"} activeClassName="current">My Account</NavLink>
                 <NavLink to={"/products"} activeClassName="current">Products</NavLink>
                 <NavLink to="/cart">View Cart</NavLink>
-                <div class="topnav-right">
+                <div className="topnav-right">
                     <button onClick={logout}>Logout</button> 
                 </div>
             </div>
@@ -51,11 +51,11 @@ const NavBar = (props) => {
             </>
             : 
             <>
-                <div class="topnav">
+                <div className="topnav">
                     <NavLink to={"/products"} activeClassName="current">Products</NavLink>
                     <NavLink to="/guestcart">View Guest Cart</NavLink>
                 </div>
-                <div class="topnav-right">
+                <div className="topnav-right">
                     <NavLink to={"/register"} activeClassName="current">Register</NavLink>
                     <NavLink to={"/login"} activeClassName="current">Login</NavLink> 
                 </div>
@@ -65,7 +65,7 @@ const NavBar = (props) => {
                 {/* <NavLink to="/cart">View Cart</NavLink> */}
             </>
             }
-            <div class="topnav">
+            <div className="topnav">
             {user && user.isAdmin && <NavLink to="/orders">View Orders</NavLink>}
             {user && user.isAdmin && <NavLink to="/users">View Users</NavLink>}
             </div>
