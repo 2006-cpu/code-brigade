@@ -246,7 +246,7 @@ async function getCartByUser(userId) {
       FROM products
       JOIN order_products ON products.id=order_products."productId"
       WHERE order_products."orderId"=$1;
-      `, [cart.id])  
+      `, [cart.id])
 
       cart.productList = productList
       return cart;

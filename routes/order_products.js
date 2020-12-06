@@ -45,35 +45,21 @@ orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
 
 orderProductsRouter.post('/create-session', async (req, res) => {
     const token = req.body.token
+    const userId = req.body.userId
     console.log('token: ', token)
-    const cart = getCartByUser(5);
+    console.log("userId: ", userId)
+
+    const cart = await getCartByUser(userId);
     console.log('cart: ', cart)
+    let amount = 0
+    cart.productList.forEach(product => {
+        amount += product.cartPrice
+    });
   const charge = await stripe.charges.create({
       source: token.id,
-      currency: 'usd'
+      currency: 'usd',
+      amount: amount * 100
 
-// notes
-// need to get userId correctly (there is no cart for the user)
-// need to pass in amount from cart
-
-
-    // payment_method_types: ['card'],
-    // line_items: [
-    //   {
-    //     price_data: {
-    //       currency: 'usd',
-    //       product_data: {
-    //         name: 'Stubborn Attachments',
-    //         images: ['https://i.imgur.com/EHyR2nP.png'],
-    //       },
-    //       unit_amount: 2000,
-    //     },
-    //     quantity: 1,
-    //   },
-    // ],
-    // mode: 'payment',
-    // success_url: `http://localhost:3000`,
-    // cancel_url: `http://localhost:3000`,
   });
   res.json(charge);
 
