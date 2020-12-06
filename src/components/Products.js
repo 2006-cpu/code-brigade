@@ -13,6 +13,7 @@ const Products = (props) => {
     const [ modal, setModal ] = useState(true)
     const [ persistentModal, setPersistentModal ] = useState(false)
     const [ addedToCart, setAddedToCart ] = useState(false)
+    const [ searchTerm, setSearchTerm ] = useState('')
  
 
    
@@ -78,11 +79,19 @@ const Products = (props) => {
 
     return (
         <>  <div className="search-form" action="/search">
-                <input className="search" type="text" name="search-term" placeholder="search"></input>
+                <input className="search" type="text" name="search-term" placeholder="search" onChange={event =>{setSearchTerm(event.target.value)}}/>
                 <button className="search-button" type="submit">Go</button>
             </div>
             <section className="cards">
-            {productList && productList.map((product) => 
+            {productList && productList.filter((product) => {
+                if (searchTerm == "") {
+                    return product
+                } else if (product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    return product
+                } else if (product.description.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    return product
+                }
+            }).map((product) => 
             
                 <div key={product.id} className="productCard">
                     <>
