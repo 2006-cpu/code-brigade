@@ -37,13 +37,13 @@ async function getAllProducts() {
 
 
 async function createProduct(product) {
-  const { name, description, price, imageURL, inStock, category } = product
+  const { name, description, price, imageurl, inStock, category } = product
   try {
     const { rows: [ newProduct ] } = await client.query(`
-      INSERT INTO products(name, description, price, imageURL, "inStock", category) 
+      INSERT INTO products(name, description, price, imageurl, "inStock", category) 
       VALUES($1, $2, $3, $4, $5, $6) 
       RETURNING *;
-    `, [name, description, price, imageURL, inStock, category]);
+    `, [name, description, price, imageurl, inStock, category]);
 
     return newProduct;
   } catch (error) {
