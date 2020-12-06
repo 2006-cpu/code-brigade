@@ -49,7 +49,6 @@ orderProductsRouter.post('/create-session', async (req, res) => {
     console.log('token: ', token)
     console.log("userId: ", userId)
 
-// HARD CODING 2 BECAUSE IM NOT SURE HOW TO GET THE CURRENT USER
     const cart = await getCartByUser(userId);
     console.log('cart: ', cart)
     let amount = 0
