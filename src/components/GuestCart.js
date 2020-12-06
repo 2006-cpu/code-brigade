@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { getOrderById, cancelledGuestOrder, getStripe } from '../api/index.js'
+import { getOrderById, cancelledGuestOrder, getStripe, editCartItem } from '../api/index.js'
 import { storeCurrentCart } from '../auth';
 import theTotal from './Utility.js'
 import TakeMoney from './TakeMoney.js'
@@ -7,6 +7,18 @@ import TakeMoney from './TakeMoney.js'
 const GuestCart = (props) => {
     const {orderId, oldGuestCart, setOldGuestCart} = props 
     const [ guestCart, setGuestCart ] = useState([])
+
+      //for updating order-products in guest cart
+      const [editOrderProductId, setEditOrderProductId] = useState(1)
+      const [editQuantity, setEditQuantity] = useState(0)
+      const [editPrice, setEditPrice] = useState(2)
+  
+      const [ editFormId, setEditFormId ] = useState(1)
+      const [ quantityForm, setQuantityForm ] = useState(false)
+  
+      const [update, setUpdate] = useState(false)
+  
+      //end updating
 
 
     const getOrder = async () => {
@@ -24,7 +36,33 @@ const GuestCart = (props) => {
 
     useEffect(()=> {
         getOrder();
-    }, []);
+    }, [update]);
+
+    //for editing order product
+
+    const handleEdit = async(event) => {
+        event.preventDefault();
+        setQuantityForm(true)
+        setEditFormId(event.target.id)
+        try {
+            const newEdit = await editCartItem(editOrderProductId, editPrice, editQuantity)
+                if (newEdit) {
+                    setUpdate(true)
+                    setQuantityForm(false)
+                    setEditQuantity(0)
+                } 
+            } catch(error) {
+            console.error(error)
+        }
+    };
+
+    const handleEditQuantity = (event) => {
+        event.preventDefault()
+        setEditFormId(event.target.id)
+        quantityForm ? setQuantityForm(false) : setQuantityForm(true)
+    };
+
+    //end of editing order product
     
 
     const PreviousGuestCart = () => {
@@ -77,6 +115,30 @@ const GuestCart = (props) => {
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
+                    {/* for editing */}
+                                <button id={product.id} className="editCartQuantity" 
+                                onClick={handleEditQuantity}>Edit Quantity</button>
+
+                                { quantityForm && editFormId == product.id &&
+                                    <form className="editOrderProductQuantity" 
+                                    onSubmit={handleEdit}> 
+                                    <label>Quantity:</label>
+                                    <input id={editFormId} type="number" min="0" value={ editQuantity} name="editQuantity"
+                                    onChange={(event) => { 
+                                        setEditQuantity(event.target.value) 
+                                        setEditPrice(product.price)
+                                        setEditOrderProductId(product.orderProductId)
+                                    }}/>
+                                    <button 
+                                    id={editFormId}
+                                    onClick={()=> {
+                                    setUpdate(false)
+                                    }} 
+                                    className="editButton">Update Quantity</button>
+                                    </form>
+                                }
+
+                {/* end for editing */}        
                             </div>)
                         }
                         </section>

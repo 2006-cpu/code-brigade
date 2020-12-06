@@ -16,7 +16,6 @@ const SingleUser = (props) => {
     const [ username, setUsername ] = useState('')
     const [ password, setPassword ] = useState('')
     const [ isAdmin, setIsAdmin ] = useState(false)
-
     const [ updateUser, setUpdateUser ] = useState(false)
     
     const fetchUser = async () => {
@@ -95,7 +94,14 @@ const SingleUser = (props) => {
                 <label>Image URL:</label>
                 <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
                 <label>Is Admin?:</label>
-                <input type="text" required title="Is Admin" placeholder={'Is Admin'} value={isAdmin} onChange={(event) => setIsAdmin(event.target.value)} />
+                <select value={ isAdmin} 
+                        style={{width: "50px"
+                        }}
+                        onChange={(event) => {setIsAdmin(event.target.value)}}
+                        name="isAdmin">
+                        <option value={true}>Yes</option>
+                        <option value={false}>No</option>
+                </select>
                 <button onClick={()=> {setUpdateUserId(singleUser.id) }} 
                       className="editButton">Update User</button>
                 </form>

@@ -364,9 +364,10 @@
     justify-content: space-between;
   }
 
-  .editUserInfo {
+  .editUserInfo, .createNewUser {
     display: flex;
     flex-direction: column;
+    margin-bottom: 30px;
   }
 
 
