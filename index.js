@@ -30,6 +30,9 @@ server.use((req, res, next) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 });
 
+server.get('*', (req, res, next) => {
+  res.status(404).send('Page does not exist');
+});
 
 //ERROR HANDLING ***
 server.use((error, req, res, next) => {
