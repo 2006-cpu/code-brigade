@@ -369,6 +369,19 @@
     flex-direction: column;
   }
 
+
+  .mProductsCard {
+    padding: 50px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .mProductsCard p {
+    margin: 10px;
+  }
+
   .userCard {
     display: flex;
     flex-direction: row;
@@ -403,3 +416,4 @@
     width: 50%;
     padding: 10px;
   }
+

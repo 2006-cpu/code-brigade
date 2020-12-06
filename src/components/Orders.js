@@ -24,6 +24,7 @@ const Orders = (props) => {
         {user && user.isAdmin &&
         <div className="orders-div">
             <h1>All Orders</h1>
+
                 <section>
                     {orders.map(({id, status, userId, datePlaced}) => {
                     return (

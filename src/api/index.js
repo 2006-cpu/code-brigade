@@ -21,6 +21,18 @@ export const getProduct = async (id) => {
   }
 }
 
+export const deleteProduct = async (id, token) => {
+  const requestToken = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+  try {
+      const response = await axios.delete(`${ BASE_URL }api/products/${id}`, requestToken)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+};
+
 export const loginUser = async (username, password) => {
   try {
     const existingUser = await fetch(`${BASE_URL}api/users/login`, {
