@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+
+import {  getCurrentUser, getCurrentToken } from '../auth';
 import NavBar from './NavBar';
 
 import {
@@ -10,6 +12,7 @@ import {
 import {
   Product,
   Products,
+  ManageProducts,
   Login,
   Register,
   Account,
@@ -17,6 +20,8 @@ import {
   Orders,
   Cart,
   GuestCart,
+  Users,
+  SingleUser
 } from './index';
 
 //new 
@@ -24,47 +29,86 @@ import { getCurrentCart } from '../auth';
 
 import {
   getAllProducts, 
+  //new dec 1 for initialorderid to fix localStorage
+  createInitialOrderId,
   getCartByUser
 } from '../api';
 
 const App = () => {
   const [productList, setProductList] = useState([]);
-  const [token, setToken] = useState('');
-  const [user, setUser] = useState({});
+
+  //for localStorage
+  const [token, setToken] =  useState(getCurrentToken() || '')
+  const [user, setUser] = useState(getCurrentUser())
+
+  //original
+  // const [token, setToken] = useState('');
+  // const [user, setUser] = useState({});
+  
   const [ shoppingCart, setShoppingCart ] = useState([]); 
   const [ orderId, setOrderId ] = useState(shoppingCart.id)
   const [ oldGuestCart, setOldGuestCart ] = useState(getCurrentCart())
 
-  const fetchProducts = () => {
-    getAllProducts()
-    .then(products => {
-        setProductList(products);
-    })
-    .catch(error => {
-        console.error(error);
-    });
+  const fetchProducts = async () => {
+    try {
+      const products = await getAllProducts();
+      setProductList(products);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  useEffect(() => {
-    getCartByUser(token)
-        .then(cart => {
-            setShoppingCart(cart.data)
-            setOrderId(cart.data.id)
-        })
-        .catch(error => {
-            console.error(error)
-        });
-}, [token]);
+  const fetchCart = async () => {
+    try {
+      const cart = await getCartByUser(token);
+      setShoppingCart(cart.data);
+      setOrderId(cart.data.id);
+    } catch (error) {
+      
+    }
+  }
 
-  useEffect(() => {
+  //new for localStorage 
+  const getInitialCart = async () => {
+    try {
+            const getCart = await getCartByUser(token)               
+                if (getCart.data.id) {
+                    setShoppingCart(getCart.data)
+                    setOrderId(getCart.data.id)
+                }  else if (!getCart.data.id && user && user.id) {
+                    const {id} = user
+                    const makeNewOrder = await createInitialOrderId('created', id)
+                    setOrderId(makeNewOrder.id)
+                }
+    }   catch(error) {
+        console.error(error)
+    }
+  }
+
+
+useEffect(() => {
+    getInitialCart()
+    .then(cart => {
+            })
+            .catch(error => {
+                console.error(error)
+            });
+    }, []);
+  //new
+
+useEffect(() => {
     fetchProducts();
 }, []);
+
+useEffect(() => {
+  fetchCart();
+}, [token]);
 
   return (
     <Router>
       <div className="App">
       <h1>Masks Co.</h1>
-      <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId}/>
+      <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId} setOldGuestCart={setOldGuestCart}/>
         <Switch>
           <Route path="/Login">
             <Login setUser={setUser} token={token} setToken={setToken} setOrderId={setOrderId}/>
@@ -78,13 +122,16 @@ const App = () => {
             </Route>
           }
           <Route path="/product/:productId">
-              <Product productList={productList}/>
+              <Product productList={productList} />
           </Route>
           <Route path="/products">
               <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
+          <Route path="/manage-products">
+              <ManageProducts productList={productList} setProductList={setProductList} user={user} token={token}/>
+          </Route>
           <Route exact path="/cart">
-              <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}/>
+              <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId} oldGuestCart={oldGuestCart}/>
           </Route>
           <Route path="/guestcart">
               <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}  oldGuestCart={oldGuestCart} setOldGuestCart={setOldGuestCart}/>
@@ -94,6 +141,12 @@ const App = () => {
           </Route>
           <Route exact path="/orders/:orderId">
             <SingleOrder user={user} />
+          </Route>
+          <Route exact path="/users">
+            <Users user={user} />
+          </Route>
+          <Route exact path="/users/:userId">
+            <SingleUser user={user} />
           </Route>
         </Switch>
       </div>

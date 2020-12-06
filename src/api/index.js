@@ -21,6 +21,18 @@ export const getProduct = async (id) => {
   }
 }
 
+export const deleteProduct = async (id, token) => {
+  const requestToken = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+  try {
+      const response = await axios.delete(`${ BASE_URL }api/products/${id}`, requestToken)
+      return response;
+  } catch (error) {
+      console.error(error);
+  }
+};
+
 export const loginUser = async (username, password) => {
   try {
     const existingUser = await fetch(`${BASE_URL}api/users/login`, {
@@ -112,7 +124,7 @@ export const deleteOrderProduct = async (id, token) => {
       console.error(error);
   }
 };
-//New Nov 28
+
 export const createInitialOrderId = async (status, userId) => {
   try {
     const { data } = await axios.post(`${BASE_URL}api/orders`, {status, userId});
@@ -143,5 +155,47 @@ export const completedOrder = async (id, token) => {
     return data;
   } catch (error) {
     throw error;
+  }
+};
+
+
+export const editCartItem = async (orderProductId, price, quantity) => {
+  try {
+    const { data } = await axios.patch(`${BASE_URL}api/order_products/${orderProductId}`, {price, quantity})
+    console.log(data)
+    return data;
+  } catch (error) {
+    throw error
+  }
+};
+
+
+//new for Dec 3
+export const getAllUsers = async () => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/users/`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//new for Dec 3
+export const getUserById = async (id) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/users/user/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//new for Dec 3
+export const editUser = async (id, firstName, lastName, email, imageurl, username, password, isAdmin) => {
+  try {
+      const { data } = await axios.patch(`${ BASE_URL }api/users/${id}`, {firstName, lastName, email, imageurl, username, password, isAdmin})
+      return data;
+  } catch (error) {
+      console.error(error);
   }
 };

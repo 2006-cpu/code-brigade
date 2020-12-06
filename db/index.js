@@ -37,20 +37,19 @@ async function getAllProducts() {
 
 
 async function createProduct(product) {
-  const { name, description, price, imageURL, inStock, category } = product
+  const { name, description, price, imageurl, inStock, category } = product
   try {
     const { rows: [ newProduct ] } = await client.query(`
-      INSERT INTO products(name, description, price, imageURL, "inStock", category) 
+      INSERT INTO products(name, description, price, imageurl, "inStock", category) 
       VALUES($1, $2, $3, $4, $5, $6) 
       RETURNING *;
-    `, [name, description, price, imageURL, inStock, category]);
+    `, [name, description, price, imageurl, inStock, category]);
 
     return newProduct;
   } catch (error) {
     throw error;
   }
 };
-
 
 async function createUser({firstName, lastName, email, imageurl, username, password, isAdmin}) {
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
@@ -322,7 +321,6 @@ async function getOrderProductById(id) {
   }
 };
 
-//seed Data for order_products
 async function createOrderProductsList({ orderId, productId, price, quantity }) {
   try {
     const { rows: [ orderProduct ] }  = await client.query(`
@@ -346,32 +344,41 @@ async function destroyOrderProduct(id){
   return order_product;
 }
 
+async function destroyProduct(id){
+  try {
+      const {rows: [product]} = await client.query(`
+      WITH cte_product AS (
+        DELETE FROM order_products 
+        WHERE "productId" = $1
+       )
+      DELETE FROM products
+      WHERE id = $1
+      RETURNING *;
+      `, [id]);
+  return product;
+  } catch (error) {
+      throw error;
+  }   
+}
+
 async function addProductToOrder({ orderId, productId, price, quantity }) {
   try {
     const orderList = await getOrdersByProduct({id: productId})
-    console.log("What is orderList in db adapter", orderList)
     const index = orderList.findIndex(order => order.id === orderId)
-    console.log("What is the index in the db adapter", index)
     if (index === -1 ) {
-
-    const newOrderProduct = await createOrderProductsList({ orderId, productId, price, quantity })
+      const newOrderProduct = await createOrderProductsList({ orderId, productId, price, quantity })
 
       return newOrderProduct
     } else {
 
       const orderDetails = await getOrderById(orderId)
-      console.log("what is the Order Details in db adapter for existing order_product", orderDetails)
-      const finding = orderDetails.productList.find(singleProduct => singleProduct.productidentity === productId);
-      console.log("What is EXISING ORDER-PRODUCT in db adapter:", finding)
-      console.log("What is the EXISTING ORDER-PRODUCT_ID:", finding.orderProductId)
-
+      const findExistingOrderProduct = orderDetails.productList.find(singleProduct => singleProduct.productidentity === productId);
       const { rows: [ changeOrderProduct ] } = await client.query(`
       UPDATE order_products
       SET price=${price}, quantity=${quantity}
-      WHERE id=${ finding.orderProductId}
+      WHERE id=${ findExistingOrderProduct.orderProductId}
       RETURNING *;
     `);
-      console.log("What is the new CHANGE for the EXISTING ORDER-PRODUCT-ID:", changeOrderProduct)
     return changeOrderProduct;
       
     }
@@ -380,7 +387,7 @@ async function addProductToOrder({ orderId, productId, price, quantity }) {
   }
 };
 
-//helper function
+
 async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   try {
       const { rows: [ orderProduct ] } = await client.query(`
@@ -395,19 +402,30 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   }
 };
 
+//from Spencer's pr request 
 async function updateOrderProduct({ id, price, quantity }) {
-
+  const fields  = { price, quantity }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    await client.query(`
-      UPDATE orders_product 
-      SET quantity=${quantity}, price=${price}
-      WHERE id = $1;
-      `, [id]);
 
+    const { rows: [ orderProduct ] } = await client.query(`
+      UPDATE order_products
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+
+      return orderProduct;
   } catch (error) {
     throw error;
-  }
+  }        
 };
+
 
 async function cancelOrder(id) {
   try {
@@ -443,6 +461,53 @@ async function completeOrder(id) {
   }
 };
 
+async function updateProduct({ id, name, description, price, imageurl, inStock, category }) {
+  const fields = { name, description, price, imageurl, inStock, category }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}"=$${index + 1}`
+  ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [product] } = await client.query(`
+  UPDATE products
+  SET ${setString}
+  WHERE id=${id}
+  RETURNING *
+  `, Object.values(fields))
+
+    return product;
+
+  } catch (error) {
+    throw error;
+  }
+};
+//updateUser Dec 3
+
+async function updateUser({ id, firstName, lastName, email, imageurl, username, password, isAdmin }) {
+  const fields = { firstName, lastName, email, imageurl, username, password, isAdmin }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}"=$${index + 1}`
+  ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [user] } = await client.query(`
+      UPDATE users
+      SET ${ setString}
+      WHERE id=${ id}
+      RETURNING *;
+      `, Object.values(fields));
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 // export
 module.exports = {
   client,
@@ -463,12 +528,16 @@ module.exports = {
   createOrderProductsList,
   getOrderProductById,
   destroyOrderProduct,
+  destroyProduct,
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
   updateOrderProduct,
   cancelOrder,
   completeOrder,
+  getCartByOrderId,
+  updateProduct,
+  updateUser,
   getCartByOrderId
   // db methods
 }

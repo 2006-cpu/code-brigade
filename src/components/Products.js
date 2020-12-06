@@ -1,24 +1,33 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 const BASE_URL = '/'
 
 const Products = (props) => {
-    const {productList, shoppingCart, setShoppingCart, orderId, setOrderId} = props
+    const { productList, shoppingCart, setShoppingCart, orderId, setOrderId } = props
     const [ price, setPrice ] = useState(1)
     const [ quantity, setQuantity ] = useState(1)
     const [ productId, setProductId ] = useState(1)
     const [ error, setError ] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
+    const [ errorMessage, setErrorMessage ] = useState('')
     const [ status, setStatus ] = useState('created')
     const [ modal, setModal ] = useState(true)
     const [ persistentModal, setPersistentModal ] = useState(false)
+    const [ addedToCart, setAddedToCart ] = useState(false)
+ 
+
+   
+
+    useEffect(() => {
+        const timer = setTimeout(() =>  setAddedToCart(false), 1000);
+        return () => clearTimeout(timer);
+    }, [addedToCart]);
 
     const newOrder = async ({status}) => {
         try {
             const { data } = await axios.post(`${BASE_URL}api/orders`, {status});
             return data;
           } catch (error) {
-          }
+        }
     };
 
     const buttonHandler = async (event) => {
@@ -48,6 +57,7 @@ const Products = (props) => {
   
     const handleSubmit = async (event) => {
         event.preventDefault();
+ 
         try {
             setErrorMessage('')
             const result = await createProductOrder({orderId, productId, price, quantity})
@@ -58,58 +68,90 @@ const Products = (props) => {
             } else if (result.data.message) {
                 setError(true)
                 setErrorMessage(result.data.message)
-                }
+            } else {
+                setAddedToCart(true)
+            }
             } catch(error) {
             console.error(error)
         }
     };
 
     return (
-        <>
-            {productList && productList.map((product) => <div key={product.id}>
-                <h2>{product.name}</h2>
-                <p>{product.description}</p>
-                <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
-                <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
-                <div>In Stock?
-                    { product.inStock ? <p>Yes</p> : <p>No</p> 
-                }</div>
-                <p>Category: {product.category}</p>  
-            <form onSubmit={ handleSubmit }>
-                <button onClick={()=> {
-                setProductId(product.id)
-                setPrice(product.price)
-                }} style={{color: "rgb(12, 56, 47)"}}>Add to Cart</button>
-            </form>
+        <>  <div className="search-form" action="/search">
+                <input className="search" type="text" name="search-term" placeholder="search"></input>
+                <button className="search-button" type="submit">Go</button>
             </div>
+            <section className="cards">
+            {productList && productList.map((product) => 
+            
+                <div key={product.id} className="productCard">
+                    <>
+                    <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
+                    <div className="productName">
+                        <h2>{product.name}</h2>
+                    </div>
+                    <div className="descriptionName">
+                    <p>{product.description}</p> 
+                    </div>
+                    <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
+                    <div>
+                        { product.inStock ? <p>In Stock</p> : <p style={{color: "red"}}>Out of Stock</p> 
+                    }</div>
+                    <>
+                    <p>Category: {product.category}</p>  
+                    <div className="orderButtonWrapper" >
+                        <form className="orderProductForm" onSubmit= {handleSubmit}>
+                            <div className="orderButton">
+                                <button onClick={(event)=> {
+                                setProductId(product.id)
+                                setPrice(product.price)
+                                }} className="addProductButton"
+                                >Add to Cart</button>
+                            </div>
+                        </form>
+                    </div>
+                    </>
+                    </>
+                </div>
+               
             )}
-             { errorMessage ? <div className="errorMessage" style={{backgroundColor: "yellow"}}
-                   style={{display: error ? 'block' : 'none', textAlign: "center"}}
-                    >{errorMessage}
-                    <span className="close" style={{color: "red"}} onClick={() => setError(false)}> X CLOSE</span> 
-                    </div> : '' }
+            </section>
+            
+            { errorMessage ? <div className="errorMessage"
+                style={{display: error ? 'block' : 'none', textAlign: "center"}}>{errorMessage}
+                <span className="close" style={{color: "red"}} onClick={() => setError(false)}> X CLOSE</span> 
+                </div> 
+                : '' 
+            }
 
             { !orderId ?
-            <div className="guestPrompt" style={{display: modal? 'block' : 'none'}}>
+                <div className="guestPrompt" style={{display: modal? 'block' : 'none'}}>
                 <form onSubmit={ buttonHandler }> 
                 <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
                 <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
                 <p className="buttons"><button>SHOP AS GUEST</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
                 </form>
-            </div>
-             : 
-             ''
+                </div>
+                : ''
             }
 
             { 
-            <div className="noOrderIdAlert" style={{display: persistentModal? 'block' : 'none'}}>
+                <div className="noOrderIdAlert" style={{display: persistentModal? 'block' : 'none'}}>
                 <form onSubmit={ buttonHandler }>
                 <h3>You are not logged in yet.</h3>
                 <p>Continue as Guest Shopper?</p>
                 <p className="buttons"><button>OK</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
                 </form>
-            </div>
+                </div>
             }
+
+            { addedToCart ? 
+                <div className="added">
+                <p>In Cart!</p>
+                </div>
+                : ''
+            }
+
         </>
     );
 }
