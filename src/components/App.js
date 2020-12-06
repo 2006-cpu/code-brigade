@@ -122,7 +122,7 @@ useEffect(() => {
             </Route>
           }
           <Route path="/product/:productId">
-              <Product productList={productList}/>
+              <Product productList={productList} />
           </Route>
           <Route path="/products">
               <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>

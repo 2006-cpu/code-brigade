@@ -20,23 +20,33 @@ const Orders = (props) => {
     }, [])
     
     console.log(orders)
-    return (<>
+    return (<div>
         {user && user.isAdmin &&
         <div className="orders-div">
             <h1>All Orders</h1>
-            {orders.map(({id, status, userId, datePlaced}) => {
-                return(
-                <div key={id}>
-                    <p>Order Number:{id}</p>
-                    <p>User ID:{userId}</p>
-                    <NavLink to={"/orders/" + id} activeClassName="current">Details</NavLink>
-                </div>
-            )})}
+
+                <section>
+                    {orders.map(({id, status, userId, datePlaced}) => {
+                    return (
+                    <div key={id} className="ordersCard">
+                        
+                        <div className="orderNumber">
+                        <p>Order Number:{id}</p>    
+                        </div>
+                        <div className="userId">
+                        <p>User ID:{userId}</p>    
+                        </div>
+                        <NavLink to={"/orders/" + id} activeClassName="current">Details</NavLink>
+                        
+                    </div>
+                )})}
+                </section>
+
         </div>
     }
         
 
-    </>)
+    </div>)
 }
 
 export default Orders;

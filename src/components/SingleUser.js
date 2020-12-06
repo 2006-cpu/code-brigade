@@ -51,21 +51,35 @@ const SingleUser = (props) => {
   return (
     <div>
       <h1>User Information</h1>
+      <div className="userCard">
       {
       user && user.isAdmin &&
       <>
+          <div className="userContainer">
           <p>User ID: {singleUser.id}</p>
           { singleUser.imageurl ?
               <p>Profile Image:<br/> <img src={singleUser.imageurl} alt={singleUser.username} width="250" height="250"></img></p>
               : <p><img src='https://picsum.photos/200' alt={singleUser.username} width="250" height="250"></img></p>
           }
-          <p>First Name: {singleUser.firstName}</p>
-          <p>Last Name: {singleUser.lastName}</p>
-          <p>Email: {singleUser.email}</p>
-          <p>Username: {singleUser.username}</p>
-          <p>IsAdmin: {singleUser.isAdmin? 'yes' : 'no'} </p>
-          <button id={singleUser.id} className="editSingleUser" 
-              onClick={handleUserForm}>Edit User</button>
+            <div className="firstName">
+            <p>First Name: {singleUser.firstName}</p>
+            </div>
+            <div className="lastName">
+            <p>Last Name: {singleUser.lastName}</p>
+            </div>
+            <div className="email">
+            <p>Email: {singleUser.email}</p>
+            </div>
+            <div className="username">
+            <p>Username: {singleUser.username}</p>
+            </div>
+            <div className="isAdmin">
+            <p>IsAdmin: {singleUser.isAdmin? 'yes' : 'no'} </p>  
+            </div>
+            
+            <button id={singleUser.id} className="editSingleUser" 
+                onClick={handleUserForm}>Edit User</button>
+          </div>
               { updateUser &&
                 <form className="editUserInfo" onSubmit={handleEdit}> 
                 <label>First Name:</label>
@@ -87,7 +101,9 @@ const SingleUser = (props) => {
                 </form>
               }
       </>
-      }   
+      } 
+      </div>
+  
     </div>
   );
 }

@@ -1,41 +1,68 @@
-body {
-    padding: 10px;
-}
+  body {
+      padding: 10px;
+  }
 
-a:link {
-    background-color:rgb(12, 56, 47);
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    color: white;
-    text-decoration: none;
-}
+  a:link {
+      background-color: black;
+      padding: 5px;
+      border: 1px solid black;
+      border-radius: 5px;
+      color: white;
+      text-decoration: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
 
-a:visited {
-    color: white;
-}
+  a:visited {
+      color: white;
+  }
 
-h1 {
-    margin-bottom: 10px;
-}
+  h1 {
+      margin-bottom: 10px;
+  }
 
-h2 { 
-    padding-top: 10px;
-}
+  h2 { 
+      padding-top: 10px;
+  }
 
-button {
-    padding: 5px;
-    border-radius: 5px;
-    background-color: darkgray;
-    margin: 5px;
-}
+  button {
+      padding: 5px;
+      border-radius: 5px;
+      background-color: darkgray;
+  }
 
-input {
-    padding: 5px;
-    border: 1px solid black;
-}
+  input {
+      padding: 5px;
+      border: 1px solid black;
+  }
 
-.wrapper {
+  .topnav a {
+  float: left;
+  }
+
+  .topnav a:hover {
+  background-color: #ddd;
+  color: black;
+  }
+
+  .topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+  }
+
+  .topnav-right {
+  float: right;
+  }
+
+  .companyName {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .header-right {
+    float: right;
+  }
+
+  .wrapper {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -45,13 +72,13 @@ input {
   }
 
   .form-wrapper {
-    width: 400px;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 40px;
-    border-radius: 10px;
-    box-shadow: 0px 10px 50px #555;
-    background-color: #ffffff;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #ffffff;
   }
 
   form {
@@ -69,7 +96,7 @@ input {
   }
 
   p {
-    font-family: "Segoe UI", "Open Sans", "Helvetica Neue", sans-serif;     
+    font-family: "arial", "Open Sans", "Helvetica Neue", sans-serif;     
   }
 
   label {
@@ -92,14 +119,21 @@ input {
     color: #999;
   }
 
-  .firstName {
+  .firstNameRegister,
+  .usernameLogin {
     margin-right: 1%;
+    display: flex;
   }
   
-  .lastName {
+  .lastNameRegister,
+  .passwordLogin {
     margin-left: 1%;
   }
   
+  .firstNameRegister,
+  .lastNameRegister,
+  .usernameLogin,
+  .passwordLogin,
   .firstName,
   .lastName,
   .email,
@@ -111,9 +145,15 @@ input {
     margin-bottom: 15px;
   }
   
-  .firstName,
-  .lastName {
+  .firstNameRegister,
+  .lastNameRegister,
+  .usernameLogin,
+  .passwordLogin {
     width: 49%;
+  }
+
+  .password {
+    margin-top: 20px;;
   }
   
   .email,
@@ -123,14 +163,16 @@ input {
     width: 100%;
   }
   
-  .createAccount {
+  .createAccount,
+  .loginAccount {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   
-  .createAccount button {
+  .createAccount button,
+  .loginAccount button {
     background-color: #519e8a;
     color: #fff;
     border: 2px solid #fff;
@@ -143,7 +185,8 @@ input {
     margin-bottom: 0.25em;
   }
   
-  .createAccount button:hover {
+  .createAccount button:hover,
+  .loginAccount button:hover {
     color: #519e8a;
     background-color: #fff;
     border: 2px solid #519e8a;
@@ -215,8 +258,107 @@ input {
     text-align: right;
   }
 
-  .usersCard {
+  .cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-family: 'Open Sans', sans-serif;
+    padding: 10px, 10px, 10px, 10px;
+    margin: 15px;
+    width: 100%;
+    justify-content: space-evenly; 
+    margin-right: 10px; 
+    margin-bottom: 30px; 
+}
+
+  .productCard {
+      display: block;
+      flex-direction: column;
+      max-width: 250px;
+      margin-right: 10px; 
+      margin-bottom: 30px;
+      box-shadow: 0 2px 5px -2px black;
+      justify-content: center;
+      text-align: center;
+  }
+
+  .descriptionName
+  {
+    padding: 1rem;
+    margin:1rem;
+    height: 50px;
+  }
+
+  .userId,
+  .userName,
+  .username,
+  .firstName,
+  .lastName,
+  .isAdmin,
+  .orderNumber,
+  .productName,
+  .productId,
+  .orderProductId,
+  .productCategory
+   {
+    height: 20px;
+    width:100%
+  }
+
+  .orderProductForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .addProductButton {
+    color: white;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    height: 3rem;
+    border-radius: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.0625rem;
+    padding: 0 2rem;  
+    margin: 1rem;
+  }
+
+  .search-form {
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .search {
+    flex-grow: 1;
+    height: 35px;
+    border-right: none;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .search-button {
+    width: 40px;
+    height: 35px;
+    border: 1px solid black;
+    border-left: none ;
+    text-align: center;
+    color: white;
+    background-color: black;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+  } 
+
+  .usersCard,
+  .ordersCard {
     padding: 10px;
+    margin: 20px;
     border: 1px solid black;
     display: flex;
     justify-content: space-between;
@@ -226,6 +368,7 @@ input {
     display: flex;
     flex-direction: column;
   }
+
 
   .mProductsCard {
     padding: 50px;
@@ -238,3 +381,39 @@ input {
   .mProductsCard p {
     margin: 10px;
   }
+
+  .userCard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-family: 'Open Sans', sans-serif;
+    padding: 10px, 10px, 10px, 10px;
+    margin: 15px;
+    width: 100%;
+    justify-content: center; 
+    margin-right: 10px; 
+    margin-bottom: 30px; 
+    padding: 20px;
+  }
+
+  .userContainer,
+  .usersContainer {
+    padding: 2px 16px;
+  }
+
+  .infoContainer{
+    display:flex;
+    justify-content: space-evenly;
+  }
+
+  .removeFromCart {
+    padding-top:10px;
+    padding-bottom: 10px;
+  }
+
+  .cartDetails {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+  }
+

@@ -118,7 +118,7 @@ const Cart = (props) => {
     }
 
     return (
-        <div>
+        <>
             
             {
                 user?  
@@ -128,60 +128,81 @@ const Cart = (props) => {
             }
             {
                 shoppingCart.id ? 
-                <div style={{border: "1px solid black", borderRadius: "5px",
+                <div key={shoppingCart.id} style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
+            
                     <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
                     {shoppingCart.id? <p>Order ID: {shoppingCart.id}</p> : ''}</h3>  
 
                     {
                         shoppingCart.productList? 
-                        <>
+                        
                         <section>
                         <h3>Items in your Cart</h3>
                         {   shoppingCart.productList.map((product) =>
-                            <div key={product.id} style={{border: "1px solid gray", padding: "20px", topMargin: "10px"}}>
-                                <p>{product.name} {product.description}</p>
-                                <p>Product Id:{product.id}</p>
-                                <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                                <p>Category: {product.category}</p>
-                                <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
+                    
+                                <div key={product.id} className="cartInfoContainer">
+                                
+                                        <div className="infoContainer">
+                                            <div className="imageContainer">
+                                            <img src={product.imageurl} alt="Mask" width="250" height="250"></img> 
+                                            </div>
+                                            <div className="cartDetails">
+                                            <div className="productName">
+                                            <p>{product.name} {product.description}</p>
+                                            </div>
+                                            <div className="productId">
+                                            <p>Product Id:{product.id}</p>
+                                            </div>
+                                            <div className="orderProductId">
+                                            <p>Order Product Id (for temporary testing):{product.orderProductId}</p>    
+                                            </div>
+                                            <div className="productCategory">
+                                            <p>Category: {product.category}</p>    
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                    <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
 
-                                <button id={product.id} className="editCartQuantity" 
-                                onClick={handleEditQuantity}>Edit Quantity</button>
+                                    <button id={product.id} className="editCartQuantity" 
+                                    onClick={handleEditQuantity}>Edit Quantity</button>
 
-                            { quantityForm && editFormId == product.id &&
-                                <form className="editOrderProductQuantity" 
-                                onSubmit={handleEdit}> 
-                                <label>Quantity:</label>
-                                <input id={editFormId} type="number" min="0" value={ editQuantity} name="editQuantity"
-                                onChange={(event) => { 
-                                    setEditQuantity(event.target.value) 
-                                    setEditPrice(product.price)
-                                    setEditOrderProductId(product.orderProductId)
-                                    }}/>
-                                <button 
-                                    id={editFormId}
-                                    onClick={()=> {
-                                    setUpdate(false)
-                                    }} 
-                                className="editButton">Update Quantity</button>
-                                </form>
-                            }
-
-                                <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
+                                    { quantityForm && editFormId == product.id &&
+                                    <form className="editOrderProductQuantity" 
+                                    onSubmit={handleEdit}> 
+                                    <label>Quantity:</label>
+                                    <input id={editFormId} type="number" min="0" value={ editQuantity} name="editQuantity"
+                                    onChange={(event) => { 
+                                        setEditQuantity(event.target.value) 
+                                        setEditPrice(product.price)
+                                        setEditOrderProductId(product.orderProductId)
+                                        }}/>
+                                    <button 
+                                        id={editFormId}
+                                        onClick={()=> {
+                                        setUpdate(false)
+                                        }} 
+                                    className="editButton">Update Quantity</button>
+                                    </form>
+                                    }
+                                    <div className="removeFromCart">
+                                    <button id={product.orderProductId} type="submit" onClick={handleRemove}>Remove From Cart</button>
+                                    </div> 
+                                 
                             </div>)
                         }
                         <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>Cancel Order</button>
                         {/* <button type="submit" onClick={() => handleCompleteOrder(shoppingCart.id)}>Complete Order</button> */}
                         </section>
-                        </>
+                        
                         : ''
                     }
                     { shoppingCart && shoppingCart.productList ?
                         <div className="total" style={{textAlign: "center", fontSize: "20px", fontWeight: "bolder"}}>Cart Total ${ theTotal(shoppingCart.productList) }</div>
                         : ''
                     }
+                
                 </div>    
                 :
                 ''
@@ -224,7 +245,7 @@ const Cart = (props) => {
             }}>Complete Order
             </button>
             </TakeMoney>   
-        </div>
+        </>
     )
 };
 

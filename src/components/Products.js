@@ -14,8 +14,7 @@ const Products = (props) => {
     const [ persistentModal, setPersistentModal ] = useState(false)
     const [ addedToCart, setAddedToCart ] = useState(false)
  
-    const [ formId, setFormId ] = useState(0)
-    const [ form, setForm ] = useState(false)
+
    
 
     useEffect(() => {
@@ -58,9 +57,6 @@ const Products = (props) => {
   
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
-        setForm(true)
-        setFormId(event.target.id);
  
         try {
             setErrorMessage('')
@@ -75,54 +71,52 @@ const Products = (props) => {
             } else {
                 setAddedToCart(true)
             }
-                setForm(false)
-                setQuantity(0)
             } catch(error) {
             console.error(error)
         }
     };
 
-    const handleQuantity = (event) => {
-        event.preventDefault();
-        setFormId(event.target.id);
-        form ? setForm(false) : setForm(true);
-    };
-
-
     return (
-        <>
-            {productList && productList.map((product) => <div key={product.id} className="productCard">
-                <h2>{product.name}</h2>
-                <p>{product.description}</p>
-                <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
-                <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
-                <div>In Stock?
-                    { product.inStock ? <p>Yes</p> : <p>No</p> 
-                }</div>
-                <p>Category: {product.category}</p>  
-
-                <button id={product.id} className="activateQuantity" 
-                onClick={handleQuantity}>Add to Cart</button>
-
-                  {  form && formId == product.id &&
-                    <form className="orderProductForm" onSubmit={ handleSubmit }>
-                    <label>Quantity:</label>
-               
-                    <input id={formId} type="number" min="0" value={ quantity} name="quantity"
-                     onChange={(event) => { setQuantity(event.target.value) }}/>
-                  
-                    <button onClick={(event)=> {
-                    setFormId(event.target.id)
-                    setProductId(product.id)
-                    setPrice(product.price)
-                    }} className="addProductButton"
-                    id={formId}                    
-                    >Add</button>
-                    </form>
-                  }
+        <>  <div className="search-form" action="/search">
+                <input className="search" type="text" name="search-term" placeholder="search"></input>
+                <button className="search-button" type="submit">Go</button>
             </div>
+            <section className="cards">
+            {productList && productList.map((product) => 
+            
+                <div key={product.id} className="productCard">
+                    <>
+                    <div><img src={product.imageurl} alt="Mask" width="250" height="250"></img></div>
+                    <div className="productName">
+                        <h2>{product.name}</h2>
+                    </div>
+                    <div className="descriptionName">
+                    <p>{product.description}</p> 
+                    </div>
+                    <p style={{fontWeight: "bolder", fontSize: "16"}}>Price: ${product.price}</p>
+                    <div>
+                        { product.inStock ? <p>In Stock</p> : <p style={{color: "red"}}>Out of Stock</p> 
+                    }</div>
+                    <>
+                    <p>Category: {product.category}</p>  
+                    <div className="orderButtonWrapper" >
+                        <form className="orderProductForm" onSubmit= {handleSubmit}>
+                            <div className="orderButton">
+                                <button onClick={(event)=> {
+                                setProductId(product.id)
+                                setPrice(product.price)
+                                }} className="addProductButton"
+                                >Add to Cart</button>
+                            </div>
+                        </form>
+                    </div>
+                    </>
+                    </>
+                </div>
+               
             )}
-
+            </section>
+            
             { errorMessage ? <div className="errorMessage"
                 style={{display: error ? 'block' : 'none', textAlign: "center"}}>{errorMessage}
                 <span className="close" style={{color: "red"}} onClick={() => setError(false)}> X CLOSE</span> 
