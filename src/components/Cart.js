@@ -207,7 +207,7 @@ const Cart = (props) => {
                 :
                 ''
             } 
-            <TakeMoney user={user}>
+            <TakeMoney orderId={orderId}>
             <button type="button" className="btn btn-primary" onClick={(e) => {
             e.preventDefault()
             // What does this do?

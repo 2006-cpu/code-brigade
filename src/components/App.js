@@ -103,6 +103,7 @@ useEffect(() => {
 useEffect(() => {
   fetchCart();
 }, [token]);
+console.log("orderId: ", orderId)
 
   return (
     <Router>
