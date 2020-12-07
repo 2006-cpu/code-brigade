@@ -24,7 +24,6 @@ const Cart = (props) => {
     const handleCancelOrder = async (id) => {
         try {
             const result = await cancelledOrder(id, token) 
-            console.log('resultcancellation', result)
             update ? setUpdate(false) : setUpdate(true);
             history.push("/products");
             swal({

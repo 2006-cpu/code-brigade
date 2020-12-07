@@ -23,7 +23,6 @@ const Login = (props) => {
     event.preventDefault();
     
     const data = await loginUser(login.username, login.password);
-    console.log('data:', data);
     setToken(data.token);
     
     const auth = {
@@ -32,12 +31,11 @@ const Login = (props) => {
       }
     const user = await axios.get(`${BASE_URL}api/users/me`, auth);
     setUser(user.data);
-    console.log("THE USER:", user.data)
 
-      //new for localStorage    
+   
     storeCurrentUser(user.data)
     storeCurrentToken(data.token)
-    //end of localStorage
+
     
     setLogin({
       username: '',

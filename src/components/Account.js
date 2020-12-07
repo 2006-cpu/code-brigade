@@ -4,13 +4,11 @@ import {getOrdersByUser} from '../api'
 const Account = (props) => {
     const {user} = props;
     const [userOrders, setUserOrders] = useState([]);
-    console.log("account user:", user)
 
     const getUserOrders = async () => {
         try {
             const orders = await getOrdersByUser(user.id);
             setUserOrders(orders);
-            console.log('orderssss:', orders) 
         } catch (error) {
             console.error(error);
         }
