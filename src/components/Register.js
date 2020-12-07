@@ -53,7 +53,7 @@ const Register = (props) => {
                 setOrderId(makeNewOrder.id)
              //new both below
              storeCurrentUser(user.data)  
-             storeCurrentToken(responseToken) 
+             storeCurrentToken(responseToken)  
                
                 return response;
             }

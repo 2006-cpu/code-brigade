@@ -329,6 +329,23 @@
     margin: 1rem;
   }
 
+  .addProductButtonDisabled {
+    color: white;
+    background-color: lightgray;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    height: 3rem;
+    border-radius: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.0625rem;
+    padding: 0 2rem;  
+    margin: 1rem;
+  }
+
   .search-form {
     display: flex;
     padding: 20px;

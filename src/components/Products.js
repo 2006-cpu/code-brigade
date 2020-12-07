@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 const BASE_URL = '/'
 
@@ -14,6 +14,7 @@ const Products = (props) => {
     const [ persistentModal, setPersistentModal ] = useState(false)
     const [ addedToCart, setAddedToCart ] = useState(false)
     const [ searchTerm, setSearchTerm ] = useState('')
+    const searchEl = useRef(null)
  
 
     useEffect(() => {
@@ -78,11 +79,12 @@ const Products = (props) => {
     const clearSearchTerm = (event) => {
         event.preventDefault();
         setSearchTerm('');
+        searchEl.current.value = '';
     };
 
     return (
         <>  <div className="search-form" action="/search">
-                <input className="search" type="text" name="search-term" placeholder="search" id="search-field" onChange={event =>{setSearchTerm(event.target.value)}}/>
+                <input className="search" type="text" name="search-term" placeholder="search" id="search-field" ref={searchEl} onChange={event =>{setSearchTerm(event.target.value)}}/>
                 <button className="search-button" type="submit" onClick={ clearSearchTerm}>Clear</button>
             </div>
             <section className="cards">
@@ -114,18 +116,20 @@ const Products = (props) => {
                     <div className="orderButtonWrapper" >
                         <form className="orderProductForm" onSubmit= {handleSubmit}>
                             <div className="orderButton">
-                                <button onClick={(event)=> {
-                                setProductId(product.id)
-                                setPrice(product.price)
-                                }} className="addProductButton"
-                                >Add to Cart</button>
+                    { product.inStock ? 
+                        <button onClick={(event)=> {
+                            setProductId(product.id)
+                            setPrice(product.price)
+                            }} className="addProductButton"
+                            >Add to Cart</button>
+                        : <button className="addProductButtonDisabled" disabled>Add to Cart</button>
+                    }
                             </div>
                         </form>
                     </div>
                     </>
                     </>
                 </div>
-               
             )}
             </section>
             
