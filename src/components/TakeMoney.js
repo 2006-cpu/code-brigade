@@ -7,6 +7,7 @@ const STRIPE_API_KEY = process.env.REACT_APP_STRIPE_API_KEY
 
 
 export default function TakeMoney({orderId, token}) {
+
   console.log(orderId)
   const history = useHistory();
   const onToken = (stripeToken) => {
@@ -17,7 +18,7 @@ export default function TakeMoney({orderId, token}) {
           const complete = await completedOrder(orderId, token)
           console.log("complete: ", complete)
           history.push('/products')
-        }
+        } 
       } catch (error) {
        throw error;
       }

@@ -16,8 +16,6 @@ const Products = (props) => {
     const [ searchTerm, setSearchTerm ] = useState('')
  
 
-   
-
     useEffect(() => {
         const timer = setTimeout(() =>  setAddedToCart(false), 1000);
         return () => clearTimeout(timer);
@@ -77,10 +75,15 @@ const Products = (props) => {
         }
     };
 
+    const clearSearchTerm = (event) => {
+        event.preventDefault();
+        setSearchTerm('');
+    };
+
     return (
         <>  <div className="search-form" action="/search">
-                <input className="search" type="text" name="search-term" placeholder="search" onChange={event =>{setSearchTerm(event.target.value)}}/>
-                <button className="search-button" type="submit">Go</button>
+                <input className="search" type="text" name="search-term" placeholder="search" id="search-field" onChange={event =>{setSearchTerm(event.target.value)}}/>
+                <button className="search-button" type="submit" onClick={ clearSearchTerm}>Clear</button>
             </div>
             <section className="cards">
             {productList && productList.filter((product) => {
