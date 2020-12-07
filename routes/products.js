@@ -27,7 +27,8 @@ productsRouter.get('/', async (req, res, next) => {
             const createdProduct = await createProduct({...req.body});
             res.send(createdProduct);    
     } catch (error) {
-        next(error);
+        // next(error);
+        res.send(400)
     }
   });
 

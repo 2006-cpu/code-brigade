@@ -199,3 +199,11 @@ export const editUser = async (id, firstName, lastName, email, imageurl, usernam
       console.error(error);
   }
 };
+
+export const createProduct = async ({name, description, price, imageurl, inStock, category}) => {
+  try {
+    const { data } = await axios.post(`${ BASE_URL }api/products`, {name, description, price, imageurl, inStock, category})
+  } catch (error) {
+      console.log(error)
+  }
+};
