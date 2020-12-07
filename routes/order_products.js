@@ -1,6 +1,6 @@
 const express = require('express');
 const orderProductsRouter = express.Router();
-const { getOrderProductById, getOrderById, destroyOrderProduct, updateOrderProduct, getCartByUser } = require('../db');
+const { getOrderProductById, getOrderById, destroyOrderProduct, updateOrderProduct } = require('../db');
 const stripe = require('stripe')('sk_test_51HswdxHuqx5U03uj8qx7Fh5fgQljGXnvJ0Tm0bAq52BeU6IzL9K4bOnlXY0aNTzwj9LGFwaXuD0xsXeEzPyJSD9v00PbuzKdpq');
 
 orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
@@ -45,15 +45,15 @@ orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
 
 orderProductsRouter.post('/create-session', async (req, res) => {
     const token = req.body.token
-    const userId = req.body.userId
+    const orderId = req.body.orderId
     console.log('token: ', token)
-    console.log("userId: ", userId)
+    console.log("orderId: ", orderId)
 
-    const cart = await getCartByUser(userId);
+    const cart = await getOrderById(orderId);
     console.log('cart: ', cart)
     let amount = 0
     cart.productList.forEach(product => {
-        amount += product.cartPrice
+        amount += product.price
     });
   const charge = await stripe.charges.create({
       source: token.id,
