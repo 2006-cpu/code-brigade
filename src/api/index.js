@@ -86,7 +86,20 @@ export const getOrderById = async (id) => {
   }
 };
 
+
+export const getOrdersByProductId = async (productId) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/products/${productId}/orders`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 export const getStripe = async (token, orderId) => {
+
   try {
     console.log(token)
     const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
