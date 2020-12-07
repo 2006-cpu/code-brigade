@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {deleteProduct, getAllProducts} from '../api'
+import {deleteProduct, getAllProducts, editProduct} from '../api'
 
 const ManageProducts = (props) => {
     const {productList, setProductList, user, token} = props;
     const [updateProduct, setUpdateProduct] = useState(false);
+    const [ productIdToEdit, setProductIdToEdit ] = useState(1)
+    const [ nameToEdit, setNameToEdit ] = useState('')
+    const [ descriptionToEdit, setDescriptionToEdit ] = useState('')
+    const [ priceToEdit, setPriceToEdit ] = useState(0)
+    const [ imageurlToEdit, setImageurlToEdit ] = useState('')
+    const [ inStockToEdit, setInStockToEdit ] = useState(true)
+    const [ categoryToEdit, setCategoryToEdit ] = useState('')
+    const [ editingProduct, setEditingProduct ] = useState(false)
+
 
     const fetchProducts = async () => {
         try {
@@ -16,7 +25,7 @@ const ManageProducts = (props) => {
 
     useEffect(() => {
         fetchProducts();
-    }, [updateProduct]);
+    }, [updateProduct, editingProduct]);
 
     const handleDelete = (e) => {
         e.preventDefault();
@@ -24,6 +33,16 @@ const ManageProducts = (props) => {
         setProductList(productList);
         updateProduct ? setUpdateProduct(false) : setUpdateProduct(true);
       }
+
+    const handleEditSubmit = async (event) => {
+        event.preventDefault()
+        try {
+            await editProduct(productIdToEdit, nameToEdit, descriptionToEdit, priceToEdit, imageurlToEdit, inStockToEdit, categoryToEdit)
+            setEditingProduct(false)
+        } catch (error) {
+          console.error(error)
+        }
+    };
 
     return (<>
         {user && user.isAdmin &&
@@ -40,6 +59,13 @@ const ManageProducts = (props) => {
                     <p><b>Image URL:</b> {imageurl}</p>
                     <p><b>In Stock?:</b> {inStock ? <>Yes</> : <>No</> }</p>
                     <p><b>Category:</b> {category}</p>
+   
+                    <button className="editProduct"
+                            onClick={() => {
+                            setEditingProduct(true)
+                            setNameToEdit(name)
+                            setProductIdToEdit(id)
+                            }}>Edit</button>
                     <button style={{backgroundColor: "red"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
                     </>   
                 </div>   
@@ -47,6 +73,36 @@ const ManageProducts = (props) => {
             }
         </div>
         }
+
+        <form className='productEditForm' 
+            style={{ display: editingProduct? 'flex' : 'none' }}
+            onSubmit={handleEditSubmit}
+            >
+            <h2 className="nameHeading" style={{display: "flex", justifyContent: "space-between"}}><span>Edit Product</span> 
+            <span className="close" style={{color: "red", backgroundColor: "white", padding: "5px", fontSize: "14px"}}
+            onClick={() => setEditingProduct(false)}
+            >X CLOSE</span> 
+            </h2>
+            <label >Name</label>
+            <input type="text" placeholder="name" value={ nameToEdit } onChange={(event) => { setNameToEdit(event.target.value) }}/>
+            <label>Description</label>
+            <input type="text" placeholder="description" value={ descriptionToEdit } onChange={(event) => { setDescriptionToEdit(event.target.value) }}/>
+            <label>Price</label>
+            <input type="number" placeholder="price" value={ priceToEdit } onChange={(event) => { setPriceToEdit(event.target.value) }}/>
+            <label>Image URL</label>
+            <input placeholder="Image URL" value={ imageurlToEdit } onChange={(event) => { setImageurlToEdit(event.target.value) }}/>
+
+            <label>Is Stock?</label>
+            <select value={ inStockToEdit } style={{width: "50px", alignSelf: "center"}}
+                onChange={(event) => {setInStockToEdit (event.target.value)}} name="isStock">
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+            </select>
+
+            <label>Category</label>
+            <input type="text" placeholder="category" value={ categoryToEdit } onChange={(event) => { setCategoryToEdit(event.target.value) }}/>
+            <button style={{padding: "5px", border: "1 solid black"}}>Submit Edit</button>
+        </form>
         
     </>)
 }

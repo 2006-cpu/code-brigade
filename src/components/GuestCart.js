@@ -6,21 +6,14 @@ import TakeMoney from './TakeMoney.js'
 
 const GuestCart = (props) => {
     const {orderId, oldGuestCart, setOldGuestCart} = props 
-    const [ guestCart, setGuestCart ] = useState([])
-
-      //for updating order-products in guest cart
-      const [editOrderProductId, setEditOrderProductId] = useState(1)
-      const [editQuantity, setEditQuantity] = useState(0)
-      const [editPrice, setEditPrice] = useState(2)
+    const [guestCart, setGuestCart] = useState([])
+    const [editOrderProductId, setEditOrderProductId] = useState(1)
+    const [editQuantity, setEditQuantity] = useState(0)
+    const [editPrice, setEditPrice] = useState(2)
+    const [editFormId, setEditFormId] = useState(1)
+    const [quantityForm, setQuantityForm] = useState(false)
+    const [update, setUpdate] = useState(false)
   
-      const [ editFormId, setEditFormId ] = useState(1)
-      const [ quantityForm, setQuantityForm ] = useState(false)
-  
-      const [update, setUpdate] = useState(false)
-  
-      //end updating
-
-
     const getOrder = async () => {
         try {
             const theGuestCart = await getOrderById(orderId);
@@ -38,7 +31,6 @@ const GuestCart = (props) => {
         getOrder();
     }, [update]);
 
-    //for editing order product
 
     const handleEdit = async(event) => {
         event.preventDefault();
@@ -61,8 +53,6 @@ const GuestCart = (props) => {
         setEditFormId(event.target.id)
         quantityForm ? setQuantityForm(false) : setQuantityForm(true)
     };
-
-    //end of editing order product
     
 
     const PreviousGuestCart = () => {
@@ -115,7 +105,7 @@ const GuestCart = (props) => {
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
-                    {/* for editing */}
+                
                                 <button id={product.id} className="editCartQuantity" 
                                 onClick={handleEditQuantity}>Edit Quantity</button>
 
@@ -137,8 +127,7 @@ const GuestCart = (props) => {
                                     className="editButton">Update Quantity</button>
                                     </form>
                                 }
-
-                {/* end for editing */}        
+   
                             </div>)
                         }
                         </section>
