@@ -18,6 +18,7 @@ import {
   Account,
   SingleOrder,
   Orders,
+  OrdersByProduct,
   Cart,
   GuestCart,
   Users,
@@ -124,7 +125,7 @@ useEffect(() => {
           <Route path="/product/:productId">
               <Product productList={productList} />
           </Route>
-          <Route path="/products">
+          <Route exact path="/products">
               <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
           <Route path="/manage-products">
@@ -138,6 +139,9 @@ useEffect(() => {
           </Route>            
           <Route exact path="/orders">
             <Orders user={user} />
+          </Route>
+          <Route exact path="/products/:productId/orders">
+            <OrdersByProduct user={user} />
           </Route>
           <Route exact path="/orders/:orderId">
             <SingleOrder user={user} />

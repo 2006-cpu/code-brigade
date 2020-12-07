@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import {deleteProduct, getAllProducts} from '../api'
 
 const ManageProducts = (props) => {
@@ -40,6 +41,7 @@ const ManageProducts = (props) => {
                     <p><b>Image URL:</b> {imageurl}</p>
                     <p><b>In Stock?:</b> {inStock ? <>Yes</> : <>No</> }</p>
                     <p><b>Category:</b> {category}</p>
+                    <NavLink style={{backgroundColor: "grey", color: "black", fontSize: "12px", margin: "2px",display: "flex", justifyContent: "center"}}to={"/products/" + id + "/orders"} activeClassName="current">Orders With This Product</NavLink>
                     <button style={{backgroundColor: "red"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
                     </>   
                 </div>   

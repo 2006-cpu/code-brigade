@@ -86,6 +86,15 @@ export const getOrderById = async (id) => {
   }
 };
 
+export const getOrdersByProductId = async (productId) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/products/${productId}/orders`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getStripe = async (token, userId) => {
   try {
     console.log(token)
