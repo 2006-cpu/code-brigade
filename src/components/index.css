@@ -203,6 +203,11 @@
     padding: 5px;
   }
 
+  .auth-title {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
   .added {
     position: fixed;
     bottom: 500px;

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { createInitialOrderId } from '../api/index.js'
-//new
 import {  storeCurrentUser, storeCurrentToken  } from '../auth';
+import swal from 'sweetalert';
 import './index.css';
 const BASE_URL = '/'
 
@@ -51,9 +51,8 @@ const Register = (props) => {
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
                 setOrderId(makeNewOrder.id)
-             //new both below
-             storeCurrentUser(user.data)  
-             storeCurrentToken(responseToken)  
+                storeCurrentUser(user.data)  
+                storeCurrentToken(responseToken)  
                
                 return response;
             }
@@ -66,6 +65,26 @@ const Register = (props) => {
         e.preventDefault();
         try {
             const result = signUp({firstName, lastName, email, username, password, imageurl, isAdmin: false})
+            if (result.error) {
+                setFirstName('');
+                setLastName('');
+                setEmail('');
+                setUsername('');
+                setPassword('');
+                setImageURL(''); 
+                swal({
+                    title: "Something went wrong",
+                    text: "Please try again",
+                    icon: "error",
+                    button: "OK",
+                  });
+            } else {
+                swal({
+                    title: "Success",
+                    text: "You successfully created an account!",
+                    icon: "success",
+                  });
+            }
         } catch(error) {
             console.error(error)
         }
@@ -74,7 +93,7 @@ const Register = (props) => {
     return (<>   
     <div className="wrapper">
         <div className="form-wrapper">
-            <h3>Register Here</h3>
+            <h2 className="auth-title">Register</h2>
             <form onSubmit={handleSubmit}>
                     <div className="firstNameRegister">
                         <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
