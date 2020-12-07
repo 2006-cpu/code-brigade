@@ -46,11 +46,8 @@ orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
 orderProductsRouter.post('/create-session', async (req, res) => {
     const token = req.body.token
     const orderId = req.body.orderId
-    console.log('token: ', token)
-    console.log("orderId: ", orderId)
 
     const cart = await getOrderById(orderId);
-    console.log('cart: ', cart)
     let amount = 0
     cart.productList.forEach(product => {
         amount += product.price

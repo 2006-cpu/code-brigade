@@ -75,7 +75,7 @@ async function getUser({username, password}) {
       FROM users
       WHERE username = $1;
       `, [username]);
-      console.log('theUser:', user)
+      
       const isMatch = bcrypt.compareSync(password, user.password);
       if(!isMatch) {
           return;

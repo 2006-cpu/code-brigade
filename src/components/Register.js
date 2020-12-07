@@ -48,7 +48,6 @@ const Register = (props) => {
                 }
 
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
-                console.log("THE USER:", user.data)
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
                 setUser(user.data);
                 setOrderId(makeNewOrder.id)
@@ -67,9 +66,6 @@ const Register = (props) => {
         e.preventDefault();
         try {
             const result = signUp({firstName, lastName, email, username, password, imageurl, isAdmin: false})
-            if (result.error) {
-                console.log("gros probleme")
-            }
         } catch(error) {
             console.error(error)
         }

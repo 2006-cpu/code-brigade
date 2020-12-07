@@ -19,7 +19,6 @@ const Orders = (props) => {
     fetchAllOrders();
     }, [])
     
-    console.log(orders)
     return (<div>
         {user && user.isAdmin &&
         <div className="orders-div">

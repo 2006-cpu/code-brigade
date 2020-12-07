@@ -22,7 +22,6 @@ const OrdersByProduct = (props) => {
         try {
             const response = await getProduct(productId);
             setProduct(response);
-            console.log("THEPRODUCT:", product);
         } catch (error) {
             console.error(error);
         }
@@ -36,7 +35,6 @@ const OrdersByProduct = (props) => {
         fetchOrdersByProduct();
     }, [])
     
-    console.log(orders)
     return (<div>
         {user &&
         <div className="orders-div">
