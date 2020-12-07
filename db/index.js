@@ -402,7 +402,7 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   }
 };
 
-//from Spencer's pr request 
+
 async function updateOrderProduct({ id, price, quantity }) {
   const fields  = { price, quantity }
   const setString = Object.keys(fields).map(
@@ -483,7 +483,7 @@ async function updateProduct({ id, name, description, price, imageurl, inStock, 
     throw error;
   }
 };
-//updateUser Dec 3
+
 
 async function updateUser({ id, firstName, lastName, email, imageurl, username, password, isAdmin }) {
   const fields = { firstName, lastName, email, imageurl, username, password, isAdmin }
