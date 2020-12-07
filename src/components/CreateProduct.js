@@ -32,6 +32,7 @@ const CreateProducts = (props) => {
           inStock: inStockInputRef.current.checked,
           category: categoryInputRef.current.value
         })
+        setUpdateProduct(true)
       }}>Create Product</button>
     </div>
   )
