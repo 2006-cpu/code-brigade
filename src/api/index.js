@@ -4,7 +4,6 @@ const BASE_URL = '/'
 export const getAllProducts = async () => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/products`);
-    console.log('data:', data)
     return data;
   } catch (error) {
     throw error;
@@ -14,7 +13,6 @@ export const getAllProducts = async () => {
 export const getProduct = async (id) => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/product/${id}`);
-    console.log('data:', data)
     return data;
   } catch (error) {
     throw error;
@@ -96,12 +94,18 @@ export const getOrdersByProductId = async (productId) => {
   }
 };
 
-
+export const getOrdersByUser = async (id) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}api/users/${id}/orders`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getStripe = async (token, orderId) => {
 
   try {
-    console.log(token)
     const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
       token: token,
       orderId: orderId
@@ -150,7 +154,6 @@ export const cancelledOrder = async (id, token) => {
   const auth = {headers: {'Authorization': `Bearer ${token}`} }
   try {
     const { data } = await axios.delete(`${BASE_URL}api/orders/${id}`, auth);
-    console.log('dataCancelledOrder', data);
     return data;
   } catch (error) {
     throw error;
@@ -161,10 +164,8 @@ export const cancelledOrder = async (id, token) => {
 export const completedOrder = async (id, token) => {
   const auth = {headers: {'Authorization': `Bearer ${token}`} }
 
-  console.log('id', id);
   try {
     const { data } = await axios.delete(`${BASE_URL}api/orders/cart/${id}`, auth);
-    console.log('datacompletedOrder', data);
     return data;
   } catch (error) {
     throw error;
@@ -175,7 +176,6 @@ export const completedOrder = async (id, token) => {
 export const editCartItem = async (orderProductId, price, quantity) => {
   try {
     const { data } = await axios.patch(`${BASE_URL}api/order_products/${orderProductId}`, {price, quantity})
-    console.log(data)
     return data;
   } catch (error) {
     throw error
@@ -212,6 +212,13 @@ export const editUser = async (id, firstName, lastName, email, imageurl, usernam
   }
 };
 
+export const createProduct = async ({name, description, price, imageurl, inStock, category}) => {
+  try {
+    const { data } = await axios.post(`${ BASE_URL }api/products`, {name, description, price, imageurl, inStock, category})
+  } catch (error) {
+      console.log(error)
+  }
+};
 
 export const editProduct = async (id, name, description, price, imageurl, inStock, category) => {
   try {

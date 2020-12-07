@@ -1,6 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair, updateOrder, cancelOrder, completeOrder, getCartByOrderId } = require('../db');
+const { getAllOrders, getCartByUser, createOrder, getOrderById, addProductToOrder, getOrderProductByOrderIdProductIdPair, updateOrder, cancelOrder, completeOrder, getCartByOrderId} = require('../db');
 const { requireUser } = require('./utils');
 
 ordersRouter.use((req, res, next) => {
