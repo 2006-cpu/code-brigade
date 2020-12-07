@@ -7,19 +7,14 @@ import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder, getS
 import { get } from 'react-hook-form';
 
 const Cart = (props) => {
+    const {shoppingCart, setShoppingCart, user, token, setOrderId, orderId, setIsLoading} = props
     const history = useHistory();
     const [update, setUpdate] = useState(false)
-
     const [editOrderProductId, setEditOrderProductId] = useState(1)
     const [editQuantity, setEditQuantity] = useState(0)
     const [editPrice, setEditPrice] = useState(2)
-
-    const {shoppingCart, setShoppingCart} = props
-    const {user, token, setOrderId, orderId } = props
-
-    const [ editFormId, setEditFormId ] = useState(1)
-    const [ quantityForm, setQuantityForm ] = useState(false)
-
+    const [editFormId, setEditFormId] = useState(1)
+    const [quantityForm, setQuantityForm] = useState(false)
 
     const handleCancelOrder = async (id) => {
         try {
@@ -95,6 +90,7 @@ const Cart = (props) => {
 
 
     const handleEdit = async(event) => {
+        setIsLoading(true)
         event.preventDefault();
         setQuantityForm(true)
         setEditFormId(event.target.id)
@@ -107,6 +103,8 @@ const Cart = (props) => {
                 } 
             } catch(error) {
             console.error(error)
+            } finally {
+            setIsLoading(false)
         }
     };
 
