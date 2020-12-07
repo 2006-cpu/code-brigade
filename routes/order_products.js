@@ -28,8 +28,6 @@ orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
     }
 });
 
-
-//from spencer's pr
 orderProductsRouter.patch('/:orderProductId', async (req, res, next) => {
   const { orderProductId } = req.params;
   const { price, quantity } = req.body;

@@ -124,7 +124,7 @@ usersRouter.get('/:userId/orders', async (req, res, next) => {
   }
 });
 
-//Dec 3
+
 usersRouter.get('/', async (req, res, next) => {
   try {
       const users = await getAllUsers();
@@ -134,7 +134,7 @@ usersRouter.get('/', async (req, res, next) => {
   }
 });
 
-//Dec 3
+
 usersRouter.patch('/:userId', async (req, res, next) => {
   const { userId } = req.params;
   const { firstName, lastName, email, imageurl, username, password, isAdmin } = req.body
@@ -146,7 +146,7 @@ usersRouter.patch('/:userId', async (req, res, next) => {
   }
 });
 
-//Dec 3 getUserbyId for admin
+
 usersRouter.get('/user/:userId', async (req, res, next) => {
   const id = req.params.userId;
   try {

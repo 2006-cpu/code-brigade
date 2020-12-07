@@ -1,4 +1,3 @@
-// code to build and initialize DB goes here
 const {
   client, 
   createProduct,
@@ -173,7 +172,6 @@ async function createInitialOrders() {
   }
 }
 
-
 async function createInitialOrderProductList() {
   try {
     console.log('Starting to create Order Products...');
@@ -283,10 +281,6 @@ async function testDB() {
     console.log("see Cart By orderId")
     const cartByOrderId = await getCartByOrderId(6)
     console.log("See Cart By orderId:", cartByOrderId)
-
-    // console.log("Update a User")
-    // const updatedUser = await updateUser({ id: 2, firstName: 'Monica', lastName: 'Charles', email: 'monica@gmail.com', imageurl: 'https://picsum.photos/20', username: 'december', password: 'december', isAdmin: true})
-    // console.log("What is the updated User", updatedUser)
 
     console.log("Finished database tests!");
   } catch (error) {

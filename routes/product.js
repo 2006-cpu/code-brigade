@@ -15,6 +15,6 @@ productRouter.get('/:productId', async (req, res, next) => {
     } catch (error) {
        next(error);
     }
-  });
+});
 
 module.exports = productRouter;

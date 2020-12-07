@@ -192,7 +192,6 @@ const Cart = (props) => {
                             </div>)
                         }
                         <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>Cancel Order</button>
-                        {/* <button type="submit" onClick={() => handleCompleteOrder(shoppingCart.id)}>Complete Order</button> */}
                         </section>
                         
                         : ''
@@ -209,8 +208,6 @@ const Cart = (props) => {
             <TakeMoney orderId={orderId} token={token}>
             <button type="button" className="btn btn-primary" onClick={(e) => {
             e.preventDefault()
-            // What does this do?
-            // handleCompleteOrder(shoppingCart.id)
             }}>Complete Order
             </button>
             </TakeMoney>   

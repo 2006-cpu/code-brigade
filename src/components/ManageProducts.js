@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import {deleteProduct, getAllProducts} from '../api'
 import CreateProduct from './CreateProduct'
 import { NavLink } from 'react-router-dom';
 import {deleteProduct, getAllProducts, editProduct} from '../api'

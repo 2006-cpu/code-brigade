@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-//new below
 import { clearCurrentUser, clearCurrentToken, clearCurrentCart } from '../auth';
 import './index.css'
 
@@ -13,14 +12,10 @@ const NavBar = (props) => {
             setUser('');
             setShoppingCart([])
             setOrderId(0)
-
-            //new both
             clearCurrentUser()
             clearCurrentToken()
             setOldGuestCart([])
-        //maybe this will fix localStorage below  with clearCurrentCart
             clearCurrentCart()
-
         } else {
            return 
         }
@@ -59,10 +54,6 @@ const NavBar = (props) => {
                     <NavLink to={"/register"}>Register</NavLink>
                     <NavLink to={"/login"}>Login</NavLink> 
                 </div>
-                
-                
-                {/* testing view cart    remove from here later  */}
-                {/* <NavLink to="/cart">View Cart</NavLink> */}
             </>
             }
             <div className="topnav">
