@@ -5,7 +5,7 @@ import theTotal from './Utility.js'
 import TakeMoney from './TakeMoney.js'
 
 const GuestCart = (props) => {
-    const {orderId, oldGuestCart, setOldGuestCart} = props 
+    const {orderId, oldGuestCart} = props 
     const [guestCart, setGuestCart] = useState([])
     const [editOrderProductId, setEditOrderProductId] = useState(1)
     const [editQuantity, setEditQuantity] = useState(0)
@@ -109,7 +109,7 @@ const GuestCart = (props) => {
                                 <button id={product.id} className="editCartQuantity" 
                                 onClick={handleEditQuantity}>Edit Quantity</button>
 
-                                { quantityForm && editFormId == product.id &&
+                                { quantityForm && Number(editFormId) === product.id &&
                                     <form className="editOrderProductQuantity" 
                                     onSubmit={handleEdit}> 
                                     <label>Quantity:</label>

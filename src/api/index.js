@@ -215,6 +215,7 @@ export const editUser = async (id, firstName, lastName, email, imageurl, usernam
 export const createProduct = async ({name, description, price, imageurl, inStock, category}) => {
   try {
     const { data } = await axios.post(`${ BASE_URL }api/products`, {name, description, price, imageurl, inStock, category})
+      return data;
   } catch (error) {
       console.log(error)
   }
