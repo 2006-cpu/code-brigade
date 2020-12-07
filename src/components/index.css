@@ -418,3 +418,14 @@
     padding: 10px;
   }
 
+  .productEditForm {
+    position: fixed;
+    top: 100px;
+    left: 300px; 
+    background-color: gray;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    padding-bottom: 20px;
+  }

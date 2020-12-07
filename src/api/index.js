@@ -86,6 +86,7 @@ export const getOrderById = async (id) => {
   }
 };
 
+
 export const getOrdersByProductId = async (productId) => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/products/${productId}/orders`);
@@ -95,12 +96,15 @@ export const getOrdersByProductId = async (productId) => {
   }
 };
 
-export const getStripe = async (token, userId) => {
+
+
+export const getStripe = async (token, orderId) => {
+
   try {
     console.log(token)
     const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
       token: token,
-      userId: userId
+      orderId: orderId
     })
     return data;
   } catch (error) {
@@ -179,7 +183,6 @@ export const editCartItem = async (orderProductId, price, quantity) => {
 };
 
 
-//new for Dec 3
 export const getAllUsers = async () => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/users/`);
@@ -189,7 +192,7 @@ export const getAllUsers = async () => {
   }
 };
 
-//new for Dec 3
+
 export const getUserById = async (id) => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/users/user/${id}`);
@@ -199,12 +202,22 @@ export const getUserById = async (id) => {
   }
 };
 
-//new for Dec 3
+
 export const editUser = async (id, firstName, lastName, email, imageurl, username, password, isAdmin) => {
   try {
       const { data } = await axios.patch(`${ BASE_URL }api/users/${id}`, {firstName, lastName, email, imageurl, username, password, isAdmin})
       return data;
   } catch (error) {
       console.error(error);
+  }
+};
+
+
+export const editProduct = async (id, name, description, price, imageurl, inStock, category) => {
+  try {
+    const { data } = await axios.patch(`${ BASE_URL }api/products/${id}`, {name, description, price, imageurl, inStock, category})
+      return data;
+  } catch (error) {
+    console.error(error);
   }
 };
