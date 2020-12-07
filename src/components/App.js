@@ -95,7 +95,7 @@ useEffect(() => {
                 console.error(error)
             });
     }, []);
-  //new
+
 
 useEffect(() => {
     fetchProducts();
@@ -115,7 +115,7 @@ useEffect(() => {
             <Login setUser={setUser} token={token} setToken={setToken} setOrderId={setOrderId}/>
           </Route>
           <Route path="/register">
-              <Register user={user} setUser={setUser} setToken={setToken} setOrderId={setOrderId}/>
+              <Register user={user} setUser={setUser} setToken={setToken} setOrderId={setOrderId} orderId={orderId}/>
           </Route>
           {user && token && 
             <Route path="/account">
