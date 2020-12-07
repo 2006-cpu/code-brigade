@@ -7,8 +7,6 @@ const BASE_URL = '/'
 const Users = (props) => {
     const {user} = props;
     const [users, setAllUsers] = useState([]);
-
-    //for create form
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,7 +15,6 @@ const Users = (props) => {
     const [imageurl, setImageURL] = useState('');   
     const [isAdmin, setIsAdmin] = useState(false)
     const [ userAdded, setUserAdded] = useState(false)
-//end of create form
 
     useEffect(() => {
         getAllUsers()
@@ -29,7 +26,7 @@ const Users = (props) => {
        });
     }, [userAdded]);
 
-    //for createform
+
     const signUp = async ({firstName, lastName, email, username, password, imageurl, isAdmin}) => {
         setUserAdded(false)
         try {
@@ -59,12 +56,10 @@ const Users = (props) => {
         console.error(error)
         }
     };
-//end of createform
 
     
     return (<>
 
-    {/* create form */}
         <h2>Create New User</h2>
             <form className="createNewUser"
                 onSubmit={handleSubmit}>
@@ -85,7 +80,6 @@ const Users = (props) => {
                     
                 <button type="submit" >Sign Up</button>
                 </form>   
-{/* create form ends */}
         
         {user && user.isAdmin &&
         <div className="orders-div">

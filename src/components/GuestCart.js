@@ -6,21 +6,14 @@ import TakeMoney from './TakeMoney.js'
 
 const GuestCart = (props) => {
     const {orderId, oldGuestCart, setOldGuestCart} = props 
-    const [ guestCart, setGuestCart ] = useState([])
-
-      //for updating order-products in guest cart
-      const [editOrderProductId, setEditOrderProductId] = useState(1)
-      const [editQuantity, setEditQuantity] = useState(0)
-      const [editPrice, setEditPrice] = useState(2)
+    const [guestCart, setGuestCart] = useState([])
+    const [editOrderProductId, setEditOrderProductId] = useState(1)
+    const [editQuantity, setEditQuantity] = useState(0)
+    const [editPrice, setEditPrice] = useState(2)
+    const [editFormId, setEditFormId] = useState(1)
+    const [quantityForm, setQuantityForm] = useState(false)
+    const [update, setUpdate] = useState(false)
   
-      const [ editFormId, setEditFormId ] = useState(1)
-      const [ quantityForm, setQuantityForm ] = useState(false)
-  
-      const [update, setUpdate] = useState(false)
-  
-      //end updating
-
-
     const getOrder = async () => {
         try {
             const theGuestCart = await getOrderById(orderId);
@@ -38,7 +31,6 @@ const GuestCart = (props) => {
         getOrder();
     }, [update]);
 
-    //for editing order product
 
     const handleEdit = async(event) => {
         event.preventDefault();
@@ -61,8 +53,6 @@ const GuestCart = (props) => {
         setEditFormId(event.target.id)
         quantityForm ? setQuantityForm(false) : setQuantityForm(true)
     };
-
-    //end of editing order product
     
 
     const PreviousGuestCart = () => {
@@ -115,7 +105,7 @@ const GuestCart = (props) => {
                                 <p>Category: {product.category}</p>
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
-                    {/* for editing */}
+                
                                 <button id={product.id} className="editCartQuantity" 
                                 onClick={handleEditQuantity}>Edit Quantity</button>
 
@@ -137,8 +127,7 @@ const GuestCart = (props) => {
                                     className="editButton">Update Quantity</button>
                                     </form>
                                 }
-
-                {/* end for editing */}        
+   
                             </div>)
                         }
                         </section>
@@ -155,38 +144,8 @@ const GuestCart = (props) => {
                 { oldGuestCart && oldGuestCart.productList ? <PreviousGuestCart /> : ''}
              
 
-                  
-                <TakeMoney
-                name="Three Comma Co." // the pop-in header title
-                description="Big Data Stuff" // the pop-in header subtitle
-                image="https://www.vidhub.co/assets/logos/vidhub-icon-2e5c629f64ced5598a56387d4e3d0c7c.png" // the pop-in header image (default none)
-                ComponentClass="div"
-                panelLabel="Give Money" // prepended to the amount in the bottom pay button
-                amount={1000000} // cents
-                currency="USD"
-                stripeKey="..."
-                locale="zh"
-                email="info@vidhub.co"
-                // Note: Enabling either address option will give the user the ability to
-                // fill out both. Addresses are sent as a second parameter in the token callback.
-                shippingAddress
-                billingAddress={false}
-                // Note: enabling both zipCode checks and billing or shipping address will
-                // cause zipCheck to be pulled from billing address (set to shipping if none provided).
-                zipCode={false}
-                alipay // accept Alipay (default false)
-                bitcoin // accept Bitcoins (default false)
-                allowRememberMe // "Remember Me" option (default true)
-              //   token={this.onToken} // submit callback
-              //   opened={this.onOpened} // called when the checkout popin is opened (no IE6/7)
-              //   closed={this.onClosed} // called when the checkout popin is closed (no IE6/7)
-                // Note: `reconfigureOnUpdate` should be set to true IFF, for some reason
-                // you are using multiple stripe keys
-                reconfigureOnUpdate={false}
-                // Note: you can change the event to `onTouchTap`, `onClick`, `onTouchStart`
-                // useful if you're using React-Tap-Event-Plugin
-                triggerEvent="onTouchTap"
-                >
+            {/* need to update this for stripe for guest cart */}
+                <TakeMoney orderId={orderId}>
                 <button className="btn btn-primary">
                   Use your own child component, which gets wrapped in whatever
                   component you pass into as "ComponentClass" (defaults to span)
