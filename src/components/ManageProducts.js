@@ -52,7 +52,7 @@ const ManageProducts = (props) => {
         {user && user.isAdmin &&
         <div className="m-products-div">
             <h1>Manage Products</h1>
-            <CreateProduct />
+            <CreateProduct setUpdateProduct={setUpdateProduct}/>
             {productList.map(({id, name, description, price, imageurl, inStock, category}, idx) => 
                 
                 <div key={idx} className="mProductsCard">

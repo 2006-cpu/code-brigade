@@ -3,6 +3,7 @@ import { createProduct } from '../api'
 
 
 const CreateProducts = (props) => {
+  const {setUpdateProduct} = props
   const nameInputRef = useRef()
   const descriptionInputRef = useRef()
   const priceInputRef = useRef()
