@@ -203,6 +203,11 @@
     padding: 5px;
   }
 
+  .auth-title {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
   .added {
     position: fixed;
     bottom: 500px;
@@ -329,6 +334,23 @@
     margin: 1rem;
   }
 
+  .addProductButtonDisabled {
+    color: white;
+    background-color: lightgray;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    height: 3rem;
+    border-radius: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.0625rem;
+    padding: 0 2rem;  
+    margin: 1rem;
+  }
+
   .search-form {
     display: flex;
     padding: 20px;
@@ -429,4 +451,33 @@
     max-width: 700px;
     padding-bottom: 20px;
   }
+
+  .modalGuestCheckOut {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    border: 1px solid #ccc;
+    background: #fff;
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+  }
+  
+  .overlayGuestCheckOut {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .alignButtons {
+    display: inline-block;
+  }
+
+
   

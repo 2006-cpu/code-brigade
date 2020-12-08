@@ -44,7 +44,7 @@ const SingleOrder = (props) => {
     
     return (
       <div>
-      <h1>Orders</h1>
+      <h1 style={{marginTop: "2em"}}>Orders</h1>
       {
       order && user.isAdmin &&
       <>

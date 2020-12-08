@@ -1,7 +1,7 @@
 import React from 'react'
 import StripeCheckout from 'react-stripe-checkout';
 import {useHistory} from 'react-router-dom';
-import { getStripe, getAllProducts, completedOrder } from '../api/index.js'
+import { getStripe, completedOrder } from '../api/index.js'
 const STRIPE_API_KEY = process.env.REACT_APP_STRIPE_API_KEY
 
 
@@ -15,7 +15,7 @@ export default function TakeMoney({orderId, token}) {
           await getStripe(stripeToken, orderId)
           const complete = await completedOrder(orderId, token)
           history.push('/products')
-        }
+        } 
       } catch (error) {
        throw error;
       }

@@ -3,8 +3,7 @@ import TakeMoney from './TakeMoney.js';
 import theTotal from './Utility.js'
 import { useHistory } from "react-router-dom";
 import swal from 'sweetalert';
-import { getCartByUser, deleteOrderProduct, cancelledOrder, completedOrder, getStripe, editCartItem, createInitialOrderId } from '../api/index.js'
-import { get } from 'react-hook-form';
+import { getCartByUser, deleteOrderProduct, cancelledOrder, editCartItem, createInitialOrderId } from '../api/index.js'
 
 const Cart = (props) => {
     const history = useHistory();
@@ -35,16 +34,6 @@ const Cart = (props) => {
             console.error(error)
         }
     };
-
-            const handleCompleteOrder = async (id) => {
-        try {
-            const result = await completedOrder(id, token) 
-            update ? setUpdate(false) : setUpdate(true);
-        } catch(error) {
-            console.error(error)
-        }
-    };
-
 
     const getInitialCart = async () => {
         try {
@@ -121,16 +110,16 @@ const Cart = (props) => {
             
             {
                 user?  
-                <h2>{user.username}'s Shopping Cart</h2>
+                <h1 style={{marginTop: "2em"}}>{user.username}'s Shopping Cart</h1>
                 : 
-                <h2>Your Shopping Cart</h2>
+                <h1 style={{marginTop: "2em"}}>Your Shopping Cart</h1>
             }
             {
                 shoppingCart.id ? 
                 <div key={shoppingCart.id} style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
             
-                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
+                    <h3 style={{textAlign: "center"}}>
                     {shoppingCart.id? <p>Order ID: {shoppingCart.id}</p> : ''}</h3>  
 
                     {
@@ -192,7 +181,6 @@ const Cart = (props) => {
                             </div>)
                         }
                         <button type="submit" onClick={() => handleCancelOrder(shoppingCart.id)}>Cancel Order</button>
-                        {/* <button type="submit" onClick={() => handleCompleteOrder(shoppingCart.id)}>Complete Order</button> */}
                         </section>
                         
                         : ''
@@ -209,8 +197,6 @@ const Cart = (props) => {
             <TakeMoney orderId={orderId} token={token}>
             <button type="button" className="btn btn-primary" onClick={(e) => {
             e.preventDefault()
-            // What does this do?
-            // handleCompleteOrder(shoppingCart.id)
             }}>Complete Order
             </button>
             </TakeMoney>   

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
-import {getUserById, editUser } from '../api'
+import { useParams, useHistory } from 'react-router-dom';
+import {getUserById, editUser } from '../api';
+import swal from 'sweetalert';
 
 const SingleUser = (props) => {
     const [ singleUser, setSingleUser] = useState({});
@@ -17,6 +18,8 @@ const SingleUser = (props) => {
     const [ password, setPassword ] = useState('')
     const [ isAdmin, setIsAdmin ] = useState(false)
     const [ updateUser, setUpdateUser ] = useState(false)
+
+    const history = useHistory();
     
     const fetchUser = async () => {
       try {
@@ -42,6 +45,12 @@ const SingleUser = (props) => {
       try {
         await editUser(updateUserId, firstName, lastName, email, imageurl, username, password, isAdmin);
         setUpdateUser(false)
+        history.push('/users')
+        swal({
+          title: "Success!",
+          text: "Changes saved",
+          icon: "success",
+        });
       } catch (error) {
         console.error(error)
       }
@@ -49,7 +58,7 @@ const SingleUser = (props) => {
 
   return (
     <div>
-      <h1>User Information</h1>
+      <h1 style={{marginTop: "2em"}}>User Information</h1>
       <div className="userCard">
       {
       user && user.isAdmin &&

@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import { getOrderById, cancelledGuestOrder, getStripe, editCartItem } from '../api/index.js'
+import { getOrderById, editCartItem } from '../api/index.js';
 import { storeCurrentCart } from '../auth';
-import theTotal from './Utility.js'
-import TakeMoney from './TakeMoney.js'
+import theTotal from './Utility.js';
+import { useHistory } from "react-router-dom";
+import Modal from "react-modal";
 
 const GuestCart = (props) => {
     const {orderId, oldGuestCart, setOldGuestCart} = props 
@@ -13,6 +14,9 @@ const GuestCart = (props) => {
     const [editFormId, setEditFormId] = useState(1)
     const [quantityForm, setQuantityForm] = useState(false)
     const [update, setUpdate] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
+
+    let history = useHistory()
   
     const getOrder = async () => {
         try {
@@ -53,7 +57,10 @@ const GuestCart = (props) => {
         setEditFormId(event.target.id)
         quantityForm ? setQuantityForm(false) : setQuantityForm(true)
     };
-    
+
+    function toggleModal() {
+        setIsOpen(!isOpen);
+    };
 
     const PreviousGuestCart = () => {
         return (
@@ -98,12 +105,27 @@ const GuestCart = (props) => {
                         <section>
                         <h3>Items in your Cart</h3>
                         {   guestCart.productList.map((product) =>
-                            <div key={product.id} style={{border: "1px solid gray", padding: "20px", topMargin: "10px"}}>
-                                <p>{product.name} {product.description}</p>
-                                <p>Product Id:{product.id}</p>
-                                <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                                <p>Category: {product.category}</p>
+                            <div key={product.id} className="cartInfoContainer">
+                            
+                            <div className="infoContainer">
+                                
+                                <div className="imageContainer">
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
+                                </div>  
+                                <div className="CartDetails">
+                                    <p>{product.name} {product.description}</p>
+                                    <div className="productId">
+                                    <p>Product Id:{product.id}</p>    
+                                    </div>
+                                    <div className="orderProductId">
+                                    <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
+                                    </div>
+                                    <div className="productCategory">
+                                    <p>Category: {product.category}</p>
+                                    </div>
+                                </div>  
+
+                            </div>    
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
                 
                                 <button id={product.id} className="editCartQuantity" 
@@ -142,15 +164,31 @@ const GuestCart = (props) => {
                 } 
 
                 { oldGuestCart && oldGuestCart.productList ? <PreviousGuestCart /> : ''}
-             
 
-            {/* need to update this for stripe for guest cart */}
-                <TakeMoney orderId={orderId}>
-                <button className="btn btn-primary">
-                  Use your own child component, which gets wrapped in whatever
-                  component you pass into as "ComponentClass" (defaults to span)
-                </button>
-              </TakeMoney> 
+            <div className="divModal">
+                <button className="addProductButton" onClick={toggleModal}>Check Out</button>
+
+                <Modal 
+                        contentLabel="My dialog"
+                        className="modalGuestCheckOut"
+                        overlayClassName="overlayGuestCheckOut"
+                        closeTimeoutMS={500}
+                
+                    isOpen={isOpen}
+                    onRequestClose={toggleModal}
+                >
+                    <h1>Welcome to Masks Co.</h1>
+                    <p>Please create an account to complete your order</p>
+                    <div className="alignButtons">
+                    <button className="addProductButton" onClick={event =>  history.push('/register')}>Go</button>
+                    <div className="guestCardButton">
+                    <button className="closeModal" onClick={toggleModal}>Close modal</button> 
+                    </div>
+                    
+                    </div>
+                </Modal>
+            </div>
+
               </div>  
                   )
               };
