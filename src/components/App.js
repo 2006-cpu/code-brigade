@@ -25,27 +25,18 @@ import {
   SingleUser
 } from './index';
 
-//new 
 import { getCurrentCart } from '../auth';
 
 import {
   getAllProducts, 
-  //new dec 1 for initialorderid to fix localStorage
   createInitialOrderId,
   getCartByUser
 } from '../api';
 
 const App = () => {
   const [productList, setProductList] = useState([]);
-
-  //for localStorage
   const [token, setToken] =  useState(getCurrentToken() || '')
   const [user, setUser] = useState(getCurrentUser())
-
-  //original
-  // const [token, setToken] = useState('');
-  // const [user, setUser] = useState({});
-  
   const [ shoppingCart, setShoppingCart ] = useState([]); 
   const [ orderId, setOrderId ] = useState(shoppingCart.id)
   const [ oldGuestCart, setOldGuestCart ] = useState(getCurrentCart())
@@ -69,7 +60,6 @@ const App = () => {
     }
   }
 
-  //new for localStorage 
   const getInitialCart = async () => {
     try {
             const getCart = await getCartByUser(token)               
@@ -95,8 +85,6 @@ useEffect(() => {
                 console.error(error)
             });
     }, []);
-  //new
-
 useEffect(() => {
     fetchProducts();
 }, []);

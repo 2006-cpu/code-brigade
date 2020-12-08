@@ -50,7 +50,6 @@ ordersRouter.post('/', async (req, res, next) => {
     }
 });
 
-//orders/:orderId/products
 ordersRouter.post('/:orderId/products', async (req, res, next) => {
     const { orderId } = req.params;
     const { productId, price, quantity } = req.body

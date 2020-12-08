@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// import {deleteProduct, getAllProducts} from '../api'
+import {useHistory} from 'react-router-dom';
 import CreateProduct from './CreateProduct'
 import { NavLink } from 'react-router-dom';
-import {deleteProduct, getAllProducts, editProduct} from '../api'
+import {deleteProduct, getAllProducts, editProduct} from '../api';
+import swal from 'sweetalert';
 
 
 const ManageProducts = (props) => {
@@ -16,6 +17,9 @@ const ManageProducts = (props) => {
     const [ inStockToEdit, setInStockToEdit ] = useState(true)
     const [ categoryToEdit, setCategoryToEdit ] = useState('')
     const [ editingProduct, setEditingProduct ] = useState(false)
+    const [isActive, setIsActive] = useState(false)
+
+    const history = useHistory();
 
 
     const fetchProducts = async () => {
@@ -35,6 +39,11 @@ const ManageProducts = (props) => {
         e.preventDefault();
         deleteProduct(e.target.id, token);
         setProductList(productList);
+        swal({
+          title: "Success!",
+          text: "Changes saved",
+          icon: "success",
+        });
         updateProduct ? setUpdateProduct(false) : setUpdateProduct(true);
       }
 
@@ -43,6 +52,12 @@ const ManageProducts = (props) => {
         try {
             await editProduct(productIdToEdit, nameToEdit, descriptionToEdit, priceToEdit, imageurlToEdit, inStockToEdit, categoryToEdit)
             setEditingProduct(false)
+            history.push('/products')
+            swal({
+              title: "Success!",
+              text: "Changes saved",
+              icon: "success",
+            });
         } catch (error) {
           console.error(error)
         }
@@ -51,8 +66,12 @@ const ManageProducts = (props) => {
     return (<>
         {user && user.isAdmin &&
         <div className="m-products-div">
-            <h1>Manage Products</h1>
-            <CreateProduct setUpdateProduct={setUpdateProduct}/>
+            <h1 style={{marginTop: "2em"}}>Manage Products</h1>
+
+            <button className="addProductButton" onClick={setIsActive}>Create Product</button>
+            { isActive ? 
+              <CreateProduct setUpdateProduct={setUpdateProduct}/>  
+             : ''}
             {productList.map(({id, name, description, price, imageurl, inStock, category}, idx) => 
                 
                 <div key={idx} className="mProductsCard">

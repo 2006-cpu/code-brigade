@@ -2,6 +2,8 @@ import React, {useState, useEffect }from 'react';
 import { NavLink } from 'react-router-dom';
 import {getAllUsers} from '../api'
 import axios from 'axios';
+import {useHistory} from 'react-router-dom';
+import swal from 'sweetalert';
 const BASE_URL = '/'
 
 const Users = (props) => {
@@ -15,6 +17,9 @@ const Users = (props) => {
     const [imageurl, setImageURL] = useState('');   
     const [isAdmin, setIsAdmin] = useState(false)
     const [ userAdded, setUserAdded] = useState(false)
+    const [isActive, setIsActive] = useState(false)
+
+    const history = useHistory();
 
     useEffect(() => {
         getAllUsers()
@@ -52,6 +57,12 @@ const Users = (props) => {
         e.preventDefault();
         try {
             await signUp({firstName, lastName, email, username, password, imageurl, isAdmin})
+            history.push('/products')
+            swal({
+              title: "Success!",
+              text: "A new user was added!",
+              icon: "success",
+            });
         } catch(error) {
         console.error(error)
         }
@@ -60,7 +71,11 @@ const Users = (props) => {
     
     return (<>
 
-        <h2>Create New User</h2>
+        <h1 style={{marginTop: "2em"}}>Create New User</h1>
+
+        <button className="addProductButton" onClick={setIsActive}>Add Users</button>
+            { isActive ? 
+
             <form className="createNewUser"
                 onSubmit={handleSubmit}>
                 <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
@@ -79,7 +94,9 @@ const Users = (props) => {
                 </select>
                     
                 <button type="submit" >Sign Up</button>
-                </form>   
+                </form>  
+                
+                : ''}
         
         {user && user.isAdmin &&
         <div className="orders-div">

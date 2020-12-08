@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
-// import NavBar from './NavBar'
-
-//new for localStorage
 import {  storeCurrentUser, storeCurrentToken } from '../auth';
 import axios from 'axios';
 import {loginUser, createInitialOrderId, getCartByUser} from '../api/index.js'

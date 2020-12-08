@@ -105,12 +105,27 @@ const GuestCart = (props) => {
                         <section>
                         <h3>Items in your Cart</h3>
                         {   guestCart.productList.map((product) =>
-                            <div key={product.id} style={{border: "1px solid gray", padding: "20px", topMargin: "10px"}}>
-                                <p>{product.name} {product.description}</p>
-                                <p>Product Id:{product.id}</p>
-                                <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                                <p>Category: {product.category}</p>
+                            <div key={product.id} className="cartInfoContainer">
+                            
+                            <div className="infoContainer">
+                                
+                                <div className="imageContainer">
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
+                                </div>  
+                                <div className="CartDetails">
+                                    <p>{product.name} {product.description}</p>
+                                    <div className="productId">
+                                    <p>Product Id:{product.id}</p>    
+                                    </div>
+                                    <div className="orderProductId">
+                                    <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
+                                    </div>
+                                    <div className="productCategory">
+                                    <p>Category: {product.category}</p>
+                                    </div>
+                                </div>  
+
+                            </div>    
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
                 
                                 <button id={product.id} className="editCartQuantity" 
