@@ -65,7 +65,7 @@ const ManageProducts = (props) => {
 
             <button className="addProductButton" onClick={setIsActive}>Create Product</button>
             { isActive ? 
-              <CreateProduct setUpdateProduct={setUpdateProduct}/>  
+              <CreateProduct setUpdateProduct={setUpdateProduct} setIsActive={setIsActive}/>  
              : ''}
             {productList.map(({id, name, description, price, imageurl, inStock, category}, idx) => 
                 

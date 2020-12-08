@@ -42,6 +42,7 @@ const Users = (props) => {
         setEmail('');
         setImageURL('');
         setUserAdded(true)
+        setIsActive(false);
         return response;
         }
     
@@ -54,7 +55,6 @@ const Users = (props) => {
         e.preventDefault();
         try {
             await signUp({firstName, lastName, email, username, password, imageurl, isAdmin})
-            
             swal({
               title: "Success!",
               text: "A new user was added!",
