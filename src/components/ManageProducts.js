@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {useHistory} from 'react-router-dom';
 import CreateProduct from './CreateProduct'
 import { NavLink } from 'react-router-dom';
 import {deleteProduct, getAllProducts, editProduct} from '../api';
@@ -18,9 +17,6 @@ const ManageProducts = (props) => {
     const [ categoryToEdit, setCategoryToEdit ] = useState('')
     const [ editingProduct, setEditingProduct ] = useState(false)
     const [isActive, setIsActive] = useState(false)
-
-    const history = useHistory();
-
 
     const fetchProducts = async () => {
         try {
@@ -52,7 +48,6 @@ const ManageProducts = (props) => {
         try {
             await editProduct(productIdToEdit, nameToEdit, descriptionToEdit, priceToEdit, imageurlToEdit, inStockToEdit, categoryToEdit)
             setEditingProduct(false)
-            history.push('/products')
             swal({
               title: "Success!",
               text: "Changes saved",

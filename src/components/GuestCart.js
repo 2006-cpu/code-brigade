@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { getOrderById, cancelledGuestOrder, editCartItem } from '../api/index.js';
+import { getOrderById, editCartItem } from '../api/index.js';
 import { storeCurrentCart } from '../auth';
 import theTotal from './Utility.js';
 import { useHistory } from "react-router-dom";

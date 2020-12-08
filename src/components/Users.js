@@ -2,7 +2,6 @@ import React, {useState, useEffect }from 'react';
 import { NavLink } from 'react-router-dom';
 import {getAllUsers} from '../api'
 import axios from 'axios';
-import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
 const BASE_URL = '/'
 
@@ -18,8 +17,6 @@ const Users = (props) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [ userAdded, setUserAdded] = useState(false)
     const [isActive, setIsActive] = useState(false)
-
-    const history = useHistory();
 
     useEffect(() => {
         getAllUsers()
@@ -57,7 +54,7 @@ const Users = (props) => {
         e.preventDefault();
         try {
             await signUp({firstName, lastName, email, username, password, imageurl, isAdmin})
-            history.push('/products')
+            
             swal({
               title: "Success!",
               text: "A new user was added!",

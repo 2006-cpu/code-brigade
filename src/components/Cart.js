@@ -4,7 +4,6 @@ import theTotal from './Utility.js'
 import { useHistory } from "react-router-dom";
 import swal from 'sweetalert';
 import { getCartByUser, deleteOrderProduct, cancelledOrder, editCartItem, createInitialOrderId } from '../api/index.js'
-import { get } from 'react-hook-form';
 
 const Cart = (props) => {
     const history = useHistory();
