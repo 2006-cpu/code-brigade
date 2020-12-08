@@ -1,28 +1,44 @@
 import React, {useState, useEffect }from 'react';
-import { NavLink } from 'react-router-dom';
-import {getAllOrders} from '../api'
+import {getOrdersByProductId, getProduct} from '../api'
+import { NavLink, useParams } from 'react-router-dom';
 
-const Orders = (props) => {
+const OrdersByProduct = (props) => {
     const {user} = props;
     const [orders, setOrders] = useState([]);
+    const [product, setProduct] = useState({});
+    const {productId} = useParams();
     
-    const fetchAllOrders = async () =>{
+    
+    const fetchOrdersByProduct = async () => {
         try {
-            const orders = await getAllOrders();
+            const orders = await getOrdersByProductId(productId);
             setOrders(orders);
         } catch (error) {
             console.error(error);
         }
     }  
+
+    const setProductState = async () => {
+        try {
+            const response = await getProduct(productId);
+            setProduct(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect (() => {
+        setProductState();
+    }, [orders])
       
     useEffect(() => {
-    fetchAllOrders();
+        fetchOrdersByProduct();
     }, [])
     
     return (<div>
-        {user && user.isAdmin &&
+        {user &&
         <div className="orders-div">
-            <h1 style={{marginTop: "2em"}}>All Orders</h1>
+            <h1 style={{marginTop: "2em"}}>Orders With {product.name}</h1>
 
                 <section>
                     {orders.map(({id, status, userId, datePlaced}) => {
@@ -48,4 +64,4 @@ const Orders = (props) => {
     </div>)
 }
 
-export default Orders;
+export default OrdersByProduct;

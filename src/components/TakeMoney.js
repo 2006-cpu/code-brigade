@@ -1,42 +1,33 @@
 import React from 'react'
 import StripeCheckout from 'react-stripe-checkout';
-import { getStripe } from '../api/index.js'
+import {useHistory} from 'react-router-dom';
+import { getStripe, completedOrder } from '../api/index.js'
+const STRIPE_API_KEY = process.env.REACT_APP_STRIPE_API_KEY
 
 
- 
-export default class TakeMoney extends React.Component {
-  onToken = (token) => {
-    console.log(token)
+
+export default function TakeMoney({orderId, token}) {
+  const history = useHistory();
+  const onToken = (stripeToken) => {
     const stripe = async () => {
       try { 
-       console.log(await getStripe(token))
+        if (stripeToken) {
+          await getStripe(stripeToken, orderId)
+          const complete = await completedOrder(orderId, token)
+          history.push('/products')
+        } 
       } catch (error) {
        throw error;
       }
    }
    stripe()
-    // fetch('/save-stripe-token', {
-    //   method: 'POST',
-    //   body: JSON.stringify(token),
-    // }).then(response => {
-    //   response.json().then(data => {
-    //     alert(`We are in business, ${data.email}`);
-    //   });
-    // });
   }
 
-
- 
-  // ...
- 
-  render() {
     return (
-      // ...
       <StripeCheckout
-        token={this.onToken}
-        stripeKey = "pk_test_51HswdxHuqx5U03uj4yQViOm0ih4DJOewXkXfCyeDjD2fLt9SITtRVX1xEox1lOFzJNfQGdtxmBZb5QQ15ym68xzw009QQu1e9j"
+        token={onToken}
+        stripeKey = {STRIPE_API_KEY}
         billingAddress
       />
     )
   }
-}

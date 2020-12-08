@@ -1,13 +1,15 @@
 const express = require('express');
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const JWT_SECRET =  process.env.JWT_SECRET 
+const JWT_SECRET =  process.env.JWT_SECRET || 'codebrigadez';
 
 const { createUser,
         getUser,
         getUserByUsername,
         getUserById,
-        getOrdersByUser
+        getOrdersByUser,
+        getAllUsers, 
+        updateUser,
         } = require('../db/')
 
         
@@ -56,7 +58,7 @@ usersRouter.post('/login', async (req, res, next) => {
         });
       }
     } catch(error) {
-      console.log(error);
+      console.error(error);
       next(error);
     }
 });
@@ -80,7 +82,6 @@ usersRouter.post('/register', async (req, res, next) => {
           });
       }
     try {
-      // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
       const user = await createUser({firstName, lastName, email, imageurl, username, password, isAdmin})
       const token = jwt.sign({  
         id: user.id,
@@ -120,6 +121,41 @@ usersRouter.get('/:userId/orders', async (req, res, next) => {
     res.send(ordersOfUser);
   } catch ({ name, message }) {
     next({ name, message })
+  }
+});
+
+
+usersRouter.get('/', async (req, res, next) => {
+  try {
+      const users = await getAllUsers();
+      res.send(users);
+  } catch (error) {
+      next(error);
+  }
+});
+
+
+usersRouter.patch('/:userId', async (req, res, next) => {
+  const { userId } = req.params;
+  const { firstName, lastName, email, imageurl, username, password, isAdmin } = req.body
+    try {     
+        const updatedUser = await updateUser({id: userId, firstName, lastName, email, imageurl, username, password, isAdmin});
+        res.send(updatedUser);
+    } catch (error) {
+      next(error);
+  }
+});
+
+
+usersRouter.get('/user/:userId', async (req, res, next) => {
+  const id = req.params.userId;
+  try {
+      const userById = await getUserById(id);
+      if(userById) {
+      res.send(userById);
+      }
+  } catch (error) {
+     next(error);
   }
 });
   

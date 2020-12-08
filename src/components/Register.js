@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
-import { createInitialOrderId } from '../api/index.js'
+import { createInitialOrderId, editOrder } from '../api/index.js'
+import {  storeCurrentUser, storeCurrentToken  } from '../auth';
+import swal from 'sweetalert';
+
 import './index.css';
 const BASE_URL = '/'
 
 const Register = (props) => {
-    const { setUser, setToken, setOrderId } = props;
+    const { setUser, setToken, setOrderId, orderId } = props;
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [imageurl, setImageURL] = useState('');
-    const [ errorMessage , setErrorMessage ] = useState('')
+    const [errorMessage , setErrorMessage] = useState('');
     const history = useHistory();
 
     
@@ -45,11 +48,18 @@ const Register = (props) => {
                 }
 
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
-                console.log("THE USER:", user.data)
+
+                if (orderId) {
+                const edit = await editOrder({status: 'created', userId: user.data.id}, orderId)
+                setOrderId(edit.data.id)
+                } else {
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
-                setUser(user.data);
                 setOrderId(makeNewOrder.id)
-               
+                }
+                setUser(user.data);
+                storeCurrentUser(user.data)  
+                storeCurrentToken(responseToken) 
+         
                 return response;
             }
         } catch (error) {
@@ -62,7 +72,24 @@ const Register = (props) => {
         try {
             const result = signUp({firstName, lastName, email, username, password, imageurl, isAdmin: false})
             if (result.error) {
-                console.log("gros probleme")
+                setFirstName('');
+                setLastName('');
+                setEmail('');
+                setUsername('');
+                setPassword('');
+                setImageURL(''); 
+                swal({
+                    title: "Something went wrong",
+                    text: "Please try again",
+                    icon: "error",
+                    button: "OK",
+                  });
+            } else {
+                swal({
+                    title: "Success",
+                    text: "You successfully created an account!",
+                    icon: "success",
+                  });
             }
         } catch(error) {
             console.error(error)
@@ -72,28 +99,27 @@ const Register = (props) => {
     return (<>   
     <div className="wrapper">
         <div className="form-wrapper">
-            <h3>Register Here</h3>
-            <p className="error" style={{color: "red"}}>{errorMessage}</p>
+            <h2 className="auth-title">Register</h2>
             <form onSubmit={handleSubmit}>
-                    <div className="firstName">
-                        <input type="text" placeholder={'First Name'} value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                    <div className="firstNameRegister">
+                        <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
                     </div>
-                    <div className="lastName">
-                        <input type="text" placeholder={'Last Name'} value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                    <div className="lastNameRegister">
+                        <input type="text" required placeholder={'Last Name'} title="Please provide a last name" value={lastName} onChange={(event) => setLastName(event.target.value)} />
                     </div>
                     <div className="email">
-                        <input type="text" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
+                        <input type="email" required pattern="[^ @]*@[^ @]*" title="Please provide an address email" placeholder={'email'} value={email} onChange={(event) => setEmail(event.target.value)} />
                     </div>
                     <div className="username">
-                        <input type="text" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
+                        <input type="text" required title="Please provide a username" placeholder={'username'} value={username} onChange={(event) => setUsername(event.target.value)} />
                     </div>
                     <div className="password">
-                         <input type="password" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
+                         <input type="password" required minLength="8" title="Password must be at least 8 or more characters" placeholder={'password'} value={password} onChange={(event) => setPassword(event.target.value)} />
                     </div>
                     <div className="image">
                         <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
                     </div>
-                    
+                    <p className="error" style={{color: "red"}}>{errorMessage}</p>
                     <div className="createAccount">
                         <button type="submit" >Sign Up</button>
                     </div>

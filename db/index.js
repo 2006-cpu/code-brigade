@@ -1,4 +1,3 @@
-// Connect to DB
 const { Client } = require('pg');
 const DB_NAME = 'localhost:5432/graceshopper-dev'
 const DB_URL = process.env.DATABASE_URL || `postgres://${ DB_NAME }`;
@@ -6,7 +5,6 @@ const client = new Client(DB_URL);
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
 
-// database methods
 async function getProductById(id) {
   try {
     const { rows: [ product ]  } = await client.query(`
@@ -37,13 +35,13 @@ async function getAllProducts() {
 
 
 async function createProduct(product) {
-  const { name, description, price, imageURL, inStock, category } = product
+  const { name, description, price, imageurl, inStock, category } = product
   try {
     const { rows: [ newProduct ] } = await client.query(`
-      INSERT INTO products(name, description, price, imageURL, "inStock", category) 
+      INSERT INTO products(name, description, price, imageurl, "inStock", category) 
       VALUES($1, $2, $3, $4, $5, $6) 
       RETURNING *;
-    `, [name, description, price, imageURL, inStock, category]);
+    `, [name, description, price, imageurl, inStock, category]);
 
     return newProduct;
   } catch (error) {
@@ -76,7 +74,7 @@ async function getUser({username, password}) {
       FROM users
       WHERE username = $1;
       `, [username]);
-      console.log('theUser:', user)
+      
       const isMatch = bcrypt.compareSync(password, user.password);
       if(!isMatch) {
           return;
@@ -89,6 +87,7 @@ async function getUser({username, password}) {
       throw error;
   }
 };
+
 
 async function getAllUsers() {
   try {
@@ -208,6 +207,7 @@ async function getOrdersByUser(userId) {
   }
 };
 
+
 async function updateOrder({id, ...fields}){
   const setString = Object.keys(fields).map(
       (key, index) => `"${ key }"=$${ index + 1}`
@@ -230,7 +230,7 @@ async function updateOrder({id, ...fields}){
   } catch (error) {
       throw error;
   }
-}
+};
 
 
 async function getCartByUser(userId) {
@@ -247,7 +247,7 @@ async function getCartByUser(userId) {
       FROM products
       JOIN order_products ON products.id=order_products."productId"
       WHERE order_products."orderId"=$1;
-      `, [cart.id])  
+      `, [cart.id])
 
       cart.productList = productList
       return cart;
@@ -255,6 +255,7 @@ async function getCartByUser(userId) {
     throw error;
   }
 };
+
 
 async function getCartByOrderId(orderId) {
   try {
@@ -291,7 +292,7 @@ async function getOrdersByProduct({id}) {
   } catch (error) {
     throw error;
   }
-}
+};
 
 
 async function createOrder({ status, userId }) {
@@ -308,6 +309,7 @@ async function createOrder({ status, userId }) {
   }
 };
 
+
 async function getOrderProductById(id) {
   try  {
     const { rows: [ order_product ] } = await client.query(`
@@ -322,7 +324,7 @@ async function getOrderProductById(id) {
   }
 };
 
-//seed Data for order_products
+
 async function createOrderProductsList({ orderId, productId, price, quantity }) {
   try {
     const { rows: [ orderProduct ] }  = await client.query(`
@@ -337,6 +339,7 @@ async function createOrderProductsList({ orderId, productId, price, quantity }) 
   }
 };
 
+
 async function destroyOrderProduct(id){
   const { rows: [order_product] } = await client.query(`
       DELETE FROM order_products
@@ -346,32 +349,43 @@ async function destroyOrderProduct(id){
   return order_product;
 }
 
+
+async function destroyProduct(id){
+  try {
+      const {rows: [product]} = await client.query(`
+      WITH cte_product AS (
+        DELETE FROM order_products 
+        WHERE "productId" = $1
+       )
+      DELETE FROM products
+      WHERE id = $1
+      RETURNING *;
+      `, [id]);
+  return product;
+  } catch (error) {
+      throw error;
+  }   
+};
+
+
 async function addProductToOrder({ orderId, productId, price, quantity }) {
   try {
     const orderList = await getOrdersByProduct({id: productId})
-    console.log("What is orderList in db adapter", orderList)
     const index = orderList.findIndex(order => order.id === orderId)
-    console.log("What is the index in the db adapter", index)
     if (index === -1 ) {
-
-    const newOrderProduct = await createOrderProductsList({ orderId, productId, price, quantity })
+      const newOrderProduct = await createOrderProductsList({ orderId, productId, price, quantity })
 
       return newOrderProduct
     } else {
 
       const orderDetails = await getOrderById(orderId)
-      console.log("what is the Order Details in db adapter for existing order_product", orderDetails)
-      const finding = orderDetails.productList.find(singleProduct => singleProduct.productidentity === productId);
-      console.log("What is EXISING ORDER-PRODUCT in db adapter:", finding)
-      console.log("What is the EXISTING ORDER-PRODUCT_ID:", finding.orderProductId)
-
+      const findExistingOrderProduct = orderDetails.productList.find(singleProduct => singleProduct.productidentity === productId);
       const { rows: [ changeOrderProduct ] } = await client.query(`
       UPDATE order_products
       SET price=${price}, quantity=${quantity}
-      WHERE id=${ finding.orderProductId}
+      WHERE id=${ findExistingOrderProduct.orderProductId}
       RETURNING *;
     `);
-      console.log("What is the new CHANGE for the EXISTING ORDER-PRODUCT-ID:", changeOrderProduct)
     return changeOrderProduct;
       
     }
@@ -380,7 +394,7 @@ async function addProductToOrder({ orderId, productId, price, quantity }) {
   }
 };
 
-//helper function
+
 async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   try {
       const { rows: [ orderProduct ] } = await client.query(`
@@ -395,19 +409,30 @@ async function getOrderProductByOrderIdProductIdPair(orderId, productId) {
   }
 };
 
+
 async function updateOrderProduct({ id, price, quantity }) {
-
+  const fields  = { price, quantity }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    await client.query(`
-      UPDATE orders_product 
-      SET quantity=${quantity}, price=${price}
-      WHERE id = $1;
-      `, [id]);
 
+    const { rows: [ orderProduct ] } = await client.query(`
+      UPDATE order_products
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+
+      return orderProduct;
   } catch (error) {
     throw error;
-  }
+  }        
 };
+
 
 async function cancelOrder(id) {
   try {
@@ -426,6 +451,7 @@ async function cancelOrder(id) {
   }
 };
 
+
 async function completeOrder(id) {
   try {
     const {rows: [ completedOrder ]} = await client.query(`
@@ -443,7 +469,53 @@ async function completeOrder(id) {
   }
 };
 
-// export
+
+async function updateProduct({ id, name, description, price, imageurl, inStock, category }) {
+  const fields = { name, description, price, imageurl, inStock, category }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}"=$${index + 1}`
+  ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [product] } = await client.query(`
+  UPDATE products
+  SET ${setString}
+  WHERE id=${id}
+  RETURNING *
+  `, Object.values(fields))
+
+    return product;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+async function updateUser({ id, firstName, lastName, email, imageurl, username, password, isAdmin }) {
+  const fields = { firstName, lastName, email, imageurl, username, password, isAdmin }
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}"=$${index + 1}`
+  ).join(', ');
+  if (setString.length === 0) {
+    return;
+  }
+  try {
+    const { rows: [user] } = await client.query(`
+      UPDATE users
+      SET ${ setString}
+      WHERE id=${ id}
+      RETURNING *;
+      `, Object.values(fields));
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 module.exports = {
   client,
   getProductById,
@@ -463,12 +535,15 @@ module.exports = {
   createOrderProductsList,
   getOrderProductById,
   destroyOrderProduct,
+  destroyProduct,
   getOrdersByProduct,
   addProductToOrder,
   getOrderProductByOrderIdProductIdPair,
   updateOrderProduct,
   cancelOrder,
   completeOrder,
+  getCartByOrderId,
+  updateProduct,
+  updateUser,
   getCartByOrderId
-  // db methods
 }

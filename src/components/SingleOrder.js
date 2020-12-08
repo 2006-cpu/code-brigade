@@ -13,18 +13,17 @@ const SingleOrder = (props) => {
     const {user} = props;
     const statusSelect = ["Select Status", "created", "completed", "cancelled"];
 
-    const fetchOrder = () => {
-      getOrderById(orderId)
-      .then(order => {
-          setOrder(order);
-      })
-      .catch(error => {
-          console.error(error);
-      });
+    const fetchOrder = async () => {
+      try {
+        const order = await getOrderById(orderId);
+        setOrder(order);
+      } catch (error) {
+        console.error(error);
+      }
     }
     
     useEffect(() => {
-      fetchOrder()
+      fetchOrder();
     }, [edit])
 
     const handleForm = (e) => {
@@ -45,7 +44,7 @@ const SingleOrder = (props) => {
     
     return (
       <div>
-      <h1>Orders</h1>
+      <h1 style={{marginTop: "2em"}}>Orders</h1>
       {
       order && user.isAdmin &&
       <>
