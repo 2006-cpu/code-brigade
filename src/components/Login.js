@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
+import swal from 'sweetalert';
 import {  storeCurrentUser, storeCurrentToken } from '../auth';
 import axios from 'axios';
 import {loginUser, createInitialOrderId, getCartByUser} from '../api/index.js'
@@ -45,6 +46,11 @@ const Login = (props) => {
 
     if (!data.error) {
       history.push('/products')
+      swal({
+        title: "Success",
+        text: "You are now logged in!",
+        icon: "success",
+      });
       } else { 
        return
     }
@@ -62,7 +68,6 @@ const Login = (props) => {
       <div className="form-wrapper">
           <h2 className="auth-title">Login</h2>
             <form onSubmit={handleLogin}>
-              <h3 className="login-title">Login Here</h3>
               <p className="error" style={{color: "red"}}>{error}</p>
               <div className="usernameLogin">
                 <input className="login-username" placeholder="Username" type="text" value={login.username} onChange={(e) => 

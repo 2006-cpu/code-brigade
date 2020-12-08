@@ -63,8 +63,6 @@ const NavBar = (props) => {
             {user && user.isAdmin && <NavLink to="/manage-products">Manage Products</NavLink>}
 
             </div>
- 
-
         </div>
         
     )

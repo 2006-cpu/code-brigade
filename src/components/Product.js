@@ -9,7 +9,7 @@ const Product = (props) => {
 
     return (
         <div>
-            <h1>Product</h1>
+            <h1 style={{marginTop: "2em"}}>Product</h1>
             {
             product && 
             <>

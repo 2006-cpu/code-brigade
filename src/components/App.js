@@ -92,7 +92,6 @@ useEffect(() => {
             })
     }, []);
 
-
 useEffect(() => {
     fetchProducts();
 }, []);
