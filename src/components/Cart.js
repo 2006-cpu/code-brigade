@@ -6,7 +6,7 @@ import swal from 'sweetalert';
 import { getCartByUser, deleteOrderProduct, cancelledOrder, editCartItem, createInitialOrderId } from '../api/index.js'
 
 const Cart = (props) => {
-    const {shoppingCart, setShoppingCart, user, token, setOrderId, orderId, setIsLoading} = props
+    const {shoppingCart, setShoppingCart, user, token, setOrderId, orderId} = props
     const history = useHistory();
     const [update, setUpdate] = useState(false)
     const [editOrderProductId, setEditOrderProductId] = useState(1)
@@ -79,7 +79,6 @@ const Cart = (props) => {
 
 
     const handleEdit = async(event) => {
-        setIsLoading(true)
         event.preventDefault();
         setQuantityForm(true)
         setEditFormId(event.target.id)
@@ -92,8 +91,6 @@ const Cart = (props) => {
                 } 
             } catch(error) {
             console.error(error)
-            } finally {
-            setIsLoading(false)
         }
     };
 

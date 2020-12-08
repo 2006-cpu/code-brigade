@@ -12,4 +12,3 @@ export { default as OrdersByProduct } from './OrdersByProduct';
 export { default as GuestCart } from './GuestCart';
 export { default as Users } from './Users';
 export { default as SingleUser } from './SingleUser';
-export { default as Loading } from './Loading';

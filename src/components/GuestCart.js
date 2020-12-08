@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
 
 const GuestCart = (props) => {
-    const {orderId, oldGuestCart, setIsLoading} = props 
+    const {orderId, oldGuestCart} = props 
     const [guestCart, setGuestCart] = useState([])
     const [editOrderProductId, setEditOrderProductId] = useState(1)
     const [editQuantity, setEditQuantity] = useState(0)
@@ -19,7 +19,6 @@ const GuestCart = (props) => {
     let history = useHistory()
   
     const getOrder = async () => {
-        setIsLoading(true)
         try {
             const theGuestCart = await getOrderById(orderId);
             if(theGuestCart) {
@@ -28,8 +27,6 @@ const GuestCart = (props) => {
             }
         } catch (error) {
             console.error(error); 
-        } finally {
-            setIsLoading(false)
         }
     };
 

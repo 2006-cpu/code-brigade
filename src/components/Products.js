@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = '/'
 
 const Products = (props) => {
-    const { productList, shoppingCart, setShoppingCart, orderId, setOrderId, setIsLoading } = props
+    const { productList, shoppingCart, setShoppingCart, orderId, setOrderId} = props
     const [ price, setPrice ] = useState(1)
     const [ quantity, setQuantity ] = useState(1)
     const [ productId, setProductId ] = useState(1)
@@ -57,7 +57,6 @@ const Products = (props) => {
   
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setIsLoading(true)
         try {
             setErrorMessage('')
             const result = await createProductOrder({orderId, productId, price, quantity})
@@ -73,8 +72,6 @@ const Products = (props) => {
             }
             } catch(error) {
             console.error(error)
-            } finally {
-            setIsLoading(false)
         }
     };
 

@@ -24,7 +24,6 @@ import {
   GuestCart,
   Users,
   SingleUser,
-  Loading
 } from './index';
 
 import { getCurrentCart } from '../auth';
@@ -42,17 +41,13 @@ const App = () => {
   const [shoppingCart, setShoppingCart] = useState([]); 
   const [orderId, setOrderId] = useState(shoppingCart.id)
   const [oldGuestCart, setOldGuestCart] = useState(getCurrentCart())
-  const [isLoading, setIsLoading] = useState(false)
 
   const fetchProducts = async () => {
-      setIsLoading(true)
     try {
       const products = await getAllProducts();
       setProductList(products);
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -104,9 +99,6 @@ useEffect(() => {
     <Router>
       <div className="App">
       <h1>Masks Co.</h1>
-         { isLoading ?
-         <Loading /> 
-           : null }
       <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId} setOldGuestCart={setOldGuestCart}/>
         <Switch>
           <Route path="/Login">
@@ -124,16 +116,16 @@ useEffect(() => {
               <Product productList={productList} />
           </Route>
           <Route exact path="/products">
-              <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId} isLoading={isLoading} setIsLoading={setIsLoading}/>
+              <Products productList={productList} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} user={user} orderId={orderId} setOrderId={setOrderId}/>
           </Route>
           <Route path="/manage-products">
               <ManageProducts productList={productList} setProductList={setProductList} user={user} token={token}/>
           </Route>
           <Route exact path="/cart">
-              <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId} oldGuestCart={oldGuestCart} setIsLoading={setIsLoading}/>
+              <Cart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId} oldGuestCart={oldGuestCart}/>
           </Route>
           <Route path="/guestcart">
-              <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}  oldGuestCart={oldGuestCart} setOldGuestCart={setOldGuestCart} setIsLoading={setIsLoading}/>
+              <GuestCart user={user} token={token} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} orderId={orderId} setOrderId={setOrderId}  oldGuestCart={oldGuestCart} setOldGuestCart={setOldGuestCart}/>
           </Route>            
           <Route exact path="/orders">
             <Orders user={user} />
