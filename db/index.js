@@ -1,4 +1,3 @@
-// Connect to DB
 const { Client } = require('pg');
 const DB_NAME = 'localhost:5432/graceshopper-dev'
 const DB_URL = process.env.DATABASE_URL || `postgres://${ DB_NAME }`;
@@ -6,7 +5,6 @@ const client = new Client(DB_URL);
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
 
-// database methods
 async function getProductById(id) {
   try {
     const { rows: [ product ]  } = await client.query(`
@@ -51,6 +49,7 @@ async function createProduct(product) {
   }
 };
 
+
 async function createUser({firstName, lastName, email, imageurl, username, password, isAdmin}) {
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
@@ -88,6 +87,7 @@ async function getUser({username, password}) {
       throw error;
   }
 };
+
 
 async function getAllUsers() {
   try {
@@ -207,6 +207,7 @@ async function getOrdersByUser(userId) {
   }
 };
 
+
 async function updateOrder({id, ...fields}){
   const setString = Object.keys(fields).map(
       (key, index) => `"${ key }"=$${ index + 1}`
@@ -229,7 +230,7 @@ async function updateOrder({id, ...fields}){
   } catch (error) {
       throw error;
   }
-}
+};
 
 
 async function getCartByUser(userId) {
@@ -254,6 +255,7 @@ async function getCartByUser(userId) {
     throw error;
   }
 };
+
 
 async function getCartByOrderId(orderId) {
   try {
@@ -290,7 +292,7 @@ async function getOrdersByProduct({id}) {
   } catch (error) {
     throw error;
   }
-}
+};
 
 
 async function createOrder({ status, userId }) {
@@ -307,6 +309,7 @@ async function createOrder({ status, userId }) {
   }
 };
 
+
 async function getOrderProductById(id) {
   try  {
     const { rows: [ order_product ] } = await client.query(`
@@ -320,6 +323,7 @@ async function getOrderProductById(id) {
     throw error;
   }
 };
+
 
 async function createOrderProductsList({ orderId, productId, price, quantity }) {
   try {
@@ -335,6 +339,7 @@ async function createOrderProductsList({ orderId, productId, price, quantity }) 
   }
 };
 
+
 async function destroyOrderProduct(id){
   const { rows: [order_product] } = await client.query(`
       DELETE FROM order_products
@@ -343,6 +348,7 @@ async function destroyOrderProduct(id){
   `, [id])
   return order_product;
 }
+
 
 async function destroyProduct(id){
   try {
@@ -359,7 +365,8 @@ async function destroyProduct(id){
   } catch (error) {
       throw error;
   }   
-}
+};
+
 
 async function addProductToOrder({ orderId, productId, price, quantity }) {
   try {
@@ -444,6 +451,7 @@ async function cancelOrder(id) {
   }
 };
 
+
 async function completeOrder(id) {
   try {
     const {rows: [ completedOrder ]} = await client.query(`
@@ -460,6 +468,7 @@ async function completeOrder(id) {
     throw error;
   }
 };
+
 
 async function updateProduct({ id, name, description, price, imageurl, inStock, category }) {
   const fields = { name, description, price, imageurl, inStock, category }
@@ -507,8 +516,6 @@ async function updateUser({ id, firstName, lastName, email, imageurl, username, 
 };
 
 
-
-// export
 module.exports = {
   client,
   getProductById,
@@ -539,5 +546,4 @@ module.exports = {
   updateProduct,
   updateUser,
   getCartByOrderId
-  // db methods
 }

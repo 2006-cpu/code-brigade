@@ -16,7 +16,6 @@ const NavBar = (props) => {
             clearCurrentToken()
             setOldGuestCart([])
             clearCurrentCart()
-
         } else {
            return 
         }

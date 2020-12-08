@@ -16,7 +16,8 @@ ordersRouter.get('/', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
+});
+
 
 ordersRouter.get('/cart', requireUser, async (req, res, next) => {
     try {
@@ -27,7 +28,8 @@ ordersRouter.get('/cart', requireUser, async (req, res, next) => {
     } catch (error) {
       next (error)
     }
-})
+});
+
 
 ordersRouter.get('/:orderId', async (req, res, next) => {
    const id = req.params.orderId;
@@ -37,7 +39,7 @@ ordersRouter.get('/:orderId', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
+});
 
 
 ordersRouter.post('/', async (req, res, next) => {
@@ -49,6 +51,7 @@ ordersRouter.post('/', async (req, res, next) => {
     next(error);
     }
 });
+
 
 ordersRouter.post('/:orderId/products', async (req, res, next) => {
     const { orderId } = req.params;
@@ -72,35 +75,37 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
     } catch ({ name, message }) {
       next({ name, message })
     }
-  });
+});
 
-  ordersRouter.patch('/:orderId', async (req, res, next) => {
+
+ordersRouter.patch('/:orderId', async (req, res, next) => {
     const { orderId } = req.params;
     const {status, userId} = req.body
     try {     
-            const updatedOrder = await updateOrder({id: orderId, ...req.body});
-            res.send(updatedOrder);    
+        const updatedOrder = await updateOrder({id: orderId, ...req.body});
+        res.send(updatedOrder);    
     } catch (error) {
         next(error);
     }
-  });
+});
 
-  ordersRouter.delete('/:orderId', requireUser, async (req, res, next) => {
+
+ordersRouter.delete('/:orderId', requireUser, async (req, res, next) => {
     const id = req.params.orderId;
     try {
-            const order = await getOrderById(id)
+        const order = await getOrderById(id)
 
-            if (order && order.userId === req.user.id ) {
-               const cancelledOrder = await cancelOrder(order.id); 
+        if (order && order.userId === req.user.id ) {
+            const cancelledOrder = await cancelOrder(order.id); 
 
-               res.send(cancelledOrder);
-            } else {
-                next(order ? {
-                    name: "UnauthorizedUserError",
-                    message: "You cannot cancel an order which is not yours"
-                } : {
-                    name: "OrderNotFoundError",
-                    message: "That order does not exist"
+            res.send(cancelledOrder);
+        } else {
+            next(order ? {
+                name: "UnauthorizedUserError",
+                message: "You cannot cancel an order which is not yours"
+            } : {
+                name: "OrderNotFoundError",
+                message: "That order does not exist"
                 });
             } 
     } catch (error) {
@@ -108,33 +113,34 @@ ordersRouter.post('/:orderId/products', async (req, res, next) => {
     }
 });
 
+
 ordersRouter.delete('/guestcart/:orderId', async (req, res, next) => {
     const id = req.params.orderId;
     try {
-               const cancelledOrder = await cancelOrder(id); 
-
-               res.send(cancelledOrder); 
+        const cancelledOrder = await cancelOrder(id); 
+        res.send(cancelledOrder); 
     } catch (error) {
         next(error);
     }
 });
 
+
 ordersRouter.delete('/cart/:orderId', async (req, res, next) => { 
     const  id = req.params.orderId;
     try {
-            const cartByOrderId = await getCartByOrderId(id);
+        const cartByOrderId = await getCartByOrderId(id);
 
-            if (cartByOrderId && cartByOrderId.userId === req.user.id) {
-               const completedOrder = await completeOrder(cartByOrderId.id); 
+        if (cartByOrderId && cartByOrderId.userId === req.user.id) {
+            const completedOrder = await completeOrder(cartByOrderId.id); 
 
-               res.send(completedOrder);
-            } else {
-                next(cartByOrderId ? {
-                    name: "UnauthorizedUserError",
-                    message: "You cannot complete an order which is not yours"
-                    } : {
-                    name: "CartNotFoundError", 
-                    message: "That cart does not exist"
+            res.send(completedOrder);
+        } else {
+            next(cartByOrderId ? {
+                name: "UnauthorizedUserError",
+                message: "You cannot complete an order which is not yours"
+                } : {
+                name: "CartNotFoundError", 
+                message: "That cart does not exist"
                 });
             } 
     } catch (error) {

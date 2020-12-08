@@ -8,7 +8,7 @@ export const getAllProducts = async () => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const getProduct = async (id) => {
   try {
@@ -17,7 +17,7 @@ export const getProduct = async (id) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const deleteProduct = async (id, token) => {
   const requestToken = {
@@ -34,23 +34,21 @@ export const deleteProduct = async (id, token) => {
 export const loginUser = async (username, password) => {
   try {
     const existingUser = await fetch(`${BASE_URL}api/users/login`, {
-  method: "POST",
-  headers: {
+    method: "POST",
+    headers: {
     'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
+    },
+    body: JSON.stringify({
     username: username,
     password: password
+    })
   })
-})
   const responseObj = await existingUser.json();
-
-return responseObj;
+  return responseObj;
   } catch(error) {
     console.error(error);
   }
-}
-
+};
 
 export const getCartByUser = async (token) => {
   const auth = {headers: {'Authorization': `Bearer ${token}`} }
@@ -84,7 +82,6 @@ export const getOrderById = async (id) => {
   }
 };
 
-
 export const getOrdersByProductId = async (productId) => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/products/${productId}/orders`);
@@ -104,7 +101,6 @@ export const getOrdersByUser = async (id) => {
 };
 
 export const getStripe = async (token, orderId) => {
-
   try {
     const { data } = await axios.post(`${BASE_URL}api/order_products/create-session`, {
       token: token,
@@ -117,7 +113,6 @@ export const getStripe = async (token, orderId) => {
 };
 
 export const editOrder = async ({status, userId}, id) => {
-
   const body = {
       status: status,
       userId: userId,
@@ -160,7 +155,6 @@ export const cancelledOrder = async (id, token) => {
   }
 }; 
 
-
 export const completedOrder = async (id, token) => {
   const auth = {headers: {'Authorization': `Bearer ${token}`} }
 
@@ -172,7 +166,6 @@ export const completedOrder = async (id, token) => {
   }
 };
 
-
 export const editCartItem = async (orderProductId, price, quantity) => {
   try {
     const { data } = await axios.patch(`${BASE_URL}api/order_products/${orderProductId}`, {price, quantity})
@@ -181,7 +174,6 @@ export const editCartItem = async (orderProductId, price, quantity) => {
     throw error
   }
 };
-
 
 export const getAllUsers = async () => {
   try {
@@ -192,7 +184,6 @@ export const getAllUsers = async () => {
   }
 };
 
-
 export const getUserById = async (id) => {
   try {
     const { data } = await axios.get(`${BASE_URL}api/users/user/${id}`);
@@ -201,7 +192,6 @@ export const getUserById = async (id) => {
     throw error;
   }
 };
-
 
 export const editUser = async (id, firstName, lastName, email, imageurl, username, password, isAdmin) => {
   try {
@@ -215,6 +205,7 @@ export const editUser = async (id, firstName, lastName, email, imageurl, usernam
 export const createProduct = async ({name, description, price, imageurl, inStock, category}) => {
   try {
     const { data } = await axios.post(`${ BASE_URL }api/products`, {name, description, price, imageurl, inStock, category})
+      return data;
   } catch (error) {
       console.log(error)
   }

@@ -1,6 +1,6 @@
 const express = require('express');
 const productsRouter = express.Router();
-const   { updateProduct, createProduct, getAllProducts, destroyProduct, getOrdersByProduct } 
+const { updateProduct, createProduct, getAllProducts, destroyProduct, getOrdersByProduct } 
         = require('../db/')
 
 productsRouter.get('/', async (req, res, next) => {
@@ -10,7 +10,7 @@ productsRouter.get('/', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-  });
+});
 
 productsRouter.get('/:productId/orders', async (req, res, next) => {
     const { productId } = req.params;
@@ -22,24 +22,24 @@ productsRouter.get('/:productId/orders', async (req, res, next) => {
     }
 });
 
-  productsRouter.patch('/:productId', async (req, res, next) => {
+productsRouter.patch('/:productId', async (req, res, next) => {
     const { productId } = req.params;
     try {     
-            const updatedProduct = await updateProduct({id: productId, ...req.body});
-            res.send(updatedProduct);    
+        const updatedProduct = await updateProduct({id: productId, ...req.body});
+        res.send(updatedProduct);    
     } catch (error) {
         next(error);
     }
-  });
+});
 
-  productsRouter.post('/', async (req, res, next) => {
+productsRouter.post('/', async (req, res, next) => {
     try {     
-            const createdProduct = await createProduct({...req.body});
-            res.send(createdProduct);    
+        const createdProduct = await createProduct({...req.body});
+        res.send(createdProduct);    
     } catch (error) {
         next(error);
     }
-  });
+});
 
 productsRouter.delete('/:productId', async (req, res, next) => {
     const id = req.params.productId;
@@ -51,4 +51,4 @@ productsRouter.delete('/:productId', async (req, res, next) => {
     }
 })
 
-  module.exports = productsRouter;
+module.exports = productsRouter;

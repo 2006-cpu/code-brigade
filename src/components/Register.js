@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
-import { createInitialOrderId } from '../api/index.js'
+import { createInitialOrderId, editOrder } from '../api/index.js'
 import {  storeCurrentUser, storeCurrentToken  } from '../auth';
 import swal from 'sweetalert';
+
 import './index.css';
 const BASE_URL = '/'
 
 const Register = (props) => {
-    const { setUser, setToken, setOrderId } = props;
+    const { setUser, setToken, setOrderId, orderId } = props;
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -47,12 +48,18 @@ const Register = (props) => {
                 }
 
                 const user = await axios.get(`${BASE_URL}api/users/me`, auth);
+
+                if (orderId) {
+                const edit = await editOrder({status: 'created', userId: user.data.id}, orderId)
+                setOrderId(edit.data.id)
+                } else {
                 const makeNewOrder = await createInitialOrderId('created', user.data.id)
-                setUser(user.data);
                 setOrderId(makeNewOrder.id)
+                }
+                setUser(user.data);
                 storeCurrentUser(user.data)  
-                storeCurrentToken(responseToken)  
-               
+                storeCurrentToken(responseToken) 
+         
                 return response;
             }
         } catch (error) {

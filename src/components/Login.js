@@ -58,7 +58,7 @@ const Login = (props) => {
     const getCart = await getCartByUser(data.token)
     if (getCart.data.error) {
       const makeNewOrder = await createInitialOrderId('created', user.data.id)
-      const orderId = setOrderId(makeNewOrder.id)
+      await setOrderId(makeNewOrder.id)
 
     }
   }
