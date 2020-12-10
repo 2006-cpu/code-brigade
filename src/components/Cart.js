@@ -9,10 +9,10 @@ const Cart = (props) => {
     const {shoppingCart, setShoppingCart, user, token, setOrderId, orderId} = props
     const history = useHistory();
     const [update, setUpdate] = useState(false)
-    const [editOrderProductId, setEditOrderProductId] = useState(1)
+    const [editOrderProductId, setEditOrderProductId] = useState(0)
     const [editQuantity, setEditQuantity] = useState(0)
-    const [editPrice, setEditPrice] = useState(2)
-    const [editFormId, setEditFormId] = useState(1)
+    const [editPrice, setEditPrice] = useState(0)
+    const [editFormId, setEditFormId] = useState(0)
     const [quantityForm, setQuantityForm] = useState(false)
 
     const handleCancelOrder = async (id) => {
@@ -149,7 +149,10 @@ const Cart = (props) => {
                                     <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
 
                                     <button id={product.id} className="editCartQuantity" 
-                                    onClick={handleEditQuantity}>Edit Quantity</button>
+                                    onClick={(event) => {
+                                        handleEditQuantity(event)
+                                        setEditQuantity(product.quantity)
+                                        }}>Edit Quantity</button>
 
                                     { quantityForm && editFormId == product.id &&
                                     <form className="editOrderProductQuantity" 
@@ -166,7 +169,7 @@ const Cart = (props) => {
                                         onClick={()=> {
                                         setUpdate(false)
                                         }} 
-                                    className="editButton">Update Quantity</button>
+                                    className="editButton">Update Cart</button>
                                     </form>
                                     }
                                     <div className="removeFromCart">

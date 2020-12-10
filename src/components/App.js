@@ -38,7 +38,7 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [token, setToken] =  useState(getCurrentToken() || '')
   const [user, setUser] = useState(getCurrentUser())  
-  const [shoppingCart, setShoppingCart] = useState([]); 
+  const [shoppingCart, setShoppingCart] = useState(getCurrentCart() || [])
   const [orderId, setOrderId] = useState(shoppingCart.id)
   const [oldGuestCart, setOldGuestCart] = useState(getCurrentCart())
 
@@ -51,22 +51,14 @@ const App = () => {
     }
   }
 
-  const fetchCart = async () => {
-    try {
-      const cart = await getCartByUser(token);
-      setShoppingCart(cart.data);
-      setOrderId(cart.data.id);
-    } catch (error) {
-      
-    }
-  }
-
   const getInitialCart = async () => {
-    try {
+    try {   
             const getCart = await getCartByUser(token)               
                 if (getCart.data.id) {
                     setShoppingCart(getCart.data)
                     setOrderId(getCart.data.id)
+                } else if (shoppingCart && !getCart.data.id) { 
+                  setOrderId(shoppingCart.id)
                 }  else if (!getCart.data.id && user && user.id) {
                     const {id} = user
                     const makeNewOrder = await createInitialOrderId('created', id)
@@ -77,22 +69,13 @@ const App = () => {
     }
   }
 
-
-useEffect(() => {
-    getInitialCart()
-    .then(cart => {
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, []);
-
 useEffect(() => {
     fetchProducts();
+    getInitialCart()
 }, []);
 
 useEffect(() => {
-  fetchCart();
+  getInitialCart()
 }, [token]);
 
   return (

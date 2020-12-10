@@ -4,7 +4,7 @@ import { clearCurrentUser, clearCurrentToken, clearCurrentCart } from '../auth';
 import './index.css'
 
 const NavBar = (props) => { 
-    const {user, setUser, token, setToken, setShoppingCart, setOrderId, orderId, setOldGuestCart} = props;
+    const {user, setUser, token, setToken, setShoppingCart, setOrderId, setOldGuestCart} = props;
 
     const logout = () => {    
         if (token) {
