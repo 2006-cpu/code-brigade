@@ -1,7 +1,7 @@
 const express = require('express');
 const orderProductsRouter = express.Router();
 const { getOrderProductById, getOrderById, destroyOrderProduct, updateOrderProduct } = require('../db');
-const stripe = require('stripe')('sk_test_51HswdxHuqx5U03uj8qx7Fh5fgQljGXnvJ0Tm0bAq52BeU6IzL9K4bOnlXY0aNTzwj9LGFwaXuD0xsXeEzPyJSD9v00PbuzKdpq');
+const stripe = require('stripe')(process.env.REACT_APP_STRIPE_API_KEY);
 
 orderProductsRouter.delete('/:orderProductId', async (req, res, next) => {
     const { orderProductId } = req.params;
