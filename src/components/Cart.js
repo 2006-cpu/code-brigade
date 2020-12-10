@@ -6,13 +6,13 @@ import swal from 'sweetalert';
 import { getCartByUser, deleteOrderProduct, cancelledOrder, editCartItem, createInitialOrderId } from '../api/index.js'
 
 const Cart = (props) => {
-    const {shoppingCart, setShoppingCart, user, token, setOrderId, orderId, setIsLoading} = props
+    const {shoppingCart, setShoppingCart, user, token, setOrderId, orderId} = props
     const history = useHistory();
     const [update, setUpdate] = useState(false)
-    const [editOrderProductId, setEditOrderProductId] = useState(1)
+    const [editOrderProductId, setEditOrderProductId] = useState(0)
     const [editQuantity, setEditQuantity] = useState(0)
-    const [editPrice, setEditPrice] = useState(2)
-    const [editFormId, setEditFormId] = useState(1)
+    const [editPrice, setEditPrice] = useState(0)
+    const [editFormId, setEditFormId] = useState(0)
     const [quantityForm, setQuantityForm] = useState(false)
 
     const handleCancelOrder = async (id) => {
@@ -79,7 +79,6 @@ const Cart = (props) => {
 
 
     const handleEdit = async(event) => {
-        setIsLoading(true)
         event.preventDefault();
         setQuantityForm(true)
         setEditFormId(event.target.id)
@@ -92,8 +91,6 @@ const Cart = (props) => {
                 } 
             } catch(error) {
             console.error(error)
-            } finally {
-            setIsLoading(false)
         }
     };
 
@@ -118,7 +115,7 @@ const Cart = (props) => {
                      padding: "10px", topMargin: "10px"}}>
             
                     <h3 style={{textAlign: "center"}}>
-                    {shoppingCart.id? <p>Order ID: {shoppingCart.id}</p> : ''}</h3>  
+                    {shoppingCart.id? <p style={{fontWeight: "bold"}}>Order ID: {shoppingCart.id}</p> : ''}</h3>  
 
                     {
                         shoppingCart.productList? 
@@ -152,7 +149,10 @@ const Cart = (props) => {
                                     <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
 
                                     <button id={product.id} className="editCartQuantity" 
-                                    onClick={handleEditQuantity}>Edit Quantity</button>
+                                    onClick={(event) => {
+                                        handleEditQuantity(event)
+                                        setEditQuantity(product.quantity)
+                                        }}>Edit Quantity</button>
 
                                     { quantityForm && editFormId == product.id &&
                                     <form className="editOrderProductQuantity" 
@@ -169,7 +169,7 @@ const Cart = (props) => {
                                         onClick={()=> {
                                         setUpdate(false)
                                         }} 
-                                    className="editButton">Update Quantity</button>
+                                    className="editButton">Update Cart</button>
                                     </form>
                                     }
                                     <div className="removeFromCart">
@@ -193,10 +193,13 @@ const Cart = (props) => {
                 ''
             } 
             <TakeMoney orderId={orderId} token={token}>
-            <button type="button" className="btn btn-primary" onClick={(e) => {
-            e.preventDefault()
-            }}>Complete Order
+            <div className="buttonTakeMoney">
+                <button type="button" className="btn btn-primary" onClick={(e) => {
+                e.preventDefault()
+                }}>Complete Order
             </button>
+            </div>
+            
             </TakeMoney>   
         </>
     )

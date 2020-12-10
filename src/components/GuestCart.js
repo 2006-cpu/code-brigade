@@ -6,12 +6,12 @@ import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
 
 const GuestCart = (props) => {
-    const {orderId, oldGuestCart, setIsLoading} = props 
+    const {orderId} = props 
     const [guestCart, setGuestCart] = useState([])
-    const [editOrderProductId, setEditOrderProductId] = useState(1)
+    const [editOrderProductId, setEditOrderProductId] = useState(0)
     const [editQuantity, setEditQuantity] = useState(0)
-    const [editPrice, setEditPrice] = useState(2)
-    const [editFormId, setEditFormId] = useState(1)
+    const [editPrice, setEditPrice] = useState(0)
+    const [editFormId, setEditFormId] = useState(0)
     const [quantityForm, setQuantityForm] = useState(false)
     const [update, setUpdate] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
@@ -19,7 +19,6 @@ const GuestCart = (props) => {
     let history = useHistory()
   
     const getOrder = async () => {
-        setIsLoading(true)
         try {
             const theGuestCart = await getOrderById(orderId);
             if(theGuestCart) {
@@ -28,8 +27,6 @@ const GuestCart = (props) => {
             }
         } catch (error) {
             console.error(error); 
-        } finally {
-            setIsLoading(false)
         }
     };
 
@@ -64,41 +61,13 @@ const GuestCart = (props) => {
         setIsOpen(!isOpen);
     };
 
-    const PreviousGuestCart = () => {
-        return (
-            <section>
-            <h2>Your Previous Guest Cart History</h2>
-            <p> 
-             Please create an account to take advantage of our services. Thank you.</p>
-            <p>Order Number: {oldGuestCart.id}</p>
-            <h3>Items in your Previous Cart</h3>
-            {  oldGuestCart && !oldGuestCart.error ?
-               
-                oldGuestCart.productList.map((product) => 
-                <div key={product.id} style={{border: "1px solid gray",
-                maxWidth: "500px", height: "400px", padding: "20px", topMargin: "10px"}}>
-                    <p>{product.name} {product.description}</p>
-                    <p>Product Id:{product.id}</p>
-                    <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                    <p>Category: {product.category}</p>
-                    <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                    <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
-                </div>)
-                
-                : ''
-            }
-            </section>
-        )
-
-    };
-
     return (
         <div>
             <h1>Guest Shopping Cart</h1>
              { guestCart ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
-                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
+                    <h3 style={{textAlign: "center", fontWeight: "bold"}}>
                     Order ID: {guestCart.id}</h3>  
 
                     {
@@ -131,7 +100,10 @@ const GuestCart = (props) => {
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
                 
                                 <button id={product.id} className="editCartQuantity" 
-                                onClick={handleEditQuantity}>Edit Quantity</button>
+                                onClick={(event) => {
+                                    handleEditQuantity(event)
+                                    setEditQuantity(product.quantity)
+                                }}>Edit Quantity</button>
 
                                 { quantityForm && Number(editFormId) === product.id &&
                                     <form className="editOrderProductQuantity" 
@@ -148,7 +120,7 @@ const GuestCart = (props) => {
                                     onClick={()=> {
                                     setUpdate(false)
                                     }} 
-                                    className="editButton">Update Quantity</button>
+                                    className="editButton">Update Cart</button>
                                     </form>
                                 }
    
@@ -165,8 +137,6 @@ const GuestCart = (props) => {
                 ''
                 } 
 
-                { oldGuestCart && oldGuestCart.productList ? <PreviousGuestCart /> : ''}
-
             <div className="divModal">
                 <button className="addProductButton" onClick={toggleModal}>Check Out</button>
 
@@ -175,18 +145,17 @@ const GuestCart = (props) => {
                         className="modalGuestCheckOut"
                         overlayClassName="overlayGuestCheckOut"
                         closeTimeoutMS={500}
-                
-                    isOpen={isOpen}
-                    onRequestClose={toggleModal}
+                        ariaHideApp={false}
+                        isOpen={isOpen}
+                        onRequestClose={toggleModal}
                 >
                     <h1>Welcome to Masks Co.</h1>
                     <p>Please create an account to complete your order</p>
                     <div className="alignButtons">
                     <button className="addProductButton" onClick={event =>  history.push('/register')}>Go</button>
-                    <div className="guestCardButton">
-                    <button className="closeModal" onClick={toggleModal}>Close modal</button> 
                     </div>
-                    
+                    <div className="guestCardButton">
+                    <button className="closeModal" onClick={toggleModal}>Close</button> 
                     </div>
                 </Modal>
             </div>

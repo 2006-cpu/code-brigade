@@ -91,7 +91,8 @@ const Users = (props) => {
                     <option value={false}>No</option>
                 </select>
                     
-                <button type="submit" >Sign Up</button>
+                <button type="submit" >Sign Up</button><br></br>
+                <button onClick={() =>setIsActive(false)}>close</button>
                 </form>  
                 
                 : ''}

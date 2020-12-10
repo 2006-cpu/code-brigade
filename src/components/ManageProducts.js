@@ -62,8 +62,10 @@ const ManageProducts = (props) => {
         {user && user.isAdmin &&
         <div className="m-products-div">
             <h1 style={{marginTop: "2em"}}>Manage Products</h1>
-
-            <button className="addProductButton" onClick={setIsActive}>Create Product</button>
+            <div className="wrapper">
+              <button className="addProductButton" onClick={setIsActive}>Create Product</button>
+            </div>
+            
             { isActive ? 
               <CreateProduct setUpdateProduct={setUpdateProduct} setIsActive={setIsActive}/>  
              : ''}

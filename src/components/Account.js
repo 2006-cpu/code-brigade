@@ -47,7 +47,7 @@ const Account = (props) => {
                     return(
                         <div style={{marginTop: "5px"}}key={ id }>
                             <section style={{boxShadow: "1px 1px 1px 1px black", borderRadius: "10px"}}>
-                                <h3>Order Number: {id} </h3>
+                                <h3 style={{fontWeight: "bold"}}>Order Number: {id} </h3>
                                 <p>Date Placed: {date}</p>
                                 {productList.map(({id, name, price, imageurl, quantity}) => {
                                     return(

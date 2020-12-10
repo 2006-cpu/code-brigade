@@ -38,6 +38,7 @@ const CreateProducts = (props) => {
           icon: "success",
         });
       }}>Create Product</button>
+      <button onClick={() =>setIsActive(false)}>close</button>
     </div>
   )
 }
