@@ -144,11 +144,11 @@ const Products = (props) => {
 
             { !orderId ?
                 <div className="guestPrompt" style={{display: modal? 'block' : 'none'}}>
-                <form onSubmit={ buttonHandler }> 
-                <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
-                <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
-                <p className="buttons"><button>SHOP AS GUEST</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
-                </form>
+                    <form onSubmit={ buttonHandler }> 
+                    <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
+                    <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
+                    <p className="buttons"><button>SHOP AS GUEST</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
+                    </form>
                 </div>
                 : ''
             }
