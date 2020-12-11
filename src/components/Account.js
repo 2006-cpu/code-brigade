@@ -32,19 +32,15 @@ const Account = (props) => {
                     <p><b>Last Name:</b> {user.lastName}</p>
                     <p><b>Email:</b> {user.email}</p>
                         <div>{
-                            user.isAdmin 
-
-                            ? <p><b>Is Admin:</b> Yes</p>
-
-                            : <p><b>Is Admin:</b> No</p>
-                        
+                            user.isAdmin && <p><b>Is Admin:</b> Yes</p>
                         }</div>
                 </div>
             </div>
             <div>{
-                userOrders.map(({datePlaced, id, productList, status}) =>{
+                userOrders.map((orders) =>{
+                    const {datePlaced, id, productList, status} = orders
                     const date = datePlaced.slice(0,10)
-                    return(
+                    return( productList.length !== 0 &&
                         <div style={{marginTop: "5px"}}key={ id }>
                             <section style={{boxShadow: "1px 1px 1px 1px black", borderRadius: "10px"}}>
                                 <h3>Order Number: {id} </h3>
@@ -53,11 +49,21 @@ const Account = (props) => {
                                     return(
                                         <div style={{borderTop: "1px solid grey"}}key={id}>
                                             <section style={{display: "flex", justifyContent: "space-around", alignItems: "center"}}>
-                                                <h4>{name}</h4>
-                                                <p>Quantity: {quantity}</p>
-                                                <p>Price: ${price}</p>
-                                                <p>Status: {status}</p>
-                                                <img src={imageurl} alt={name} width="150"/>
+                                                <div className="order-item">
+                                                    <h4>{name}</h4>
+                                                </div>
+                                                <div className="order-item">
+                                                    <p>Quantity: {quantity}</p>
+                                                </div>
+                                                <div className="order-item">
+                                                    <p>Price: ${price}</p>
+                                                </div>
+                                                <div className="order-item">
+                                                    <p>Status: {status}</p>
+                                                </div>
+                                                <div className="order-item">
+                                                    <img src={imageurl} alt={name} width="150"/>
+                                                </div>  
                                             </section>
                                             
 
