@@ -141,20 +141,20 @@ const Products = (props) => {
 
             { !orderId ?
                 <div className="guestPrompt" style={{display: modal? 'block' : 'none'}}>
-                <form onSubmit={ buttonHandler }> 
-                <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
-                <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
-                <p className="buttons"><button>SHOP AS GUEST</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
-                </form>
+                    <form onSubmit={ buttonHandler }> 
+                    <h3 style={{color: "white", textAlign: "center"}}>Welcome to Masks Co.</h3>
+                    <p style={{color: "white", textAlign: "center"}}>Please log in to see your cart. Do you have an account?</p>
+                    <p className="buttons"><button>SHOP AS GUEST</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
+                    </form>
                 </div>
                 : ''
             }
 
             { 
-                <div className="noOrderIdAlert" style={{display: persistentModal? 'block' : 'none'}}>
+                <div className="guestPrompt" style={{display: persistentModal? 'block' : 'none'}}>
                 <form onSubmit={ buttonHandler }>
-                <h3>You are not logged in yet.</h3>
-                <p>Continue as Guest Shopper?</p>
+                <h3 style={{color: "white", textAlign: "center"}}>You are not logged in yet.</h3>
+                <p style={{color: "white", textAlign: "center"}}>Continue as Guest Shopper?</p>
                 <p className="buttons"><button>OK</button><button onClick={event =>  window.location.href='/login'}>LOG IN</button></p>
                 </form>
                 </div>

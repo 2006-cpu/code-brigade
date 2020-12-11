@@ -67,7 +67,7 @@ const GuestCart = (props) => {
              { guestCart ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
-                    <h3 style={{textAlign: "center", backgroundColor: "lightyellow"}}>
+                    <h3 style={{textAlign: "center", fontWeight: "bold"}}>
                     Order ID: {guestCart.id}</h3>  
 
                     {
@@ -145,18 +145,17 @@ const GuestCart = (props) => {
                         className="modalGuestCheckOut"
                         overlayClassName="overlayGuestCheckOut"
                         closeTimeoutMS={500}
-                
-                    isOpen={isOpen}
-                    onRequestClose={toggleModal}
+                        ariaHideApp={false}
+                        isOpen={isOpen}
+                        onRequestClose={toggleModal}
                 >
                     <h1>Welcome to Masks Co.</h1>
                     <p>Please create an account to complete your order</p>
                     <div className="alignButtons">
                     <button className="addProductButton" onClick={event =>  history.push('/register')}>Go</button>
-                    <div className="guestCardButton">
-                    <button className="closeModal" onClick={toggleModal}>Close modal</button> 
                     </div>
-                    
+                    <div className="guestCardButton">
+                    <button className="closeModal" onClick={toggleModal}>Close</button> 
                     </div>
                 </Modal>
             </div>

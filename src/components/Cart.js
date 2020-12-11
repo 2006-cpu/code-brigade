@@ -115,7 +115,7 @@ const Cart = (props) => {
                      padding: "10px", topMargin: "10px"}}>
             
                     <h3 style={{textAlign: "center"}}>
-                    {shoppingCart.id? <p>Order ID: {shoppingCart.id}</p> : ''}</h3>  
+                    {shoppingCart.id? <p style={{fontWeight: "bold"}}>Order ID: {shoppingCart.id}</p> : ''}</h3>  
 
                     {
                         shoppingCart.productList? 
@@ -193,10 +193,13 @@ const Cart = (props) => {
                 ''
             } 
             <TakeMoney orderId={orderId} token={token}>
-            <button type="button" className="btn btn-primary" onClick={(e) => {
-            e.preventDefault()
-            }}>Complete Order
+            <div className="buttonTakeMoney">
+                <button type="button" className="btn btn-primary" onClick={(e) => {
+                e.preventDefault()
+                }}>Complete Order
             </button>
+            </div>
+            
             </TakeMoney>   
         </>
     )

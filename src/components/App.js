@@ -24,6 +24,7 @@ import {
   GuestCart,
   Users,
   SingleUser,
+  Footer,
 } from './index';
 
 import { getCurrentCart } from '../auth';
@@ -79,8 +80,8 @@ useEffect(() => {
 }, [token]);
 
   return (
+    <div className="App">
     <Router>
-      <div className="App">
       <h1>Masks Co.</h1>
       <NavBar user={user} setUser={setUser} token={token} setToken={setToken} setShoppingCart={setShoppingCart} setOrderId={setOrderId} setOldGuestCart={setOldGuestCart}/>
         <Switch>
@@ -129,8 +130,9 @@ useEffect(() => {
             <Redirect to="/products" />
          </Route>
         </Switch>
-      </div>
     </Router>
+    <Footer/>
+    </div>
   );
 }
 

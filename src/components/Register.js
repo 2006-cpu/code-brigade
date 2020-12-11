@@ -97,10 +97,10 @@ const Register = (props) => {
     }
     
     return (<>   
-    <div className="wrapper">
+    <div className="wrapperRegister">
         <div className="form-wrapper">
             <h2 className="auth-title">Register</h2>
-            <form onSubmit={handleSubmit}>
+            <form className="registerForm" onSubmit={handleSubmit}>
                     <div className="firstNameRegister">
                         <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
                     </div>

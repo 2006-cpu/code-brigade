@@ -61,16 +61,18 @@ const ManageProducts = (props) => {
     return (<>
         {user && user.isAdmin &&
         <div className="m-products-div">
-            <h1 style={{marginTop: "2em"}}>Manage Products</h1>
-
-            <button className="addProductButton" onClick={setIsActive}>Create Product</button>
+            <h1 style={{marginTop: "2em"}}>Add Products</h1>
+            <div className="wrapper">
+              <button className="addProductButton" onClick={setIsActive}>Create Product</button>
+            </div>
+            
             { isActive ? 
               <CreateProduct setUpdateProduct={setUpdateProduct} setIsActive={setIsActive}/>  
              : ''}
             {productList.map(({id, name, description, price, imageurl, inStock, category}, idx) => 
                 
                 <div key={idx} className="mProductsCard">
-                    <>
+                    <div className="productCardWrapper">
                     <p><b>Product ID:</b> {id}</p>
                     <p><b>Product Name:</b> {name}</p>
                     <p><b>Product Description:</b> {description}</p>
@@ -78,18 +80,21 @@ const ManageProducts = (props) => {
                     <p><b>Image URL:</b> {imageurl}</p>
                     <p><b>In Stock?:</b> {inStock ? <>Yes</> : <>No</> }</p>
                     <p><b>Category:</b> {category}</p>
-                    </>
-                    <NavLink style={{backgroundColor: "grey", color: "black", fontSize: "12px", margin: "2px",display: "flex", justifyContent: "center"}}to={"/products/" + id + "/orders"} activeClassName="current">Orders With This Product</NavLink>
+                    </div>
+                    
 
-   
-                    <button className="editProduct"
-                            onClick={() => {
-                            setEditingProduct(true)
-                            setNameToEdit(name)
-                            setProductIdToEdit(id)
-                            }}>Edit</button>
+                    <div className="manageProductsButtons">
+                      <NavLink style={{backgroundColor: "grey", color: "black", fontSize: "12px", margin: "2px", justifyContent: "center"}}to={"/products/" + id + "/orders"} activeClassName="current">Orders With This Product</NavLink>
+                      <button className="editProduct"
+                      onClick={() => {
+                      setEditingProduct(true)
+                      setNameToEdit(name)
+                      setProductIdToEdit(id)
+                      }}>Edit</button>
 
-                    <button style={{backgroundColor: "red"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
+                      <button style={{backgroundColor: "red"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
+                    </div>  
+
                      
                 </div>   
             )

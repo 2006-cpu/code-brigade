@@ -2,7 +2,7 @@ import React from 'react'
 import StripeCheckout from 'react-stripe-checkout';
 import {useHistory} from 'react-router-dom';
 import { getStripe, completedOrder } from '../api/index.js'
-// const STRIPE_API_KEY = process.env.REACT_APP_STRIPE_API_KEY
+import swal from 'sweetalert';
 
 
 
@@ -15,6 +15,11 @@ export default function TakeMoney({orderId, token}) {
           await getStripe(stripeToken, orderId)
           const complete = await completedOrder(orderId, token)
           history.push('/products')
+          swal({
+            title: "Success!",
+            text: "Your order was placed",
+            icon: "success",
+          });
         } 
       } catch (error) {
        throw error;
