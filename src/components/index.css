@@ -483,3 +483,8 @@
   .alignButtons {
     display: inline-block;
   }
+
+  .order-item {
+    width: 25%;
+    margin-left: 10px;
+  }
