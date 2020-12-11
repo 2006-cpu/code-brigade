@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 
 
 const CreateProducts = (props) => {
-  const {setUpdateProduct, setIsActive} = props
+  const {setUpdateProduct, setIsActive, updateProduct} = props
   const nameInputRef = useRef()
   const descriptionInputRef = useRef()
   const priceInputRef = useRef()
@@ -32,7 +32,7 @@ const CreateProducts = (props) => {
             inStock: inStockInputRef.current.checked,
             category: categoryInputRef.current.value
           })
-          setUpdateProduct(true)
+          updateProduct ? setUpdateProduct(false) : setUpdateProduct(true);
           setIsActive(false);
           swal({
             title: "Success!",

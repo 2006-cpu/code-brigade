@@ -67,7 +67,7 @@ const ManageProducts = (props) => {
             </div>
             
             { isActive ? 
-              <CreateProduct setUpdateProduct={setUpdateProduct} setIsActive={setIsActive}/>  
+              <CreateProduct setUpdateProduct={setUpdateProduct} setIsActive={setIsActive} updateProduct={updateProduct}/>  
              : ''}
             {productList.map(({id, name, description, price, imageurl, inStock, category}, idx) => 
                 
