@@ -64,10 +64,10 @@ const Login = (props) => {
   }
 
   return (
-    <div className="wrapper">
+    <div className="wrapperLogin">
       <div className="form-wrapper">
           <h2 className="auth-title">Login</h2>
-            <form onSubmit={handleLogin}>
+            <form className="loginForm" onSubmit={handleLogin}>
               <p className="error" style={{color: "red"}}>{error}</p>
               <div className="usernameLogin">
                 <input className="login-username" placeholder="Username" type="text" value={login.username} onChange={(e) => 

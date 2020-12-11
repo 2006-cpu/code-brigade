@@ -74,26 +74,33 @@ const Users = (props) => {
         </div>
             { isActive ? 
 
-            <form className="createNewUser"
-                onSubmit={handleSubmit}>
-                <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
-                <input type="text" required placeholder={'Last Name'} value={lastName} onChange={(event) => setLastName(event.target.value)} />
-                <input type="email" required pattern="[^ @]*@[^ @]*" placeholder={'Email'} value={email} onChange={(event) => setEmail(event.target.value)} />
-                <input type="text" required title="Please provide a username" placeholder={'Username'} value={username} onChange={(event) => setUsername(event.target.value)} />
-                <input type="password" required minLength="8" title="Password must be at least 8 or more characters" placeholder={'Password'} value={password} onChange={(event) => setPassword(event.target.value)} />
-                <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
-                <label>Is Admin?</label>
-                <select value={ isAdmin} 
-                    style={{width: "50px"}}
-                    onChange={(event) => {setIsAdmin(event.target.value)}}
-                    name="isAdmin">
-                    <option value={true}>Yes</option>
-                    <option value={false}>No</option>
-                </select>
+            <div className="mProductsCard">
+                <div className="productCardWrapper">
                     
-                <button type="submit" >Sign Up</button><br></br>
-                <button onClick={() =>setIsActive(false)}>close</button>
+                </div>
+                <form className="createNewUser"
+                    onSubmit={handleSubmit}>
+                    <input type="text" required placeholder={'First Name'} title="Please provide a first name" value={firstName} onChange={(event) => setFirstName(event.target.value)} />
+                    <input type="text" required placeholder={'Last Name'} value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                    <input type="email" required pattern="[^ @]*@[^ @]*" placeholder={'Email'} value={email} onChange={(event) => setEmail(event.target.value)} />
+                    <input type="text" required title="Please provide a username" placeholder={'Username'} value={username} onChange={(event) => setUsername(event.target.value)} />
+                    <input type="password" required minLength="8" title="Password must be at least 8 or more characters" placeholder={'Password'} value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <input type="text" placeholder={'Image URL'} value={imageurl} onChange={(event) => setImageURL(event.target.value)} />
+                    <label>Is Admin?</label>
+                    <select value={ isAdmin} 
+                        style={{width: "50px"}}
+                        onChange={(event) => {setIsAdmin(event.target.value)}}
+                        name="isAdmin">
+                        <option value={true}>Yes</option>
+                        <option value={false}>No</option>
+                    </select>
+                        
+                    <button type="submit" >Sign Up</button><br></br>
+                    <button onClick={() =>setIsActive(false)}>close</button>
                 </form>  
+
+            </div>    
+
                 
                 : ''}
         
