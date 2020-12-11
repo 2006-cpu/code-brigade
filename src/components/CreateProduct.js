@@ -34,11 +34,11 @@ const CreateProducts = (props) => {
           })
           setUpdateProduct(true)
           setIsActive(false);
-          swal({
-            title: "Success!",
-            text: "Your Product was added!",
-            icon: "success",
-          });
+          // swal({
+          //   title: "Success!",
+          //   text: "Your Product was added!",
+          //   icon: "success",
+          // });
           }}>Create Product</button>
         <button className="addProductButtonClose" onClick={() => {setIsActive(false)}}>close</button>
       </div>
