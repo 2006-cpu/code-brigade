@@ -63,7 +63,7 @@ const GuestCart = (props) => {
 
     return (
         <div>
-            <h1>Guest Shopping Cart</h1>
+            <h1 style={{marginTop: "2em"}}>Guest Shopping Cart</h1>
              { guestCart ? 
                 <div style={{border: "1px solid black", borderRadius: "5px",
                      padding: "10px", topMargin: "10px"}}>
@@ -82,20 +82,18 @@ const GuestCart = (props) => {
                                 
                                 <div className="imageContainer">
                                 <img src={product.imageurl} alt="Mask" width="250" height="250"></img>
-                                </div>  
-                                <div className="CartDetails">
-                                    <p>{product.name} {product.description}</p>
-                                    <div className="productId">
-                                    <p>Product Id:{product.id}</p>    
-                                    </div>
-                                    <div className="orderProductId">
-                                    <p>Order Product Id (for temporary testing):{product.orderProductId}</p>
-                                    </div>
-                                    <div className="productCategory">
-                                    <p>Category: {product.category}</p>
-                                    </div>
-                                </div>  
-
+                                </div> 
+                                <div className="cartDetails">
+                                            <div className="productName">
+                                            <p> {product.name} {product.description}</p>
+                                            </div>
+                                            <div className="productId">
+                                            <p>Product Id: {product.id}</p>
+                                            </div>
+                                            <div className="productCategory">
+                                            <p>Category: {product.category}</p>    
+                                            </div>
+                                </div>
                             </div>    
                                 <p className="priceQuantity"><span>Price: ${product.price}</span> <span>Quantity: {product.quantity}</span></p>
                 

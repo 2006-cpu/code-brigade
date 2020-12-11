@@ -132,13 +132,10 @@ const Cart = (props) => {
                                             </div>
                                             <div className="cartDetails">
                                             <div className="productName">
-                                            <p>{product.name} {product.description}</p>
+                                            <p> {product.name} {product.description}</p>
                                             </div>
                                             <div className="productId">
-                                            <p>Product Id:{product.id}</p>
-                                            </div>
-                                            <div className="orderProductId">
-                                            <p>Order Product Id (for temporary testing):{product.orderProductId}</p>    
+                                            <p>Product Id: {product.id}</p>
                                             </div>
                                             <div className="productCategory">
                                             <p>Category: {product.category}</p>    
