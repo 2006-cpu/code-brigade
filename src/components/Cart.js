@@ -155,7 +155,7 @@ const Cart = (props) => {
                                         }}>Edit Quantity</button>
 
                                     { quantityForm && editFormId == product.id &&
-                                    <form className="editOrderProductQuantity" 
+                                    <form 
                                     onSubmit={handleEdit}> 
                                     <label>Quantity:</label>
                                     <input id={editFormId} type="number" min="0" value={ editQuantity} name="editQuantity"

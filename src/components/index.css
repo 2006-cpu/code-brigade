@@ -298,10 +298,6 @@ button:hover {
   color:white;
 }
 
-.editOrderProductQuantity {
-  text-align: right;
-}
-
 .cards {
   display: flex;
   flex-direction: row;
@@ -434,6 +430,11 @@ button:hover {
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+}
+
+.editSingleUser {
+  margin-top:10px;
+  margin-left:2px;
 }
 
 
