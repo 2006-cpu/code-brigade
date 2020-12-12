@@ -29,11 +29,6 @@ const Login = (props) => {
       }
     const user = await axios.get(`${BASE_URL}api/users/me`, auth);
     setUser(user.data);
-
-   
-    storeCurrentUser(user.data)
-    storeCurrentToken(data.token)
-
     
     setLogin({
       username: '',
@@ -41,7 +36,11 @@ const Login = (props) => {
     })
 
     if (data.error) {
-      setError(data.message)
+      setError(data.error + ": No Valid User Found")
+      return
+    } else { 
+      storeCurrentUser(user.data)
+      storeCurrentToken(data.token)
     }
 
     if (!data.error) {
