@@ -61,8 +61,9 @@ const ManageProducts = (props) => {
     return (<>
         {user && user.isAdmin &&
         <div className="m-products-div">
-            <h1 style={{marginTop: "2em"}}>Add Products</h1>
+            
             <div className="wrapper">
+            <h1>Add Products</h1>
               <button className="addProductButton" onClick={setIsActive}>Create Product</button>
             </div>
             

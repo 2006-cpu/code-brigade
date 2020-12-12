@@ -22,8 +22,7 @@ const Orders = (props) => {
     return (<div>
         {user && user.isAdmin &&
         <div className="orders-div">
-            <h1 style={{marginTop: "2em"}}>All Orders</h1>
-
+             <h1 style={{paddingTop: "2em"}}>All Orders</h1>
                 <section>
                     {orders.map(({id, status, userId, datePlaced}) => {
                     return (

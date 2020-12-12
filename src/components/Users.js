@@ -68,8 +68,8 @@ const Users = (props) => {
     
     return (<>
 
-        <h1 style={{marginTop: "2em"}}>Create New User</h1>
         <div className="wrapper">
+            <h1>Create New User</h1>
             <button className="addProductButton" id="centered-toggle" onClick={setIsActive}>Add Users</button>
         </div>
             { isActive ? 

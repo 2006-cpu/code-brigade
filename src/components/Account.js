@@ -20,7 +20,7 @@ const Account = (props) => {
 
     return (
         <>
-            <h1 style={{marginTop: "2em"}}>{user.username}'s Account</h1>
+            <h1 style={{paddingTop: "2em"}}>{user.username}'s Account</h1>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}className="userCard">
             { user.imageurl ?
             <div><img src={user.imageurl} alt={user.username} width="250" height="250"></img></div>
