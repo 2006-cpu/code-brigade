@@ -2,6 +2,8 @@ import React from 'react';
 
 const Footer = () => {
     return (
+        <>
+        <h2 style={{textAlign: "center", paddingTop: "150px"}}><a style={{backgroundColor: "white", color: "black", border: "none"}} href="https://github.com/2006-cpu/code-brigade" target="_blank">Contact Us</a></h2>
         <div className="footer-container">
             <div className="nameWrapper">
                 <div>
@@ -15,7 +17,7 @@ const Footer = () => {
             </div>
             <div className="nameWrapper">
                 <div>
-                   <span style={{marginTop: "20%"}} className="material-icons">
+                   <span className="material-icons">
                     masks
                     </span> 
                 </div>
@@ -44,6 +46,7 @@ const Footer = () => {
                 </div>
             </div>
         </div>
+        </>
     )
 
 }

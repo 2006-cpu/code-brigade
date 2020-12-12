@@ -84,15 +84,15 @@ const ManageProducts = (props) => {
                     
 
                     <div className="manageProductsButtons">
-                      <NavLink style={{backgroundColor: "grey", color: "black", fontSize: "12px", margin: "2px", justifyContent: "center"}}to={"/products/" + id + "/orders"} activeClassName="current">Orders With This Product</NavLink>
+                      <NavLink style={{backgroundColor: "grey", color: "black", fontSize: "12px", margin: "3px", justifyContent: "center"}}to={"/products/" + id + "/orders"} activeClassName="current">Orders With This Product</NavLink>
                       <button className="editProduct"
                       onClick={() => {
                       setEditingProduct(true)
                       setNameToEdit(name)
                       setProductIdToEdit(id)
-                      }}>Edit</button>
+                      }}>Edit Prodcut</button>
 
-                      <button style={{backgroundColor: "red"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
+                      <button style={{backgroundColor: "red", marginLeft: "3px"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
                     </div>  
 
                      
