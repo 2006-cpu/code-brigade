@@ -91,7 +91,7 @@ const ManageProducts = (props) => {
                       setEditingProduct(true)
                       setNameToEdit(name)
                       setProductIdToEdit(id)
-                      }}>Edit Prodcut</button>
+                      }}>Edit Product</button>
 
                       <button style={{backgroundColor: "red", marginLeft: "3px"}}id={id} type="submit" onClick={handleDelete}>Delete Product</button>
                     </div>  
