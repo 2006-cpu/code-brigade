@@ -56,7 +56,7 @@ const SingleOrder = (props) => {
           <div>{edit &&
           <form>
             <h3>Edit Order</h3>
-            <input type="text" placeholder={"New User ID"} value={userId} onChange={(e) => setUserId(e.target.value)}/>
+            <p>User ID: </p><input type="text" placeholder={"New User ID"} value={userId} onChange={(e) => setUserId(e.target.value)}/>
             <select onChange={(e) => {
               setStatus(e.target.value)
              }}>{
