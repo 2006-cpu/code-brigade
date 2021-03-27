@@ -7,7 +7,7 @@ const DB_URL = process.env.DATABASE_URL || `postgres://${ DB_NAME }`;
 
 //For HEROKU Deployment
 const client = new Client({
-  connectionString: CONNECTION_STRING,
+  connectionString: DB_URL,
   ssl: {
     rejectUnauthorized: false
   }
