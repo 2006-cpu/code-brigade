@@ -1,7 +1,19 @@
 const { Client } = require('pg');
 const DB_NAME = 'localhost:5432/graceshopper-dev'
 const DB_URL = process.env.DATABASE_URL || `postgres://${ DB_NAME }`;
-const client = new Client(DB_URL);
+//For Dev
+// const client = new Client(DB_URL);
+//End for Dev
+
+//For HEROKU Deployment
+const client = new Client({
+  connectionString: CONNECTION_STRING,
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
+//End for HEROKU Deployment
+
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
 
